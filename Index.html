@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marvel Champions Companion</title>
+  <!-- Tailwind CSS para diseño moderno -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen p-4 flex flex-col justify-between font-sans">
+
+  <!-- ENCABEZADO -->
+  <header class="text-center py-2 border-b border-slate-700">
+    <h1 class="text-xl font-bold tracking-wider text-red-500 uppercase">Marvel Champions</h1>
+    <p class="text-xs text-slate-400">Companion App - Prototipo</p>
+  </header>
+
+  <!-- SECCIÓN DEL VILLANO -->
+  <section class="bg-slate-800 rounded-2xl p-4 border-2 border-red-900/50 shadow-lg my-3">
+    <div class="flex justify-between items-center mb-2">
+      <div>
+        <span class="text-xs font-bold bg-red-900/80 text-red-200 px-2 py-0.5 rounded uppercase">Villano</span>
+        <h2 class="text-2xl font-black text-slate-100">RHINO</h2>
+      </div>
+      <span class="text-sm font-bold text-slate-400">Fase I</span>
+    </div>
+
+    <!-- Vida del Villano -->
+    <div class="text-center py-3 bg-slate-950/50 rounded-xl my-2">
+      <span class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Puntos de Vida</span>
+      <div id="hp-villano" class="text-5xl font-extrabold text-red-500">14</div>
+    </div>
+
+    <!-- Botones para cambiar vida del Villano -->
+    <div class="grid grid-cols-4 gap-2 mt-3">
+      <button onclick="cambiarVida('villano', -5)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">-5</button>
+      <button onclick="cambiarVida('villano', -1)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">-1</button>
+      <button onclick="cambiarVida('villano', 1)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">+1</button>
+      <button onclick="cambiarVida('villano', 5)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">+5</button>
+    </div>
+  </section>
+
+  <!-- SECCIÓN DEL HÉROE (TU JUGADOR) -->
+  <section class="bg-slate-800 rounded-2xl p-4 border-2 border-blue-900/50 shadow-lg my-3">
+    <div class="flex justify-between items-center mb-2">
+      <div>
+        <span class="text-xs font-bold bg-blue-900/80 text-blue-200 px-2 py-0.5 rounded uppercase">Héroe</span>
+        <h2 class="text-2xl font-black text-slate-100">SPIDER-MAN</h2>
+      </div>
+      <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded">Jugador 1</span>
+    </div>
+
+    <!-- Vida del Héroe -->
+    <div class="text-center py-3 bg-slate-950/50 rounded-xl my-2">
+      <span class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Puntos de Vida</span>
+      <div id="hp-heroe" class="text-5xl font-extrabold text-green-400">10</div>
+    </div>
+
+    <!-- Botones para cambiar vida del Héroe -->
+    <div class="grid grid-cols-4 gap-2 my-3">
+      <button onclick="cambiarVida('heroe', -5)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">-5</button>
+      <button onclick="cambiarVida('heroe', -1)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">-1</button>
+      <button onclick="cambiarVida('heroe', 1)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">+1</button>
+      <button onclick="cambiarVida('heroe', 5)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">+5</button>
+    </div>
+
+    <!-- Fichas de Estado -->
+    <div class="mt-4 pt-3 border-t border-slate-700/50">
+      <span class="text-xs text-slate-400 uppercase tracking-wider block mb-2">Estados del Héroe:</span>
+      <div class="grid grid-cols-3 gap-2">
+        <button id="btn-confuso" onclick="toggleEstado('confuso')" class="bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-2 rounded-lg text-xs uppercase active:scale-95 transition">Confuso</button>
+        <button id="btn-aturdido" onclick="toggleEstado('aturdido')" class="bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-2 rounded-lg text-xs uppercase active:scale-95 transition">Aturdido</button>
+        <button id="btn-duro" onclick="toggleEstado('duro')" class="bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-2 rounded-lg text-xs uppercase active:scale-95 transition">Duro</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="text-center py-2 text-xs text-slate-500">
+    Fase 1: Prototipo Interactivo
+  </footer>
+
+  <!-- LÓGICA DE PROGRAMACIÓN (JAVASCRIPT) -->
+  <script>
+    let vidaVillano = 14;
+    let vidaHeroe = 10;
+    
+    let estados = {
+      confuso: false,
+      aturdido: false,
+      duro: false
+    };
+
+    function cambiarVida(personaje, cantidad) {
+      if (personaje === 'villano') {
+        vidaVillano = Math.max(0, vidaVillano + cantidad);
+        document.getElementById('hp-villano').innerText = vidaVillano;
+      } else if (personaje === 'heroe') {
+        vidaHeroe = Math.max(0, vidaHeroe + cantidad);
+        document.getElementById('hp-heroe').innerText = vidaHeroe;
+      }
+    }
+
+    function toggleEstado(estado) {
+      estados[estado] = !estados[estado];
+      const btn = document.getElementById('btn-' + estado);
+      
+      if (estados[estado]) {
+        btn.className = "bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-bold py-2 rounded-lg text-xs uppercase active:scale-95 transition shadow-lg shadow-amber-500/10";
+      } else {
+        btn.className = "bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-2 rounded-lg text-xs uppercase active:scale-95 transition";
+      }
+    }
+  </script>
+
+</body>
+</html>
