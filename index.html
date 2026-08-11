@@ -21,7 +21,7 @@
 
   <!-- PANEL DE CONFIGURACIÓN DE PARTIDA -->
   <section class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/60 my-3 shadow-xl backdrop-blur">
-    <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Selección de Partida</h2>
+    <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Selección de Partida (Modo Libre)</h2>
     
     <div class="grid grid-cols-2 gap-2">
       <div>
@@ -139,10 +139,10 @@
   </div>
 
   <footer class="text-center py-2 text-[10px] text-slate-500 font-medium">
-    Conectado dinámicamente a MarvelCDB
+    Conectado a MarvelCDB API
   </footer>
 
-  <!-- LÓGICA DE PROGRAMACIÓN -->
+  <!-- LÓGICA REVISADA DE MARVELCDB -->
   <script>
     let vidaVillano = 0;
     let vidaHeroe = 0;
@@ -214,13 +214,17 @@
         selectHeroe.innerHTML += `<option value="${h.code}">${h.name} (${h.health || 10} HP)</option>`;
       });
 
-      // 2. Filtrar Villanos (type_code === 'villain')
-      const villanos = cartasFiltradas.filter(c => c.type_code === 'villain');
+      // 2. Filtrar Villanos (type_code es 'villain' o el nombre del grupo coincide con villanos)
+      const villanos = cartasFiltradas.filter(c => c.type_code === 'villain' || c.type_code === 'villain_phase');
       const villanosUnicos = [...new Map(villanos.map(item => [item.name, item])).values()];
 
-      villanosUnicos.forEach(v => {
-        selectVillano.innerHTML += `<option value="${v.pack_code}_${v.name}">${v.name} (${v.health || 12} HP)</option>`;
-      });
+      if (villanosUnicos.length === 0) {
+        selectVillano.innerHTML = '<option value="">Sin villanos en cajas seleccionadas</option>';
+      } else {
+        villanosUnicos.forEach(v => {
+          selectVillano.innerHTML += `<option value="${v.pack_code}_${v.name}">${v.name} (${v.health || 12} HP)</option>`;
+        });
+      }
 
       actualizarHeroe();
       actualizarVillano();
@@ -240,17 +244,19 @@
       const val = document.getElementById('select-villano').value;
       if (!val) return;
 
-      const [packCode, nombreVillano] = val.split('_');
+      const partes = val.split('_');
+      const packCode = partes[0];
+      const nombreVillano = partes[1];
       
-      // Buscar primera fase del villano para asignar vida inicial
-      const villanoCard = todasLasCartas.find(c => c.type_code === 'villain' && c.name === nombreVillano);
+      // Buscar carta de villano
+      const villanoCard = todasLasCartas.find(c => (c.type_code === 'villain' || c.type_code === 'villain_phase') && c.name === nombreVillano);
       if (villanoCard) {
         vidaVillano = villanoCard.health || 12;
         document.getElementById('nombre-villano').innerText = villanoCard.name.toUpperCase();
         document.getElementById('hp-villano').innerText = vidaVillano;
       }
 
-      // Buscar todos los Planes Principales (main_scheme) ordenados de ese escenario
+      // Buscar todos los Planes Principales (main_scheme) del mismo pack ordenados por etapa
       planesDelVillano = todasLasCartas
         .filter(c => c.type_code === 'main_scheme' && c.pack_code === packCode)
         .sort((a, b) => (a.stage || 1) - (b.stage || 1));
@@ -271,7 +277,7 @@
         document.getElementById('amenaza-actual').innerText = amenazaActual;
         document.getElementById('amenaza-limite').innerText = amenazaLimite;
       } else {
-        document.getElementById('nombre-plan').innerText = 'Plan Estándar';
+        document.getElementById('nombre-plan').innerText = 'Plan Principal Estándar';
         document.getElementById('etapa-plan').innerText = 'Etapa 1B';
         amenazaActual = 0;
         amenazaLimite = 10;
@@ -294,10 +300,9 @@
       amenazaActual = Math.max(0, amenazaActual + cant);
       document.getElementById('amenaza-actual').innerText = amenazaActual;
 
-      // SI LA AMENAZA ALCANZA O SUPERA EL LÍMITE, PASA AL SIGUIENTE PLAN AUTOMÁTICAMENTE
       if (amenazaActual >= amenazaLimite && planesDelVillano.length > 0) {
         if (indicePlanActual + 1 < planesDelVillano.length) {
-          alert(`⚠️ ¡La amenaza alcanzó el límite! Se avanza automáticamente al siguiente Plan Principal.`);
+          alert(`⚠️ ¡La amenaza alcanzó el límite! Avanzando automáticamente al siguiente Plan Principal.`);
           indicePlanActual++;
           cargarPlanActual();
         } else {
@@ -317,7 +322,6 @@
     function abrirModalColeccion() { document.getElementById('modal-coleccion').classList.remove('hidden'); }
     function cerrarModalColeccion() { document.getElementById('modal-coleccion').classList.add('hidden'); }
 
-    // Iniciar app
     inicializarMarvelCDB();
   </script>
 </body>
