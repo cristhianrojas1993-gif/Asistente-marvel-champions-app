@@ -12,16 +12,16 @@
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p id="api-status" class="text-[10px] text-slate-400 font-semibold tracking-wide">Cargando base de datos de MarvelCDB...</p>
+      <p id="api-status" class="text-[10px] text-slate-400 font-semibold tracking-wide">Cargando datos de MarvelCDB...</p>
     </div>
     <button onclick="abrirModalColeccion()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 active:scale-95 transition shadow-md">
       📦 Colección
     </button>
   </header>
 
-  <!-- PANEL DE CONFIGURACIÓN (MODO LIBRE) -->
+  <!-- PANEL DE CONFIGURACIÓN DE PARTIDA -->
   <section class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/60 my-3 shadow-xl backdrop-blur">
-    <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Selección de Partida (Modo Libre)</h2>
+    <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Selección de Partida</h2>
     
     <div class="grid grid-cols-2 gap-2">
       <div>
@@ -42,7 +42,7 @@
   <!-- TABLERO PRINCIPAL DE JUEGO -->
   <main class="space-y-3 flex-1">
     
-    <!-- TARJETA DEL VILLANO -->
+    <!-- TARJETA DEL VILLANO Y PLAN PRINCIPAL -->
     <section class="bg-gradient-to-b from-slate-800 to-slate-850 rounded-2xl p-4 border-2 border-red-900/60 shadow-2xl">
       <div class="flex justify-between items-center mb-1">
         <div>
@@ -52,29 +52,41 @@
         <span id="fase-villano" class="text-xs font-bold bg-slate-900 border border-red-800/80 text-red-400 px-2.5 py-1 rounded-lg">Fase I</span>
       </div>
       
+      <!-- VIDA DEL VILLANO -->
       <div class="text-center py-2 bg-slate-950/60 rounded-xl my-2 border border-slate-800">
         <div id="hp-villano" class="text-5xl font-black text-red-500 tracking-tight">0</div>
       </div>
       
       <div class="grid grid-cols-4 gap-2 mb-3">
-        <button onclick="cambiarVida('villano', -5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">-5</button>
-        <button onclick="cambiarVida('villano', -1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">-1</button>
-        <button onclick="cambiarVida('villano', 1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">+1</button>
-        <button onclick="cambiarVida('villano', 5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">+5</button>
+        <button onclick="cambiarVida('villano', -5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-5</button>
+        <button onclick="cambiarVida('villano', -1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-1</button>
+        <button onclick="cambiarVida('villano', 1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+1</button>
+        <button onclick="cambiarVida('villano', 5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+5</button>
       </div>
 
-      <!-- SECCIÓN DE PLAN PRINCIPAL (AMENAZA) -->
+      <!-- SECCIÓN DEL PLAN PRINCIPAL (AMENAZA) -->
       <div class="pt-3 border-t border-slate-700/60">
         <div class="flex justify-between items-center mb-1">
-          <span id="nombre-plan" class="text-xs font-bold text-amber-400 uppercase tracking-wide">Plan Principal: Seleccionar</span>
-          <span class="text-[10px] text-slate-400">Amenaza</span>
-        </div>
-        <div class="flex items-center justify-between bg-slate-950/60 p-2 rounded-xl border border-slate-800">
-          <div class="grid grid-cols-2 gap-1 w-28">
-            <button onclick="cambiarAmenaza(-1)" class="bg-slate-800 active:bg-slate-700 font-bold py-1 rounded-lg border border-slate-700 text-xs text-slate-200">-1</button>
-            <button onclick="cambiarAmenaza(1)" class="bg-slate-800 active:bg-slate-700 font-bold py-1 rounded-lg border border-slate-700 text-xs text-slate-200">+1</button>
+          <div>
+            <span class="text-[9px] font-black bg-amber-900/80 text-amber-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Plan Principal</span>
+            <h4 id="nombre-plan" class="text-xs font-bold text-amber-400 mt-0.5">Sin Plan Asignado</h4>
           </div>
-          <div id="amenaza-plan" class="text-2xl font-black text-amber-400 px-3">0</div>
+          <span id="etapa-plan" class="text-[10px] font-bold text-amber-300 bg-amber-950 border border-amber-800 px-2 py-0.5 rounded-md">Etapa 1B</span>
+        </div>
+
+        <div class="flex items-center justify-between bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 my-2">
+          <div class="grid grid-cols-2 gap-1 w-28">
+            <button onclick="cambiarAmenaza(-1)" class="bg-slate-800 active:bg-slate-700 font-bold py-1.5 rounded-lg border border-slate-700 text-xs text-slate-200">-1</button>
+            <button onclick="cambiarAmenaza(1)" class="bg-slate-800 active:bg-slate-700 font-bold py-1.5 rounded-lg border border-slate-700 text-xs text-slate-200">+1</button>
+          </div>
+          <div class="text-right">
+            <div class="flex items-baseline justify-end gap-1">
+              <span id="amenaza-actual" class="text-3xl font-black text-amber-400">0</span>
+              <span class="text-slate-500 font-bold text-xs">/</span>
+              <span id="amenaza-limite" class="text-slate-400 font-bold text-sm">0</span>
+            </div>
+            <span class="text-[9px] text-slate-500 uppercase block font-semibold">Amenaza Actual</span>
+          </div>
         </div>
       </div>
     </section>
@@ -94,17 +106,17 @@
       </div>
 
       <div class="grid grid-cols-4 gap-2 mb-3">
-        <button onclick="cambiarVida('heroe', -5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">-5</button>
-        <button onclick="cambiarVida('heroe', -1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">-1</button>
-        <button onclick="cambiarVida('heroe', 1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">+1</button>
-        <button onclick="cambiarVida('heroe', 5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">+5</button>
+        <button onclick="cambiarVida('heroe', -5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-5</button>
+        <button onclick="cambiarVida('heroe', -1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-1</button>
+        <button onclick="cambiarVida('heroe', 1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+1</button>
+        <button onclick="cambiarVida('heroe', 5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+5</button>
       </div>
 
       <!-- ESTADOS DEL HÉROE -->
       <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-700/60">
-        <button id="btn-confuso" onclick="toggleEstado('confuso')" class="bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider transition">Confuso</button>
-        <button id="btn-aturdido" onclick="toggleEstado('aturdido')" class="bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider transition">Aturdido</button>
-        <button id="btn-duro" onclick="toggleEstado('duro')" class="bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider transition">Duro</button>
+        <button id="btn-confuso" onclick="toggleEstado('confuso')" class="bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider">Confuso</button>
+        <button id="btn-aturdido" onclick="toggleEstado('aturdido')" class="bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider">Aturdido</button>
+        <button id="btn-duro" onclick="toggleEstado('duro')" class="bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider">Duro</button>
       </div>
     </section>
 
@@ -119,7 +131,7 @@
       </div>
 
       <div id="lista-coleccion-api" class="space-y-2 overflow-y-auto pr-1 text-xs flex-1">
-        <p class="text-slate-400 text-center py-4">Obteniendo expansiones de MarvelCDB...</p>
+        <p class="text-slate-400 text-center py-4">Cargando expansiones de MarvelCDB...</p>
       </div>
 
       <button onclick="guardarYFiltrar()" class="w-full bg-red-600 font-extrabold py-3 rounded-2xl text-xs uppercase tracking-wider shadow-lg active:scale-95 transition">Guardar y Aplicar</button>
@@ -127,14 +139,17 @@
   </div>
 
   <footer class="text-center py-2 text-[10px] text-slate-500 font-medium">
-    Conectado dinámicamente a la API de MarvelCDB
+    Conectado dinámicamente a MarvelCDB
   </footer>
 
-  <!-- LÓGICA DE DATOS -->
+  <!-- LÓGICA DE PROGRAMACIÓN -->
   <script>
     let vidaVillano = 0;
     let vidaHeroe = 0;
-    let amenazaPlan = 0;
+    let amenazaActual = 0;
+    let amenazaLimite = 0;
+    let planesDelVillano = [];
+    let indicePlanActual = 0;
     let estados = { confuso: false, aturdido: false, duro: false };
     
     let packsMarvelCDB = [];
@@ -191,7 +206,7 @@
 
       const cartasFiltradas = todasLasCartas.filter(c => coleccionUsuario.includes(c.pack_code));
 
-      // Filtrar Héroes (type_code === 'hero')
+      // 1. Filtrar Héroes (type_code === 'hero')
       const heroes = cartasFiltradas.filter(c => c.type_code === 'hero');
       const heroesUnicos = [...new Map(heroes.map(item => [item.name, item])).values()];
       
@@ -199,12 +214,12 @@
         selectHeroe.innerHTML += `<option value="${h.code}">${h.name} (${h.health || 10} HP)</option>`;
       });
 
-      // Filtrar Villanos (type_code === 'villain')
+      // 2. Filtrar Villanos (type_code === 'villain')
       const villanos = cartasFiltradas.filter(c => c.type_code === 'villain');
       const villanosUnicos = [...new Map(villanos.map(item => [item.name, item])).values()];
 
       villanosUnicos.forEach(v => {
-        selectVillano.innerHTML += `<option value="${v.code}">${v.name} (${v.health || 12} HP)</option>`;
+        selectVillano.innerHTML += `<option value="${v.pack_code}_${v.name}">${v.name} (${v.health || 12} HP)</option>`;
       });
 
       actualizarHeroe();
@@ -222,24 +237,46 @@
     }
 
     function actualizarVillano() {
-      const code = document.getElementById('select-villano').value;
-      const villano = todasLasCartas.find(c => c.code === code);
-      if (villano) {
-        vidaVillano = villano.health || 12;
-        document.getElementById('nombre-villano').innerText = villano.name.toUpperCase();
-        document.getElementById('hp-villano').innerText = vidaVillano;
+      const val = document.getElementById('select-villano').value;
+      if (!val) return;
 
-        // Buscar Plan Principal asociado (main_scheme)
-        const plan = todasLasCartas.find(c => c.type_code === 'main_scheme' && c.pack_code === villano.pack_code);
-        if (plan) {
-          document.getElementById('nombre-plan').innerText = `Plan: ${plan.name}`;
-          amenazaPlan = plan.base_threat || 0;
-          document.getElementById('amenaza-plan').innerText = amenazaPlan;
-        } else {
-          document.getElementById('nombre-plan').innerText = 'Plan Principal: Estándar';
-          amenazaPlan = 0;
-          document.getElementById('amenaza-plan').innerText = amenazaPlan;
-        }
+      const [packCode, nombreVillano] = val.split('_');
+      
+      // Buscar primera fase del villano para asignar vida inicial
+      const villanoCard = todasLasCartas.find(c => c.type_code === 'villain' && c.name === nombreVillano);
+      if (villanoCard) {
+        vidaVillano = villanoCard.health || 12;
+        document.getElementById('nombre-villano').innerText = villanoCard.name.toUpperCase();
+        document.getElementById('hp-villano').innerText = vidaVillano;
+      }
+
+      // Buscar todos los Planes Principales (main_scheme) ordenados de ese escenario
+      planesDelVillano = todasLasCartas
+        .filter(c => c.type_code === 'main_scheme' && c.pack_code === packCode)
+        .sort((a, b) => (a.stage || 1) - (b.stage || 1));
+
+      indicePlanActual = 0;
+      cargarPlanActual();
+    }
+
+    function cargarPlanActual() {
+      if (planesDelVillano.length > 0 && planesDelVillano[indicePlanActual]) {
+        const plan = planesDelVillano[indicePlanActual];
+        document.getElementById('nombre-plan').innerText = plan.name;
+        document.getElementById('etapa-plan').innerText = `Etapa ${plan.stage || (indicePlanActual + 1)}B`;
+        
+        amenazaActual = plan.base_threat || 0;
+        amenazaLimite = plan.base_threat_over_total || plan.threat || 7;
+        
+        document.getElementById('amenaza-actual').innerText = amenazaActual;
+        document.getElementById('amenaza-limite').innerText = amenazaLimite;
+      } else {
+        document.getElementById('nombre-plan').innerText = 'Plan Estándar';
+        document.getElementById('etapa-plan').innerText = 'Etapa 1B';
+        amenazaActual = 0;
+        amenazaLimite = 10;
+        document.getElementById('amenaza-actual').innerText = 0;
+        document.getElementById('amenaza-limite').innerText = 10;
       }
     }
 
@@ -254,8 +291,19 @@
     }
 
     function cambiarAmenaza(cant) {
-      amenazaPlan = Math.max(0, amenazaPlan + cant);
-      document.getElementById('amenaza-plan').innerText = amenazaPlan;
+      amenazaActual = Math.max(0, amenazaActual + cant);
+      document.getElementById('amenaza-actual').innerText = amenazaActual;
+
+      // SI LA AMENAZA ALCANZA O SUPERA EL LÍMITE, PASA AL SIGUIENTE PLAN AUTOMÁTICAMENTE
+      if (amenazaActual >= amenazaLimite && planesDelVillano.length > 0) {
+        if (indicePlanActual + 1 < planesDelVillano.length) {
+          alert(`⚠️ ¡La amenaza alcanzó el límite! Se avanza automáticamente al siguiente Plan Principal.`);
+          indicePlanActual++;
+          cargarPlanActual();
+        } else {
+          alert(`💀 ¡EL PLAN PRINCIPAL HA COMPLETADO SU ÚLTIMA ETAPA! LOS HÉROES HAN PERDIDO LA PARTIDA.`);
+        }
+      }
     }
 
     function toggleEstado(est) {
@@ -269,6 +317,7 @@
     function abrirModalColeccion() { document.getElementById('modal-coleccion').classList.remove('hidden'); }
     function cerrarModalColeccion() { document.getElementById('modal-coleccion').classList.add('hidden'); }
 
+    // Iniciar app
     inicializarMarvelCDB();
   </script>
 </body>
