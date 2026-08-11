@@ -19,40 +19,22 @@
     </button>
   </header>
 
-  <!-- PANEL DE CONFIGURACIÓN -->
+  <!-- PANEL DE CONFIGURACIÓN (MODO LIBRE) -->
   <section class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/60 my-3 shadow-xl backdrop-blur">
-    <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Preparación de Partida</h2>
+    <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Selección de Partida (Modo Libre)</h2>
     
-    <div class="grid grid-cols-2 gap-2 mb-3">
-      <button onclick="seleccionarModo('preset')" id="tab-preset" class="py-2 text-xs font-bold rounded-xl bg-red-600 text-white shadow-md transition">Desafíos</button>
-      <button onclick="seleccionarModo('libre')" id="tab-libre" class="py-2 text-xs font-bold rounded-xl bg-slate-700/60 text-slate-400 transition">Modo Libre</button>
-    </div>
-
-    <!-- MODO DESAFÍOS -->
-    <div id="panel-presets" class="space-y-2">
-      <select id="select-preset" onchange="cargarPreset()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs font-medium text-slate-200 focus:outline-none focus:border-red-500">
-        <option value="">-- Elige un Escenario --</option>
-        <option value="rhino_facil">🟢 [Fácil] Rhino</option>
-        <option value="klaw_medio">🟡 [Medio] Klaw</option>
-        <option value="ultron_dificil">🔴 [Difícil] Ultron</option>
-      </select>
-    </div>
-
-    <!-- MODO LIBRE -->
-    <div id="panel-libre" class="hidden space-y-2">
-      <div class="grid grid-cols-2 gap-2">
-        <div>
-          <label class="text-[10px] font-bold text-slate-400 uppercase">Villano</label>
-          <select id="select-villano" onchange="cambiarVillanoCustom()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
-            <!-- Se llena dinámicamente según tu colección -->
-          </select>
-        </div>
-        <div>
-          <label class="text-[10px] font-bold text-slate-400 uppercase">Héroe</label>
-          <select id="select-heroe" onchange="cambiarHeroeCustom()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
-            <!-- Se llena dinámicamente según tu colección -->
-          </select>
-        </div>
+    <div class="grid grid-cols-2 gap-2">
+      <div>
+        <label class="text-[10px] font-bold text-slate-400 uppercase">Villano</label>
+        <select id="select-villano" onchange="actualizarVillano()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
+          <option value="">Cargando villanos...</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-[10px] font-bold text-slate-400 uppercase">Héroe</label>
+        <select id="select-heroe" onchange="actualizarHeroe()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
+          <option value="">Cargando héroes...</option>
+        </select>
       </div>
     </div>
   </section>
@@ -65,20 +47,35 @@
       <div class="flex justify-between items-center mb-1">
         <div>
           <span class="text-[9px] font-black bg-red-900/80 text-red-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Villano</span>
-          <h3 id="nombre-villano" class="text-2xl font-black text-slate-100 mt-0.5">RHINO</h3>
+          <h3 id="nombre-villano" class="text-2xl font-black text-slate-100 mt-0.5">SELECCIONAR</h3>
         </div>
         <span id="fase-villano" class="text-xs font-bold bg-slate-900 border border-red-800/80 text-red-400 px-2.5 py-1 rounded-lg">Fase I</span>
       </div>
       
       <div class="text-center py-2 bg-slate-950/60 rounded-xl my-2 border border-slate-800">
-        <div id="hp-villano" class="text-5xl font-black text-red-500 tracking-tight">14</div>
+        <div id="hp-villano" class="text-5xl font-black text-red-500 tracking-tight">0</div>
       </div>
       
-      <div class="grid grid-cols-4 gap-2">
+      <div class="grid grid-cols-4 gap-2 mb-3">
         <button onclick="cambiarVida('villano', -5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">-5</button>
         <button onclick="cambiarVida('villano', -1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">-1</button>
         <button onclick="cambiarVida('villano', 1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">+1</button>
         <button onclick="cambiarVida('villano', 5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 shadow text-slate-100 text-sm">+5</button>
+      </div>
+
+      <!-- SECCIÓN DE PLAN PRINCIPAL (AMENAZA) -->
+      <div class="pt-3 border-t border-slate-700/60">
+        <div class="flex justify-between items-center mb-1">
+          <span id="nombre-plan" class="text-xs font-bold text-amber-400 uppercase tracking-wide">Plan Principal: Seleccionar</span>
+          <span class="text-[10px] text-slate-400">Amenaza</span>
+        </div>
+        <div class="flex items-center justify-between bg-slate-950/60 p-2 rounded-xl border border-slate-800">
+          <div class="grid grid-cols-2 gap-1 w-28">
+            <button onclick="cambiarAmenaza(-1)" class="bg-slate-800 active:bg-slate-700 font-bold py-1 rounded-lg border border-slate-700 text-xs text-slate-200">-1</button>
+            <button onclick="cambiarAmenaza(1)" class="bg-slate-800 active:bg-slate-700 font-bold py-1 rounded-lg border border-slate-700 text-xs text-slate-200">+1</button>
+          </div>
+          <div id="amenaza-plan" class="text-2xl font-black text-amber-400 px-3">0</div>
+        </div>
       </div>
     </section>
 
@@ -87,13 +84,13 @@
       <div class="flex justify-between items-center mb-1">
         <div>
           <span class="text-[9px] font-black bg-blue-900/80 text-blue-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Héroe</span>
-          <h3 id="nombre-heroe" class="text-2xl font-black text-slate-100 mt-0.5">SPIDER-MAN</h3>
+          <h3 id="nombre-heroe" class="text-2xl font-black text-slate-100 mt-0.5">SELECCIONAR</h3>
         </div>
         <span class="text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-700 px-2 py-1 rounded-lg">Jugador 1</span>
       </div>
 
       <div class="text-center py-2 bg-slate-950/60 rounded-xl my-2 border border-slate-800">
-        <div id="hp-heroe" class="text-5xl font-black text-emerald-400 tracking-tight">10</div>
+        <div id="hp-heroe" class="text-5xl font-black text-emerald-400 tracking-tight">0</div>
       </div>
 
       <div class="grid grid-cols-4 gap-2 mb-3">
@@ -113,16 +110,14 @@
 
   </main>
 
-  <!-- MODAL DE COLECCIÓN CONECTADO A MARVELCDB -->
+  <!-- MODAL DE COLECCIÓN -->
   <div id="modal-coleccion" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
     <div class="bg-slate-800 rounded-3xl p-5 border border-slate-700 w-full max-w-sm space-y-4 shadow-2xl max-h-[85vh] flex flex-col">
-      
       <div class="flex justify-between items-center border-b border-slate-700 pb-2">
         <h3 class="text-base font-black text-slate-100 uppercase tracking-wide">Seleccionar Cajas</h3>
         <button onclick="cerrarModalColeccion()" class="text-slate-400 text-lg font-bold px-2">✕</button>
       </div>
 
-      <!-- LISTADO DE EXPANSIONES DESDE MARVELCDB -->
       <div id="lista-coleccion-api" class="space-y-2 overflow-y-auto pr-1 text-xs flex-1">
         <p class="text-slate-400 text-center py-4">Obteniendo expansiones de MarvelCDB...</p>
       </div>
@@ -132,53 +127,33 @@
   </div>
 
   <footer class="text-center py-2 text-[10px] text-slate-500 font-medium">
-    Conectado a la API oficial de MarvelCDB
+    Conectado dinámicamente a la API de MarvelCDB
   </footer>
 
-  <!-- LÓGICA INTEGRADORA CON MARVELCDB -->
+  <!-- LÓGICA DE DATOS -->
   <script>
-    let vidaVillano = 14;
-    let vidaHeroe = 10;
+    let vidaVillano = 0;
+    let vidaHeroe = 0;
+    let amenazaPlan = 0;
     let estados = { confuso: false, aturdido: false, duro: false };
     
     let packsMarvelCDB = [];
+    let todasLasCartas = [];
     let coleccionUsuario = JSON.parse(localStorage.getItem('mvl_coleccion')) || ['Core'];
 
-    // Base de personajes (MarvelCDB API)
-    const baseHeroes = [
-      { id: 'spiderman', name: 'Spider-Man', hp: 10, pack: 'Core' },
-      { id: 'ironman', name: 'Iron Man', hp: 9, pack: 'Core' },
-      { id: 'captainmarvel', name: 'Capitana Marvel', hp: 12, pack: 'Core' },
-      { id: 'shehulk', name: 'Hulka', hp: 15, pack: 'Core' },
-      { id: 'blackpanther', name: 'Pantera Negra', hp: 11, pack: 'Core' },
-      { id: 'captainamerica', name: 'Capitán América', hp: 11, pack: 'Cap' },
-      { id: 'msmarvel', name: 'Ms. Marvel', hp: 10, pack: 'MsMarvel' },
-      { id: 'thor', name: 'Thor', hp: 14, pack: 'Thor' },
-      { id: 'blackwidow', name: 'Viuda Negra', hp: 9, pack: 'Bw' },
-      { id: 'doctorstrange', name: 'Doctor Strange', hp: 10, pack: 'DrStrange' },
-      { id: 'hulk', name: 'Hulk', hp: 18, pack: 'Hulk' },
-      { id: 'hawkeye', name: 'Ojo de Halcón', hp: 9, pack: 'RORS' },
-      { id: 'spiderwoman', name: 'Spider-Woman', hp: 11, pack: 'RORS' }
-    ];
-
-    const baseVillanos = [
-      { id: 'rhino', name: 'Rhino', hp: 14, pack: 'Core' },
-      { id: 'klaw', name: 'Klaw', hp: 12, pack: 'Core' },
-      { id: 'ultron', name: 'Ultron', hp: 17, pack: 'Core' },
-      { id: 'goblin', name: 'El Duende Verde', hp: 16, pack: 'Gob' },
-      { id: 'crossbones', name: 'Crossbones', hp: 12, pack: 'RORS' }
-    ];
-
-    // Cargar paquetes directamente de la API MarvelCDB
     async function inicializarMarvelCDB() {
       try {
-        const resp = await fetch('https://marvelcdb.com/api/public/packs/');
-        packsMarvelCDB = await resp.json();
-        document.getElementById('api-status').innerText = 'Base de datos sincronizada con MarvelCDB';
+        const respPacks = await fetch('https://marvelcdb.com/api/public/packs/');
+        packsMarvelCDB = await respPacks.json();
+
+        const respCards = await fetch('https://marvelcdb.com/api/public/cards/');
+        todasLasCartas = await respCards.json();
+
+        document.getElementById('api-status').innerText = 'Base de datos sincronizada';
         renderizarColeccion();
         actualizarSelects();
       } catch (e) {
-        document.getElementById('api-status').innerText = 'Modo Offline (Sin conexión a API)';
+        document.getElementById('api-status').innerText = 'Error al conectar con MarvelCDB';
       }
     }
 
@@ -214,13 +189,58 @@
       selectHeroe.innerHTML = '';
       selectVillano.innerHTML = '';
 
-      baseHeroes.filter(h => coleccionUsuario.includes(h.pack) || h.pack === 'Core').forEach(h => {
-        selectHeroe.innerHTML += `<option value="${h.id}">${h.name} (${h.hp} HP)</option>`;
+      const cartasFiltradas = todasLasCartas.filter(c => coleccionUsuario.includes(c.pack_code));
+
+      // Filtrar Héroes (type_code === 'hero')
+      const heroes = cartasFiltradas.filter(c => c.type_code === 'hero');
+      const heroesUnicos = [...new Map(heroes.map(item => [item.name, item])).values()];
+      
+      heroesUnicos.forEach(h => {
+        selectHeroe.innerHTML += `<option value="${h.code}">${h.name} (${h.health || 10} HP)</option>`;
       });
 
-      baseVillanos.filter(v => coleccionUsuario.includes(v.pack) || v.pack === 'Core').forEach(v => {
-        selectVillano.innerHTML += `<option value="${v.id}">${v.name} (${v.hp} HP)</option>`;
+      // Filtrar Villanos (type_code === 'villain')
+      const villanos = cartasFiltradas.filter(c => c.type_code === 'villain');
+      const villanosUnicos = [...new Map(villanos.map(item => [item.name, item])).values()];
+
+      villanosUnicos.forEach(v => {
+        selectVillano.innerHTML += `<option value="${v.code}">${v.name} (${v.health || 12} HP)</option>`;
       });
+
+      actualizarHeroe();
+      actualizarVillano();
+    }
+
+    function actualizarHeroe() {
+      const code = document.getElementById('select-heroe').value;
+      const heroe = todasLasCartas.find(c => c.code === code);
+      if (heroe) {
+        vidaHeroe = heroe.health || 10;
+        document.getElementById('nombre-heroe').innerText = heroe.name.toUpperCase();
+        document.getElementById('hp-heroe').innerText = vidaHeroe;
+      }
+    }
+
+    function actualizarVillano() {
+      const code = document.getElementById('select-villano').value;
+      const villano = todasLasCartas.find(c => c.code === code);
+      if (villano) {
+        vidaVillano = villano.health || 12;
+        document.getElementById('nombre-villano').innerText = villano.name.toUpperCase();
+        document.getElementById('hp-villano').innerText = vidaVillano;
+
+        // Buscar Plan Principal asociado (main_scheme)
+        const plan = todasLasCartas.find(c => c.type_code === 'main_scheme' && c.pack_code === villano.pack_code);
+        if (plan) {
+          document.getElementById('nombre-plan').innerText = `Plan: ${plan.name}`;
+          amenazaPlan = plan.base_threat || 0;
+          document.getElementById('amenaza-plan').innerText = amenazaPlan;
+        } else {
+          document.getElementById('nombre-plan').innerText = 'Plan Principal: Estándar';
+          amenazaPlan = 0;
+          document.getElementById('amenaza-plan').innerText = amenazaPlan;
+        }
+      }
     }
 
     function cambiarVida(tipo, cant) {
@@ -233,6 +253,11 @@
       }
     }
 
+    function cambiarAmenaza(cant) {
+      amenazaPlan = Math.max(0, amenazaPlan + cant);
+      document.getElementById('amenaza-plan').innerText = amenazaPlan;
+    }
+
     function toggleEstado(est) {
       estados[est] = !estados[est];
       const btn = document.getElementById('btn-' + est);
@@ -241,41 +266,9 @@
         : "bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider";
     }
 
-    function seleccionarModo(modo) {
-      const isPreset = modo === 'preset';
-      document.getElementById('panel-presets').classList.toggle('hidden', !isPreset);
-      document.getElementById('panel-libre').classList.toggle('hidden', isPreset);
-      document.getElementById('tab-preset').className = isPreset ? "py-2 text-xs font-bold rounded-xl bg-red-600 text-white" : "py-2 text-xs font-bold rounded-xl bg-slate-700/60 text-slate-400";
-      document.getElementById('tab-libre').className = !isPreset ? "py-2 text-xs font-bold rounded-xl bg-red-600 text-white" : "py-2 text-xs font-bold rounded-xl bg-slate-700/60 text-slate-400";
-    }
-
-    function cargarPreset() {
-      const val = document.getElementById('select-preset').value;
-      if (val === 'rhino_facil') setStats('RHINO', 14, 'SPIDER-MAN', 10);
-      if (val === 'klaw_medio') setStats('KLAW', 12, 'PANTERA NEGRA', 11);
-      if (val === 'ultron_dificil') setStats('ULTRON', 17, 'IRON MAN', 9);
-    }
-
-    function cambiarVillanoCustom() {
-      const id = document.getElementById('select-villano').value;
-      const v = baseVillanos.find(item => item.id === id);
-      if(v) setVillano(v.name.toUpperCase(), v.hp);
-    }
-
-    function cambiarHeroeCustom() {
-      const id = document.getElementById('select-heroe').value;
-      const h = baseHeroes.find(item => item.id === id);
-      if(h) setHeroe(h.name.toUpperCase(), h.hp);
-    }
-
-    function setStats(vName, vHp, hName, hHp) { setVillano(vName, vHp); setHeroe(hName, hHp); }
-    function setVillano(name, hp) { vidaVillano = hp; document.getElementById('nombre-villano').innerText = name; document.getElementById('hp-villano').innerText = hp; }
-    function setHeroe(name, hp) { vidaHeroe = hp; document.getElementById('nombre-heroe').innerText = name; document.getElementById('hp-heroe').innerText = hp; }
-
     function abrirModalColeccion() { document.getElementById('modal-coleccion').classList.remove('hidden'); }
     function cerrarModalColeccion() { document.getElementById('modal-coleccion').classList.add('hidden'); }
 
-    // Ejecutar al cargar la página
     inicializarMarvelCDB();
   </script>
 </body>
