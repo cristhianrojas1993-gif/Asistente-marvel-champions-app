@@ -4,114 +4,185 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Marvel Champions Companion</title>
-  <!-- Tailwind CSS para diseño moderno -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-900 text-white min-h-screen p-4 flex flex-col justify-between font-sans">
 
   <!-- ENCABEZADO -->
-  <header class="text-center py-2 border-b border-slate-700">
-    <h1 class="text-xl font-bold tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-    <p class="text-xs text-slate-400">Companion App - Prototipo</p>
+  <header class="flex justify-between items-center py-2 border-b border-slate-700">
+    <div>
+      <h1 class="text-xl font-bold tracking-wider text-red-500 uppercase">Marvel Champions</h1>
+      <p class="text-xs text-slate-400">Companion App</p>
+    </div>
+    <button onclick="abrirModalColeccion()" class="bg-slate-800 border border-slate-600 px-3 py-1.5 rounded-lg text-xs font-semibold active:scale-95 transition">
+      📦 Mi Colección
+    </button>
   </header>
 
-  <!-- SECCIÓN DEL VILLANO -->
-  <section class="bg-slate-800 rounded-2xl p-4 border-2 border-red-900/50 shadow-lg my-3">
-    <div class="flex justify-between items-center mb-2">
-      <div>
-        <span class="text-xs font-bold bg-red-900/80 text-red-200 px-2 py-0.5 rounded uppercase">Villano</span>
-        <h2 class="text-2xl font-black text-slate-100">RHINO</h2>
-      </div>
-      <span class="text-sm font-bold text-slate-400">Fase I</span>
+  <!-- PANEL DE SETUP Y DIFICULTAD -->
+  <section class="bg-slate-800 rounded-2xl p-4 border border-slate-700 my-3">
+    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Configuración del Escenario</h2>
+    
+    <div class="grid grid-cols-2 gap-2 mb-3">
+      <button onclick="seleccionarModo('preset')" id="tab-preset" class="py-2 text-xs font-bold rounded-lg bg-red-600 text-white">Desafíos</button>
+      <button onclick="seleccionarModo('libre')" id="tab-libre" class="py-2 text-xs font-bold rounded-lg bg-slate-700 text-slate-300">Modo Libre</button>
     </div>
 
-    <!-- Vida del Villano -->
-    <div class="text-center py-3 bg-slate-950/50 rounded-xl my-2">
-      <span class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Puntos de Vida</span>
-      <div id="hp-villano" class="text-5xl font-extrabold text-red-500">14</div>
+    <!-- Opciones Desafíos -->
+    <div id="panel-presets" class="space-y-2">
+      <select id="select-preset" onchange="cargarPreset()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200">
+        <option value="">-- Selecciona un Desafío --</option>
+        <option value="facil">🟢 [Fácil] Rhino + Bomb Scare</option>
+        <option value="medio">🟡 [Medio] Klaw + Masters of Evil</option>
+        <option value="dificil">🔴 [Difícil] Ultron + Telepathic Trickery</option>
+      </select>
     </div>
 
-    <!-- Botones para cambiar vida del Villano -->
-    <div class="grid grid-cols-4 gap-2 mt-3">
-      <button onclick="cambiarVida('villano', -5)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">-5</button>
-      <button onclick="cambiarVida('villano', -1)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">-1</button>
-      <button onclick="cambiarVida('villano', 1)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">+1</button>
-      <button onclick="cambiarVida('villano', 5)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">+5</button>
-    </div>
-  </section>
-
-  <!-- SECCIÓN DEL HÉROE (TU JUGADOR) -->
-  <section class="bg-slate-800 rounded-2xl p-4 border-2 border-blue-900/50 shadow-lg my-3">
-    <div class="flex justify-between items-center mb-2">
-      <div>
-        <span class="text-xs font-bold bg-blue-900/80 text-blue-200 px-2 py-0.5 rounded uppercase">Héroe</span>
-        <h2 class="text-2xl font-black text-slate-100">SPIDER-MAN</h2>
-      </div>
-      <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded">Jugador 1</span>
-    </div>
-
-    <!-- Vida del Héroe -->
-    <div class="text-center py-3 bg-slate-950/50 rounded-xl my-2">
-      <span class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Puntos de Vida</span>
-      <div id="hp-heroe" class="text-5xl font-extrabold text-green-400">10</div>
-    </div>
-
-    <!-- Botones para cambiar vida del Héroe -->
-    <div class="grid grid-cols-4 gap-2 my-3">
-      <button onclick="cambiarVida('heroe', -5)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">-5</button>
-      <button onclick="cambiarVida('heroe', -1)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">-1</button>
-      <button onclick="cambiarVida('heroe', 1)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">+1</button>
-      <button onclick="cambiarVida('heroe', 5)" class="bg-slate-700 active:bg-slate-600 text-white font-bold py-3 rounded-lg text-lg active:scale-95 transition">+5</button>
-    </div>
-
-    <!-- Fichas de Estado -->
-    <div class="mt-4 pt-3 border-t border-slate-700/50">
-      <span class="text-xs text-slate-400 uppercase tracking-wider block mb-2">Estados del Héroe:</span>
-      <div class="grid grid-cols-3 gap-2">
-        <button id="btn-confuso" onclick="toggleEstado('confuso')" class="bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-2 rounded-lg text-xs uppercase active:scale-95 transition">Confuso</button>
-        <button id="btn-aturdido" onclick="toggleEstado('aturdido')" class="bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-2 rounded-lg text-xs uppercase active:scale-95 transition">Aturdido</button>
-        <button id="btn-duro" onclick="toggleEstado('duro')" class="bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-2 rounded-lg text-xs uppercase active:scale-95 transition">Duro</button>
+    <!-- Opciones Modo Libre -->
+    <div id="panel-libre" class="hidden space-y-2">
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-[10px] text-slate-400 uppercase">Villano</label>
+          <select id="select-villano" onchange="cambiarVillanoCustom()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-200">
+            <option value="rhino">Rhino (14 HP)</option>
+            <option value="klaw">Klaw (12 HP)</option>
+            <option value="ultron">Ultron (17 HP)</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 uppercase">Héroe</label>
+          <select id="select-heroe" onchange="cambiarHeroeCustom()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-200">
+            <option value="spiderman">Spider-Man (10 HP)</option>
+            <option value="captainamerica">Capitán América (11 HP)</option>
+            <option value="ironman">Iron Man (9 HP)</option>
+          </select>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- PIE DE PÁGINA -->
-  <footer class="text-center py-2 text-xs text-slate-500">
-    Fase 1: Prototipo Interactivo
+  <!-- TABLERO PRINCIPAL -->
+  <main class="space-y-3 flex-1">
+    
+    <!-- VILLANO -->
+    <section class="bg-slate-800/90 rounded-2xl p-4 border-2 border-red-900/50 shadow-lg">
+      <div class="flex justify-between items-center mb-1">
+        <span id="nombre-villano" class="text-xl font-black text-slate-100">RHINO</span>
+        <span id="fase-villano" class="text-xs font-bold bg-red-900/80 text-red-200 px-2 py-0.5 rounded">Fase I</span>
+      </div>
+      <div class="text-center py-2 bg-slate-950/50 rounded-xl my-2">
+        <div id="hp-villano" class="text-5xl font-extrabold text-red-500">14</div>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <button onclick="cambiarVida('villano', -5)" class="bg-slate-700 active:bg-slate-600 font-bold py-2.5 rounded-lg">-5</button>
+        <button onclick="cambiarVida('villano', -1)" class="bg-slate-700 active:bg-slate-600 font-bold py-2.5 rounded-lg">-1</button>
+        <button onclick="cambiarVida('villano', 1)" class="bg-slate-700 active:bg-slate-600 font-bold py-2.5 rounded-lg">+1</button>
+        <button onclick="cambiarVida('villano', 5)" class="bg-slate-700 active:bg-slate-600 font-bold py-2.5 rounded-lg">+5</button>
+      </div>
+    </section>
+
+    <!-- HÉROE -->
+    <section class="bg-slate-800/90 rounded-2xl p-4 border-2 border-blue-900/50 shadow-lg">
+      <div class="flex justify-between items-center mb-1">
+        <span id="nombre-heroe" class="text-xl font-black text-slate-100">SPIDER-MAN</span>
+        <span class="text-xs text-slate-400 bg-slate-700 px-2 py-0.5 rounded">Jugador 1</span>
+      </div>
+      <div class="text-center py-2 bg-slate-950/50 rounded-xl my-2">
+        <div id="hp-heroe" class="text-5xl font-extrabold text-green-400">10</div>
+      </div>
+      <div class="grid grid-cols-4 gap-2 mb-3">
+        <button onclick="cambiarVida('heroe', -5)" class="bg-slate-700 active:bg-slate-600 font-bold py-2.5 rounded-lg">-5</button>
+        <button onclick="cambiarVida('heroe', -1)" class="bg-slate-700 active:bg-slate-600 font-bold py-2.5 rounded-lg">-1</button>
+        <button onclick="cambiarVida('heroe', 1)" class="bg-slate-700 active:bg-slate-600 font-bold py-2.5 rounded-lg">+1</button>
+        <button onclick="cambiarVida('heroe', 5)" class="bg-slate-700 active:bg-slate-600 font-bold py-2.5 rounded-lg">+5</button>
+      </div>
+
+      <!-- ESTADOS -->
+      <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-700/50">
+        <button id="btn-confuso" onclick="toggleEstado('confuso')" class="bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-1.5 rounded-lg text-xs uppercase">Confuso</button>
+        <button id="btn-aturdido" onclick="toggleEstado('aturdido')" class="bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-1.5 rounded-lg text-xs uppercase">Aturdido</button>
+        <button id="btn-duro" onclick="toggleEstado('duro')" class="bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-1.5 rounded-lg text-xs uppercase">Duro</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE COLECCIÓN -->
+  <div id="modal-coleccion" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+    <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700 w-full max-w-sm space-y-4">
+      <h3 class="text-lg font-bold text-slate-100">Selecciona tus Cajas</h3>
+      <div class="space-y-2 text-sm">
+        <label class="flex items-center space-x-2"><input type="checkbox" checked class="rounded bg-slate-900 border-slate-700 text-red-600"> <span>Caja Base (Core Set)</span></label>
+        <label class="flex items-center space-x-2"><input type="checkbox" class="rounded bg-slate-900 border-slate-700 text-red-600"> <span>El Duende Verde</span></label>
+        <label class="flex items-center space-x-2"><input type="checkbox" class="rounded bg-slate-900 border-slate-700 text-red-600"> <span>La Sombra del Devorador</span></label>
+      </div>
+      <button onclick="cerrarModalColeccion()" class="w-full bg-red-600 font-bold py-2 rounded-xl text-xs uppercase">Guardar Colección</button>
+    </div>
+  </div>
+
+  <footer class="text-center py-2 text-[10px] text-slate-500">
+    Fase 2 & 3: Lógica de Escenarios e Integración
   </footer>
 
-  <!-- LÓGICA DE PROGRAMACIÓN (JAVASCRIPT) -->
+  <!-- LÓGICA -->
   <script>
     let vidaVillano = 14;
     let vidaHeroe = 10;
-    
-    let estados = {
-      confuso: false,
-      aturdido: false,
-      duro: false
-    };
+    let estados = { confuso: false, aturdido: false, duro: false };
 
-    function cambiarVida(personaje, cantidad) {
-      if (personaje === 'villano') {
-        vidaVillano = Math.max(0, vidaVillano + cantidad);
+    function cambiarVida(tipo, cant) {
+      if (tipo === 'villano') {
+        vidaVillano = Math.max(0, vidaVillano + cant);
         document.getElementById('hp-villano').innerText = vidaVillano;
-      } else if (personaje === 'heroe') {
-        vidaHeroe = Math.max(0, vidaHeroe + cantidad);
+      } else {
+        vidaHeroe = Math.max(0, vidaHeroe + cant);
         document.getElementById('hp-heroe').innerText = vidaHeroe;
       }
     }
 
-    function toggleEstado(estado) {
-      estados[estado] = !estados[estado];
-      const btn = document.getElementById('btn-' + estado);
-      
-      if (estados[estado]) {
-        btn.className = "bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-bold py-2 rounded-lg text-xs uppercase active:scale-95 transition shadow-lg shadow-amber-500/10";
-      } else {
-        btn.className = "bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-2 rounded-lg text-xs uppercase active:scale-95 transition";
-      }
+    function toggleEstado(est) {
+      estados[est] = !estados[est];
+      const btn = document.getElementById('btn-' + est);
+      btn.className = estados[est] 
+        ? "bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-bold py-1.5 rounded-lg text-xs uppercase"
+        : "bg-slate-700/50 text-slate-400 border border-slate-600 font-semibold py-1.5 rounded-lg text-xs uppercase";
     }
-  </script>
 
+    function seleccionarModo(modo) {
+      const isPreset = modo === 'preset';
+      document.getElementById('panel-presets').classList.toggle('hidden', !isPreset);
+      document.getElementById('panel-libre').classList.toggle('hidden', isPreset);
+      document.getElementById('tab-preset').className = isPreset ? "py-2 text-xs font-bold rounded-lg bg-red-600 text-white" : "py-2 text-xs font-bold rounded-lg bg-slate-700 text-slate-300";
+      document.getElementById('tab-libre').className = !isPreset ? "py-2 text-xs font-bold rounded-lg bg-red-600 text-white" : "py-2 text-xs font-bold rounded-lg bg-slate-700 text-slate-300";
+    }
+
+    function cargarPreset() {
+      const val = document.getElementById('select-preset').value;
+      if (val === 'facil') setStats('RHINO', 14, 'SPIDER-MAN', 10);
+      if (val === 'medio') setStats('KLAW', 12, 'CAPITÁN AMÉRICA', 11);
+      if (val === 'dificil') setStats('ULTRON', 17, 'IRON MAN', 9);
+    }
+
+    function cambiarVillanoCustom() {
+      const v = document.getElementById('select-villano').value;
+      if (v === 'rhino') setVillano('RHINO', 14);
+      if (v === 'klaw') setVillano('KLAW', 12);
+      if (v === 'ultron') setVillano('ULTRON', 17);
+    }
+
+    function cambiarHeroeCustom() {
+      const h = document.getElementById('select-heroe').value;
+      if (h === 'spiderman') setHeroe('SPIDER-MAN', 10);
+      if (h === 'captainamerica') setHeroe('CAPITÁN AMÉRICA', 11);
+      if (h === 'ironman') setHeroe('IRON MAN', 9);
+    }
+
+    function setStats(vName, vHp, hName, hHp) { setVillano(vName, vHp); setHeroe(hName, hHp); }
+    function setVillano(name, hp) { vidaVillano = hp; document.getElementById('nombre-villano').innerText = name; document.getElementById('hp-villano').innerText = hp; }
+    function setHeroe(name, hp) { vidaHeroe = hp; document.getElementById('nombre-heroe').innerText = name; document.getElementById('hp-heroe').innerText = hp; }
+
+    function abrirModalColeccion() { document.getElementById('modal-coleccion').classList.remove('hidden'); }
+    function cerrarModalColeccion() { document.getElementById('modal-coleccion').classList.add('hidden'); }
+  </script>
 </body>
 </html>
