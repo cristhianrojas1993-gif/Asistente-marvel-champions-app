@@ -12,9 +12,9 @@
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">COMPANION APP</p>
+      <p id="api-status" class="text-[10px] text-slate-400 font-semibold tracking-wide">Cargando base de datos de MarvelCDB...</p>
     </div>
-    <button onclick="abrirModalColeccion()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 active:scale-95 transition flex items-center gap-1 shadow-md">
+    <button onclick="abrirModalColeccion()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 active:scale-95 transition shadow-md">
       📦 Colección
     </button>
   </header>
@@ -24,19 +24,17 @@
     <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Preparación de Partida</h2>
     
     <div class="grid grid-cols-2 gap-2 mb-3">
-      <button onclick="seleccionarModo('preset')" id="tab-preset" class="py-2 text-xs font-bold rounded-xl bg-red-600 text-white shadow-md transition">Desafíos Oficiales</button>
+      <button onclick="seleccionarModo('preset')" id="tab-preset" class="py-2 text-xs font-bold rounded-xl bg-red-600 text-white shadow-md transition">Desafíos</button>
       <button onclick="seleccionarModo('libre')" id="tab-libre" class="py-2 text-xs font-bold rounded-xl bg-slate-700/60 text-slate-400 transition">Modo Libre</button>
     </div>
 
     <!-- MODO DESAFÍOS -->
     <div id="panel-presets" class="space-y-2">
       <select id="select-preset" onchange="cargarPreset()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs font-medium text-slate-200 focus:outline-none focus:border-red-500">
-        <option value="">-- Elige un Escenario Recomendado --</option>
-        <option value="rhino_facil">🟢 [Fácil] Rhino + Bomb Scare</option>
-        <option value="klaw_medio">🟡 [Medio] Klaw + Masters of Evil</option>
-        <option value="ultron_dificil">🔴 [Difícil] Ultron + Under Attack</option>
-        <option value="goblin_medio">🟡 [Medio] Risky Business (Goblin Verde)</option>
-        <option value="ronan_pesadilla">💀 [Pesadilla] Ronan el Acusador</option>
+        <option value="">-- Elige un Escenario --</option>
+        <option value="rhino_facil">🟢 [Fácil] Rhino</option>
+        <option value="klaw_medio">🟡 [Medio] Klaw</option>
+        <option value="ultron_dificil">🔴 [Difícil] Ultron</option>
       </select>
     </div>
 
@@ -46,19 +44,13 @@
         <div>
           <label class="text-[10px] font-bold text-slate-400 uppercase">Villano</label>
           <select id="select-villano" onchange="cambiarVillanoCustom()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
-            <option value="rhino">Rhino (14 HP)</option>
-            <option value="klaw">Klaw (12 HP)</option>
-            <option value="ultron">Ultron (17 HP)</option>
+            <!-- Se llena dinámicamente según tu colección -->
           </select>
         </div>
         <div>
           <label class="text-[10px] font-bold text-slate-400 uppercase">Héroe</label>
           <select id="select-heroe" onchange="cambiarHeroeCustom()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
-            <option value="spiderman">Spider-Man (10 HP)</option>
-            <option value="ironman">Iron Man (9 HP)</option>
-            <option value="captainmarvel">Capitana Marvel (12 HP)</option>
-            <option value="shehulk">Hulka (15 HP)</option>
-            <option value="blackpanther">Pantera Negra (11 HP)</option>
+            <!-- Se llena dinámicamente según tu colección -->
           </select>
         </div>
       </div>
@@ -121,62 +113,115 @@
 
   </main>
 
-  <!-- MODAL GESTOR DE COLECCIÓN OFICIAL -->
+  <!-- MODAL DE COLECCIÓN CONECTADO A MARVELCDB -->
   <div id="modal-coleccion" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
     <div class="bg-slate-800 rounded-3xl p-5 border border-slate-700 w-full max-w-sm space-y-4 shadow-2xl max-h-[85vh] flex flex-col">
       
       <div class="flex justify-between items-center border-b border-slate-700 pb-2">
-        <h3 class="text-base font-black text-slate-100 uppercase tracking-wide">Mi Colección</h3>
+        <h3 class="text-base font-black text-slate-100 uppercase tracking-wide">Seleccionar Cajas</h3>
         <button onclick="cerrarModalColeccion()" class="text-slate-400 text-lg font-bold px-2">✕</button>
       </div>
 
-      <!-- LISTADO DE CAJAS CON SCROLL -->
-      <div class="space-y-3 overflow-y-auto pr-1 text-xs flex-1">
-        
-        <div>
-          <span class="text-[10px] font-bold text-red-400 uppercase tracking-wider block mb-1">Caja Base</span>
-          <label class="flex items-center space-x-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-700">
-            <input type="checkbox" checked disabled class="accent-red-600 rounded">
-            <span class="font-bold">Caja Base (Core Set)</span>
-          </label>
-        </div>
-
-        <div>
-          <span class="text-[10px] font-bold text-blue-400 uppercase tracking-wider block mb-1">Expansiones de Campaña</span>
-          <div class="space-y-1.5">
-            <label class="flex items-center space-x-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/60"><input type="checkbox" class="accent-red-600"> <span>La Sombra del Devorador</span></label>
-            <label class="flex items-center space-x-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/60"><input type="checkbox" class="accent-red-600"> <span>La Sombra de Thanos</span></label>
-            <label class="flex items-center space-x-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/60"><input type="checkbox" class="accent-red-600"> <span>Sinister Motives</span></label>
-            <label class="flex items-center space-x-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/60"><input type="checkbox" class="accent-red-600"> <span>Mutant Genesis</span></label>
-            <label class="flex items-center space-x-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/60"><input type="checkbox" class="accent-red-600"> <span>NeXt Evolution</span></label>
-            <label class="flex items-center space-x-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/60"><input type="checkbox" class="accent-red-600"> <span>Age of Apocalypse</span></label>
-          </div>
-        </div>
-
-        <div>
-          <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider block mb-1">Packs de Escenario</span>
-          <div class="space-y-1.5">
-            <label class="flex items-center space-x-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/60"><input type="checkbox" class="accent-red-600"> <span>El Duende Verde</span></label>
-            <label class="flex items-center space-x-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/60"><input type="checkbox" class="accent-red-600"> <span>La Demoledora (Wrecking Crew)</span></label>
-            <label class="flex items-center space-x-2 bg-slate-900/50 p-2 rounded-lg border border-slate-700/60"><input type="checkbox" class="accent-red-600"> <span>Once Upon a Time</span></label>
-          </div>
-        </div>
-
+      <!-- LISTADO DE EXPANSIONES DESDE MARVELCDB -->
+      <div id="lista-coleccion-api" class="space-y-2 overflow-y-auto pr-1 text-xs flex-1">
+        <p class="text-slate-400 text-center py-4">Obteniendo expansiones de MarvelCDB...</p>
       </div>
 
-      <button onclick="cerrarModalColeccion()" class="w-full bg-red-600 font-extrabold py-3 rounded-2xl text-xs uppercase tracking-wider shadow-lg active:scale-95 transition">Guardar Cambios</button>
+      <button onclick="guardarYFiltrar()" class="w-full bg-red-600 font-extrabold py-3 rounded-2xl text-xs uppercase tracking-wider shadow-lg active:scale-95 transition">Guardar y Aplicar</button>
     </div>
   </div>
 
   <footer class="text-center py-2 text-[10px] text-slate-500 font-medium">
-    Marvel Champions Companion v1.1 - Datos de MarvelCDB
+    Conectado a la API oficial de MarvelCDB
   </footer>
 
-  <!-- LÓGICA JAVASCRIPT -->
+  <!-- LÓGICA INTEGRADORA CON MARVELCDB -->
   <script>
     let vidaVillano = 14;
     let vidaHeroe = 10;
     let estados = { confuso: false, aturdido: false, duro: false };
+    
+    let packsMarvelCDB = [];
+    let coleccionUsuario = JSON.parse(localStorage.getItem('mvl_coleccion')) || ['Core'];
+
+    // Base de personajes (MarvelCDB API)
+    const baseHeroes = [
+      { id: 'spiderman', name: 'Spider-Man', hp: 10, pack: 'Core' },
+      { id: 'ironman', name: 'Iron Man', hp: 9, pack: 'Core' },
+      { id: 'captainmarvel', name: 'Capitana Marvel', hp: 12, pack: 'Core' },
+      { id: 'shehulk', name: 'Hulka', hp: 15, pack: 'Core' },
+      { id: 'blackpanther', name: 'Pantera Negra', hp: 11, pack: 'Core' },
+      { id: 'captainamerica', name: 'Capitán América', hp: 11, pack: 'Cap' },
+      { id: 'msmarvel', name: 'Ms. Marvel', hp: 10, pack: 'MsMarvel' },
+      { id: 'thor', name: 'Thor', hp: 14, pack: 'Thor' },
+      { id: 'blackwidow', name: 'Viuda Negra', hp: 9, pack: 'Bw' },
+      { id: 'doctorstrange', name: 'Doctor Strange', hp: 10, pack: 'DrStrange' },
+      { id: 'hulk', name: 'Hulk', hp: 18, pack: 'Hulk' },
+      { id: 'hawkeye', name: 'Ojo de Halcón', hp: 9, pack: 'RORS' },
+      { id: 'spiderwoman', name: 'Spider-Woman', hp: 11, pack: 'RORS' }
+    ];
+
+    const baseVillanos = [
+      { id: 'rhino', name: 'Rhino', hp: 14, pack: 'Core' },
+      { id: 'klaw', name: 'Klaw', hp: 12, pack: 'Core' },
+      { id: 'ultron', name: 'Ultron', hp: 17, pack: 'Core' },
+      { id: 'goblin', name: 'El Duende Verde', hp: 16, pack: 'Gob' },
+      { id: 'crossbones', name: 'Crossbones', hp: 12, pack: 'RORS' }
+    ];
+
+    // Cargar paquetes directamente de la API MarvelCDB
+    async function inicializarMarvelCDB() {
+      try {
+        const resp = await fetch('https://marvelcdb.com/api/public/packs/');
+        packsMarvelCDB = await resp.json();
+        document.getElementById('api-status').innerText = 'Base de datos sincronizada con MarvelCDB';
+        renderizarColeccion();
+        actualizarSelects();
+      } catch (e) {
+        document.getElementById('api-status').innerText = 'Modo Offline (Sin conexión a API)';
+      }
+    }
+
+    function renderizarColeccion() {
+      const container = document.getElementById('lista-coleccion-api');
+      container.innerHTML = '';
+      
+      packsMarvelCDB.forEach(pack => {
+        const isChecked = coleccionUsuario.includes(pack.code) || pack.code === 'Core';
+        const item = document.createElement('label');
+        item.className = "flex items-center space-x-2 bg-slate-900/60 p-2.5 rounded-xl border border-slate-700/60";
+        item.innerHTML = `
+          <input type="checkbox" value="${pack.code}" ${isChecked ? 'checked' : ''} ${pack.code === 'Core' ? 'disabled' : ''} class="chk-pack accent-red-600 rounded">
+          <span class="font-bold text-slate-200">${pack.name}</span>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function guardarYFiltrar() {
+      const checkboxes = document.querySelectorAll('.chk-pack');
+      coleccionUsuario = ['Core'];
+      checkboxes.forEach(chk => { if(chk.checked && chk.value !== 'Core') coleccionUsuario.push(chk.value); });
+      localStorage.setItem('mvl_coleccion', JSON.stringify(coleccionUsuario));
+      actualizarSelects();
+      cerrarModalColeccion();
+    }
+
+    function actualizarSelects() {
+      const selectHeroe = document.getElementById('select-heroe');
+      const selectVillano = document.getElementById('select-villano');
+      
+      selectHeroe.innerHTML = '';
+      selectVillano.innerHTML = '';
+
+      baseHeroes.filter(h => coleccionUsuario.includes(h.pack) || h.pack === 'Core').forEach(h => {
+        selectHeroe.innerHTML += `<option value="${h.id}">${h.name} (${h.hp} HP)</option>`;
+      });
+
+      baseVillanos.filter(v => coleccionUsuario.includes(v.pack) || v.pack === 'Core').forEach(v => {
+        selectVillano.innerHTML += `<option value="${v.id}">${v.name} (${v.hp} HP)</option>`;
+      });
+    }
 
     function cambiarVida(tipo, cant) {
       if (tipo === 'villano') {
@@ -192,7 +237,7 @@
       estados[est] = !estados[est];
       const btn = document.getElementById('btn-' + est);
       btn.className = estados[est] 
-        ? "bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold py-2 rounded-xl text-[11px] uppercase tracking-wider shadow-lg shadow-amber-500/10"
+        ? "bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold py-2 rounded-xl text-[11px] uppercase tracking-wider"
         : "bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider";
     }
 
@@ -200,8 +245,8 @@
       const isPreset = modo === 'preset';
       document.getElementById('panel-presets').classList.toggle('hidden', !isPreset);
       document.getElementById('panel-libre').classList.toggle('hidden', isPreset);
-      document.getElementById('tab-preset').className = isPreset ? "py-2 text-xs font-bold rounded-xl bg-red-600 text-white shadow-md transition" : "py-2 text-xs font-bold rounded-xl bg-slate-700/60 text-slate-400 transition";
-      document.getElementById('tab-libre').className = !isPreset ? "py-2 text-xs font-bold rounded-xl bg-red-600 text-white shadow-md transition" : "py-2 text-xs font-bold rounded-xl bg-slate-700/60 text-slate-400 transition";
+      document.getElementById('tab-preset').className = isPreset ? "py-2 text-xs font-bold rounded-xl bg-red-600 text-white" : "py-2 text-xs font-bold rounded-xl bg-slate-700/60 text-slate-400";
+      document.getElementById('tab-libre').className = !isPreset ? "py-2 text-xs font-bold rounded-xl bg-red-600 text-white" : "py-2 text-xs font-bold rounded-xl bg-slate-700/60 text-slate-400";
     }
 
     function cargarPreset() {
@@ -209,24 +254,18 @@
       if (val === 'rhino_facil') setStats('RHINO', 14, 'SPIDER-MAN', 10);
       if (val === 'klaw_medio') setStats('KLAW', 12, 'PANTERA NEGRA', 11);
       if (val === 'ultron_dificil') setStats('ULTRON', 17, 'IRON MAN', 9);
-      if (val === 'goblin_medio') setStats('DUENDE VERDE', 16, 'CAPITANA MARVEL', 12);
-      if (val === 'ronan_pesadilla') setStats('RONAN', 18, 'HULKA', 15);
     }
 
     function cambiarVillanoCustom() {
-      const v = document.getElementById('select-villano').value;
-      if (v === 'rhino') setVillano('RHINO', 14);
-      if (v === 'klaw') setVillano('KLAW', 12);
-      if (v === 'ultron') setVillano('ULTRON', 17);
+      const id = document.getElementById('select-villano').value;
+      const v = baseVillanos.find(item => item.id === id);
+      if(v) setVillano(v.name.toUpperCase(), v.hp);
     }
 
     function cambiarHeroeCustom() {
-      const h = document.getElementById('select-heroe').value;
-      if (h === 'spiderman') setHeroe('SPIDER-MAN', 10);
-      if (h === 'ironman') setHeroe('IRON MAN', 9);
-      if (h === 'captainmarvel') setHeroe('CAPITANA MARVEL', 12);
-      if (h === 'shehulk') setHeroe('HULKA', 15);
-      if (h === 'blackpanther') setHeroe('PANTERA NEGRA', 11);
+      const id = document.getElementById('select-heroe').value;
+      const h = baseHeroes.find(item => item.id === id);
+      if(h) setHeroe(h.name.toUpperCase(), h.hp);
     }
 
     function setStats(vName, vHp, hName, hHp) { setVillano(vName, vHp); setHeroe(hName, hHp); }
@@ -235,6 +274,9 @@
 
     function abrirModalColeccion() { document.getElementById('modal-coleccion').classList.remove('hidden'); }
     function cerrarModalColeccion() { document.getElementById('modal-coleccion').classList.add('hidden'); }
+
+    // Ejecutar al cargar la página
+    inicializarMarvelCDB();
   </script>
 </body>
 </html>
