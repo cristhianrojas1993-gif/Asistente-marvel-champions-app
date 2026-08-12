@@ -6,7 +6,7 @@
   <title>Marvel Champions Companion</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* ANIMACIÓN CONTINUA DE BRILLO METALIZADO (UN SOLO SENTIDO) */
+    /* ANIMACIÓN CONTINUA DE BRILLO METALIZADO (ARMADURAS) */
     @keyframes shineContinuous {
       0% { transform: translateX(-150%) skewX(-20deg); }
       100% { transform: translateX(250%) skewX(-20deg); }
@@ -23,20 +23,29 @@
       }
     }
 
-    /* MOVIMIENTO FLUIDO DE MATERIA OSCURA DE VENOM (SIMBIONTE) */
-    @keyframes symbioteShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* ANIMACIÓN DE PETRÓLEO/MATERIA OSCURA EN FLUIDO CONTINUO (VENOM) */
+    @keyframes oilFlow {
+      0% {
+        background-position: 0% 0%;
+        filter: drop-shadow(0 0 8px rgba(2, 6, 23, 0.9));
+      }
+      50% {
+        background-position: 100% 100%;
+        filter: drop-shadow(0 0 18px rgba(15, 23, 42, 1));
+      }
+      100% {
+        background-position: 0% 0%;
+        filter: drop-shadow(0 0 8px rgba(2, 6, 23, 0.9));
+      }
     }
 
     @keyframes pulseSymbioteBorder {
       0%, 100% {
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3), inset 0 0 15px rgba(15, 23, 42, 0.9);
-        border-color: #cbd5e1 !important;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.95);
+        border-color: #e2e8f0 !important;
       }
       50% {
-        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6), inset 0 0 25px rgba(2, 6, 23, 0.95);
+        box-shadow: 0 0 24px rgba(255, 255, 255, 0.8), inset 0 0 35px rgba(2, 6, 23, 1);
         border-color: #ffffff !important;
       }
     }
@@ -102,25 +111,45 @@
       box-shadow: 0 0 15px rgba(226, 232, 240, 0.4);
     }
 
-    /* SPIDER-MAN (ROJO CON TELARAÑAS NEGRAS - SIN BRILLO METAL) */
+    /* SPIDER-MAN (TELARAÑA RADIAL REALISTA + AZUL MALLA) */
     .spiderman-card {
-      background-color: #b91c1c;
-      background-image: 
-        radial-gradient(circle at 50% 50%, transparent 20%, rgba(0,0,0,0.85) 90%),
-        repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(15, 23, 42, 0.75) 20px),
-        repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(15, 23, 42, 0.75) 20px),
-        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(15, 23, 42, 0.45) 36px),
-        repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(15, 23, 42, 0.45) 36px);
+      position: relative;
+      background: radial-gradient(circle at 50% 30%, #dc2626 0%, #991b1b 50%, #1e3a8a 100%);
       border: 3px solid #ef4444 !important;
-      box-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+      box-shadow: 0 0 18px rgba(220, 38, 38, 0.6);
+      overflow: hidden;
+    }
+    .spiderman-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cg stroke='%23000000' stroke-width='1.5' fill='none' opacity='0.55'%3E%3C!-- Rayos de Telaraña --%3E%3Cline x1='150' y1='150' x2='150' y2='0'/%3E%3Cline x1='150' y1='150' x2='300' y2='150'/%3E%3Cline x1='150' y1='150' x2='150' y2='300'/%3E%3Cline x1='150' y1='150' x2='0' y2='150'/%3E%3Cline x1='150' y1='150' x2='256' y2='44'/%3E%3Cline x1='150' y1='150' x2='256' y2='256'/%3E%3Cline x1='150' y1='150' x2='44' y2='256'/%3E%3Cline x1='150' y1='150' x2='44' y2='44'/%3E%3C!-- Arcos Cóncavos Anidados --%3E%3Cpath d='M150,120 Q171,128 171,150 Q171,171 150,171 Q128,171 128,150 Q128,128 150,120 Z'/%3E%3Cpath d='M150,90 Q192,102 192,150 Q192,192 150,192 Q108,192 108,150 Q108,102 150,90 Z'/%3E%3Cpath d='M150,60 Q213,77 213,150 Q213,213 150,213 Q87,213 87,150 Q87,77 150,60 Z'/%3E%3Cpath d='M150,30 Q234,51 234,150 Q234,234 150,234 Q66,234 66,150 Q66,51 150,30 Z'/%3E%3Cpath d='M150,5 Q252,26 252,150 Q252,252 150,252 Q48,252 48,150 Q48,26 150,5 Z'/%3E%3C/g%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center 30%;
+      background-size: 280px 280px;
+      pointer-events: none;
+      z-index: 1;
     }
 
-    /* VENOM (MATERIA OSCURA SIMBIONTE EN MOVIMIENTO FLUIDO) */
+    /* VENOM (PETRÓLEO OSCURO Y VISCOSO EN FLUIDO VIVO) */
     .venom-card {
-      background: linear-gradient(270deg, #020617, #0f172a, #1e1b4b, #020617, #090d16);
-      background-size: 300% 300%;
-      animation: symbioteShift 7s ease infinite, pulseSymbioteBorder 3s infinite ease-in-out;
-      border: 3px solid #cbd5e1 !important;
+      position: relative;
+      background: radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 40%, #000000 80%),
+                  linear-gradient(135deg, #020617 0%, #1e1b4b 25%, #000000 50%, #090d16 75%, #020617 100%);
+      background-size: 200% 200%;
+      animation: oilFlow 8s ease-in-out infinite, pulseSymbioteBorder 3.5s infinite ease-in-out;
+      border: 3px solid #e2e8f0 !important;
+      overflow: hidden;
+    }
+    .venom-card::after {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 0) 70%),
+                  repeating-radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0) 15px);
+      animation: oilFlow 12s infinite linear alternate;
+      pointer-events: none;
+      z-index: 1;
     }
 
     @keyframes pulseGlowEvolve {
@@ -138,7 +167,7 @@
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.6 (Spidey Web + Symbiote Venom)</p>
+      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.7 (Real Spidey Web + Viscous Venom)</p>
     </div>
     
     <button onclick="reiniciarPartida()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-red-400 active:scale-95 transition shadow-md">
@@ -356,7 +385,7 @@
   </div>
 
   <footer class="text-center py-1 text-[10px] text-slate-500 font-medium">
-    Marvel Champions Companion v6.6
+    Marvel Champions Companion v6.7
   </footer>
 
   <!-- LÓGICA Y CATÁLOGO COMPLETO -->
