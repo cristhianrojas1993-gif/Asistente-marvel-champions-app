@@ -23,6 +23,18 @@
       }
     }
 
+    /* EFECTO DE CAMPO ELECTROMAGNÉTICO PULSANTE PARA MAGNETO */
+    @keyframes magneticAura {
+      0%, 100% {
+        box-shadow: 0 0 12px rgba(192, 132, 252, 0.8), inset 0 0 15px rgba(129, 140, 248, 0.5);
+        border-color: #c084fc !important;
+      }
+      50% {
+        box-shadow: 0 0 28px rgba(168, 85, 247, 1), inset 0 0 22px rgba(192, 132, 252, 0.8);
+        border-color: #e879f9 !important;
+      }
+    }
+
     /* ESTILO BASE CON CAPA CROMADA TRASLÚCIDA */
     .metal-card {
       position: relative;
@@ -38,9 +50,9 @@
       background: linear-gradient(
         90deg, 
         rgba(255, 255, 255, 0) 0%, 
-        rgba(255, 255, 255, 0.18) 45%, 
-        rgba(255, 255, 255, 0.35) 50%, 
-        rgba(255, 255, 255, 0.18) 55%, 
+        rgba(255, 255, 255, 0.22) 45%, 
+        rgba(255, 255, 255, 0.45) 50%, 
+        rgba(255, 255, 255, 0.22) 55%, 
         rgba(255, 255, 255, 0) 100%
       );
       transform: skewX(-20deg);
@@ -77,6 +89,13 @@
       border: 3px solid #38bdf8 !important;
     }
 
+    /* ARMADURA MAGNETO (PLATA BRILLANTE + CAMPO MAGNÉTICO PULSANTE) */
+    .magneto-card {
+      background: linear-gradient(135deg, #334155 0%, #64748b 35%, #94a3b8 50%, #475569 80%, #1e293b 100%);
+      animation: magneticAura 2.2s infinite ease-in-out;
+      border: 3px solid #c084fc !important;
+    }
+
     @keyframes pulseGlowEvolve {
       0%, 100% { filter: drop-shadow(0 0 8px #facc15); border-color: #ffffff !important; }
       50% { filter: drop-shadow(0 0 18px #fde047); border-color: #facc15 !important; }
@@ -92,7 +111,7 @@
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.4 (Full Roster + Kang Fixed)</p>
+      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.5 (Magneto + Smooth Metallic Fix)</p>
     </div>
     
     <button onclick="reiniciarPartida()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-red-400 active:scale-95 transition shadow-md">
@@ -310,7 +329,7 @@
   </div>
 
   <footer class="text-center py-1 text-[10px] text-slate-500 font-medium">
-    Marvel Champions Companion v6.4
+    Marvel Champions Companion v6.5
   </footer>
 
   <!-- LÓGICA Y CATÁLOGO COMPLETO -->
@@ -356,7 +375,7 @@
       { id: 'ronan', name: 'Ronan el Acusador', hpPerPlayer: [18, 22], plans: [{ name: 'Juicio Universal', stage: '1B', threatPerPlayer: 10 }] },
 
       // La Sombra de Thanos (MTS)
-      { id: 'ebony_maw', name: 'Ebony Maw', hpPerPlayer: [14, 16], plans: [{ name: 'Ataque a Knowhere', stage: '1B', threatPerPlayer: 6 }] },
+      { id: 'ebony_maw', name: 'Ebony Maw', hpPerPlayer: [14, 16], plans: [{ name: 'Ataque Knowhere', stage: '1B', threatPerPlayer: 6 }] },
       { id: 'tower_defense', name: 'Proxima & Corvus (Tower Defense)', hpPerPlayer: [15, 18], plans: [{ name: 'Defensa de la Torre', stage: '1B', threatPerPlayer: 8 }] },
       { id: 'thanos', name: 'Thanos', hpPerPlayer: [20, 24], plans: [{ name: 'Las Gemas del Infinito', stage: '1B', threatPerPlayer: 12 }] },
       { id: 'hela', name: 'Hela', hpPerPlayer: [18, 22], plans: [{ name: 'Reino de Niflheim', stage: '1B', threatPerPlayer: 10 }] },
@@ -372,7 +391,7 @@
       // Mutant Genesis
       { id: 'sabretooth', name: 'Dientes de Sable', hpPerPlayer: [15, 18], plans: [{ name: 'Caza Mutante', stage: '1B', threatPerPlayer: 7 }] },
       { id: 'sentinel', name: 'Centinela Master Mold', hpPerPlayer: [16, 20], plans: [{ name: 'Fábrica de Centinelas', stage: '1B', threatPerPlayer: 8 }] },
-      { id: 'magneto', name: 'Magneto', hpPerPlayer: [20, 25], plans: [{ name: 'Dominación Mutante', stage: '1B', threatPerPlayer: 12 }] },
+      { id: 'magneto_v', name: 'Magneto (Villano)', hpPerPlayer: [20, 25], plans: [{ name: 'Dominación Mutante', stage: '1B', threatPerPlayer: 12 }] },
 
       // NeXt Evolution & Age of Apocalypse
       { id: 'stryfe', name: 'Stryfe', hpPerPlayer: [18, 22], plans: [{ name: 'Dominio Psíquico', stage: '1B', threatPerPlayer: 10 }] },
@@ -454,7 +473,7 @@
       { id: 'iceman', name: 'Hombre de Hielo (Bobby Drake)', hp: 11 },
       { id: 'jubilee', name: 'Júbilo (Jubilation Lee)', hp: 10 },
       { id: 'nightcrawler', name: 'Rondador Nocturno (Kurt Wagner)', hp: 11 },
-      { id: 'magneto_hero', name: 'Magneto (Erik Lehnsherr)', hp: 11 }
+      { id: 'magneto_hero', name: 'Magneto (Erik Lehnsherr)', hp: 11, esMagneto: true }
     ];
 
     let numJugadores = 1;
@@ -467,7 +486,8 @@
         cambioUsadoTurno: false,
         estados: { confuso: 0, aturdido: 0, duro: false, teson: false },
         ironheartData: { version: 1, contadores: 0 },
-        ironmanData: { mejorasTech: 0 }
+        ironmanData: { mejorasTech: 0 },
+        magnetoData: { cargas: 0 }
       }
     ];
 
@@ -568,6 +588,7 @@
           j.estados = { confuso: 0, aturdido: 0, duro: false, teson: false };
           j.ironheartData = { version: 1, contadores: 0 };
           j.ironmanData = { mejorasTech: 0 };
+          j.magnetoData = { cargas: 0 };
         });
 
         document.getElementById('panel-especial-kang').classList.add('hidden');
@@ -652,7 +673,8 @@
           cambioUsadoTurno: false,
           estados: { confuso: 0, aturdido: 0, duro: false, teson: false },
           ironheartData: { version: 1, contadores: 0 },
-          ironmanData: { mejorasTech: 0 }
+          ironmanData: { mejorasTech: 0 },
+          magnetoData: { cargas: 0 }
         });
       }
       while (jugadores.length > numJugadores) {
@@ -685,6 +707,7 @@
         const heroeObj = baseHeroes.find(h => h.id === j.heroeId);
         const esIronheart = heroeObj && heroeObj.esIronheart;
         const esIronman = heroeObj && heroeObj.esIronman;
+        const esMagneto = heroeObj && heroeObj.esMagneto;
 
         let listoEvolucionar = esIronheart && j.ironheartData.version < 3 && j.ironheartData.contadores >= 6;
 
@@ -696,6 +719,8 @@
           else if (j.ironheartData.version === 3) claseCard = `metal-card ironheart-v3 rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
         } else if (esIronman) {
           claseCard = `metal-card ironman-card rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
+        } else if (esMagneto) {
+          claseCard = `metal-card magneto-card rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
         }
 
         const card = document.createElement('div');
@@ -748,6 +773,27 @@
                   <button onclick="cambiarMejorasIronman(${index}, -1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">-</button>
                   <span id="txt-tech-ironman-${index}" class="text-sm font-black text-sky-400 px-1.5">${j.ironmanData.mejorasTech}</span>
                   <button onclick="cambiarMejorasIronman(${index}, 1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">+</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        let htmlPanelMagneto = '';
+        if (esMagneto) {
+          htmlPanelMagneto = `
+            <div class="relative z-10 mt-3 pt-2 border-t border-slate-700/60 bg-black/70 p-2.5 rounded-xl border border-purple-400/60 space-y-2 backdrop-blur-sm">
+              <div class="flex justify-between items-center">
+                <span class="text-[10px] font-black text-purple-300 uppercase tracking-wider">Control Electromagnético</span>
+                <span class="text-[10px] font-extrabold bg-purple-950 border border-purple-500 text-purple-200 px-2 py-0.5 rounded shadow">Aura Plata</span>
+              </div>
+
+              <div class="flex justify-between items-center bg-slate-950/80 p-1.5 rounded-lg border border-slate-800">
+                <span class="text-[9px] font-bold text-slate-300 uppercase">Cargas de Magnetismo:</span>
+                <div class="flex items-center gap-1">
+                  <button onclick="cambiarCargasMagneto(${index}, -1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">-</button>
+                  <span id="txt-cargas-magneto-${index}" class="text-sm font-black text-purple-300 px-1.5">${j.magnetoData.cargas}</span>
+                  <button onclick="cambiarCargasMagneto(${index}, 1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">+</button>
                 </div>
               </div>
             </div>
@@ -812,11 +858,13 @@
 
           ${htmlPanelIronheart}
           ${htmlPanelIronman}
+          ${htmlPanelMagneto}
         `;
         container.appendChild(card);
       });
     }
 
+    // IN-PLACE UPDATES SIN RE-RENDERIZADO QUE REINICIE LAS ANIMACIONES CSS
     function cambiarContadoresIronheart(index, cant) {
       const data = jugadores[index].ironheartData;
       data.contadores = Math.max(0, data.contadores + cant);
@@ -828,7 +876,7 @@
       const btnWrapper = document.getElementById(`wrapper-btn-evolucion-${index}`);
 
       if (data.version < 3 && data.contadores >= 6) {
-        if (card) card.classList.add('glow-evolve');
+        if (card && !card.classList.contains('glow-evolve')) card.classList.add('glow-evolve');
         if (btnWrapper) {
           btnWrapper.innerHTML = `
             <button onclick="evolucionarIronheart(${index})" class="w-full bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-black py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow-lg active:scale-95 transition border border-yellow-200">
@@ -865,6 +913,14 @@
       }
     }
 
+    function cambiarCargasMagneto(index, cant) {
+      const data = jugadores[index].magnetoData;
+      data.cargas = Math.max(0, data.cargas + cant);
+
+      const txtCargas = document.getElementById(`txt-cargas-magneto-${index}`);
+      if (txtCargas) txtCargas.innerText = data.cargas;
+    }
+
     function seleccionarHeroeJugador(index, heroeId) {
       const heroe = baseHeroes.find(h => h.id === heroeId);
       if (heroe) {
@@ -874,6 +930,7 @@
         jugadores[index].cambioUsadoTurno = false;
         jugadores[index].ironheartData = { version: 1, contadores: 0 };
         jugadores[index].ironmanData = { mejorasTech: 0 };
+        jugadores[index].magnetoData = { cargas: 0 };
         renderizarJugadores();
       }
     }
@@ -931,7 +988,6 @@
         
         actualizarVidaVillanoCalculada();
 
-        // Kang inicia sin el botón de dividir mesa
         document.getElementById('panel-especial-kang').classList.add('hidden');
         document.getElementById('vista-etapa3b-kang').classList.add('hidden');
         document.getElementById('tablero-principal').classList.remove('hidden');
@@ -992,7 +1048,6 @@
       vidaVillano = Math.max(0, vidaVillano + cant);
       document.getElementById('hp-villano').innerText = vidaVillano;
 
-      // SI KANG I LLEGA A 0 HP, SE DESBLOQUEA Y MUESTRA EL BOTÓN DE ETAPA 3B
       if (vidaVillano === 0 && villanoSeleccionado.esKang && indicePlanActual === 0) {
         alert("🎉 ¡Kang I ha sido derrotado! Se ha desbloqueado la opción para dividir la mesa en la Etapa 3B.");
         document.getElementById('panel-especial-kang').classList.remove('hidden');
@@ -1013,7 +1068,7 @@
       }
     }
 
-    // MECÁNICA KANG ETAPA 3B (COLUMNAS CON PANELS DE HÉROE COMPLETOS + PLAN 2B ARRIBA)
+    // MECÁNICA KANG ETAPA 3B
     function iniciarMecanicaKang() {
       document.getElementById('tablero-principal').classList.add('hidden');
       document.getElementById('vista-etapa3b-kang').classList.remove('hidden');
@@ -1054,7 +1109,6 @@
         const col = document.createElement('div');
         col.className = `min-w-[300px] w-[88vw] max-w-[350px] snap-center flex-shrink-0 flex flex-col gap-3 p-3 rounded-2xl border ${linea.derrotado ? 'bg-slate-900/60 border-slate-700/80 opacity-75' : 'bg-slate-800 border-indigo-800 shadow-2xl'}`;
 
-        // PANEL DE KANG + PLAN 3B EN LA PARTE SUPERIOR DE LA COLUMNA
         let htmlKang = `
           <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/80 space-y-2">
             <div class="flex justify-between items-center border-b border-indigo-900/60 pb-1">
@@ -1092,7 +1146,6 @@
           </div>
         `;
 
-        // CLONACIÓN / RENDERIZADO DEL PANEL DEL HÉROE EN SU TAMAÑO ORIGINAL Y COMPLETO
         const idxJ = jugadores.findIndex(j => j.id === linea.idJugador);
         let htmlHeroeCompleto = '';
 
@@ -1101,6 +1154,7 @@
           const heroeObj = baseHeroes.find(h => h.id === j.heroeId);
           const esIronheart = heroeObj && heroeObj.esIronheart;
           const esIronman = heroeObj && heroeObj.esIronman;
+          const esMagneto = heroeObj && heroeObj.esMagneto;
 
           let claseCardHeroe = "bg-slate-900 rounded-2xl p-4 border-2 border-blue-900/60 shadow-xl space-y-2";
           if (esIronheart) {
@@ -1109,6 +1163,8 @@
             else if (j.ironheartData.version === 3) claseCardHeroe = `metal-card ironheart-v3 rounded-2xl p-4 space-y-2`;
           } else if (esIronman) {
             claseCardHeroe = `metal-card ironman-card rounded-2xl p-4 space-y-2`;
+          } else if (esMagneto) {
+            claseCardHeroe = `metal-card magneto-card rounded-2xl p-4 space-y-2`;
           }
 
           let opcionesVidaHeroe = '';
@@ -1157,6 +1213,26 @@
             `;
           }
 
+          let htmlPanelMagneto = '';
+          if (esMagneto) {
+            htmlPanelMagneto = `
+              <div class="relative z-10 mt-2 pt-2 border-t border-slate-700/60 bg-black/70 p-2 rounded-xl border border-purple-400/60 space-y-1.5">
+                <div class="flex justify-between items-center">
+                  <span class="text-[10px] font-black text-purple-300 uppercase">Magneto</span>
+                  <span class="text-[10px] font-extrabold bg-purple-950 border border-purple-500 text-purple-200 px-1.5 py-0.5 rounded">Plata Aura</span>
+                </div>
+                <div class="flex justify-between items-center bg-slate-950/80 p-1 rounded-lg">
+                  <span class="text-[9px] font-bold text-slate-300 uppercase">Cargas:</span>
+                  <div class="flex items-center gap-1">
+                    <button onclick="cambiarCargasMagneto(${idxJ}, -1); renderizarColumnasKang();" class="bg-slate-800 px-2 text-xs font-bold">-</button>
+                    <span class="text-xs font-black text-purple-300 px-1">${j.magnetoData.cargas}</span>
+                    <button onclick="cambiarCargasMagneto(${idxJ}, 1); renderizarColumnasKang();" class="bg-slate-800 px-2 text-xs font-bold">+</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
           htmlHeroeCompleto = `
             <div class="${claseCardHeroe}">
               <div class="relative z-10 flex justify-between items-center border-b border-slate-700/60 pb-1">
@@ -1193,6 +1269,7 @@
 
               ${htmlPanelIronheart}
               ${htmlPanelIronman}
+              ${htmlPanelMagneto}
             </div>
           `;
         }
