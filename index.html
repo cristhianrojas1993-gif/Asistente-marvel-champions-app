@@ -12,7 +12,7 @@
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Mesa de Juego Multijugador (1-4 Jugadores)</p>
+      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Mesa de Juego v4.6 (Kang: 4 Etapas de Plan)</p>
     </div>
     <button onclick="abrirModalColeccion()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 active:scale-95 transition shadow-md">
       📦 Colección
@@ -44,7 +44,7 @@
   <!-- TABLERO PRINCIPAL DE JUEGO -->
   <main class="space-y-3 flex-1 flex flex-col justify-start">
     
-    <!-- TARJETA DEL VILLANO Y PLAN PRINCIPAL (FIJO) -->
+    <!-- TARJETA DEL VILLANO Y PLAN PRINCIPAL -->
     <section class="bg-gradient-to-b from-slate-800 to-slate-850 rounded-2xl p-4 border-2 border-red-900/60 shadow-2xl">
       <div class="flex justify-between items-center mb-1">
         <div>
@@ -68,6 +68,13 @@
         <button onclick="cambiarVidaVillano(5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+5</button>
       </div>
 
+      <!-- BOTÓN ESPECIAL DE KANG -->
+      <div id="panel-especial-kang" class="hidden my-2">
+        <button onclick="iniciarMecanicaKang()" class="w-full bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-600 hover:to-indigo-600 text-white font-extrabold py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg active:scale-95 transition border border-purple-500">
+          🌀 Activar Etapa 3B (Dividir Mesa)
+        </button>
+      </div>
+
       <!-- PLAN PRINCIPAL -->
       <div class="pt-2 border-t border-slate-700/60">
         <div class="flex justify-between items-center mb-1">
@@ -89,8 +96,20 @@
               <span class="text-slate-500 font-bold text-xs">/</span>
               <span id="amenaza-limite" class="text-slate-400 font-bold text-xs">0</span>
             </div>
+            <span class="text-[8px] text-slate-500 uppercase block font-semibold" id="txt-calculo-amenaza">(Base × Jugadores)</span>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- PANEL MULTIVERSAL DE KANG (ETAPA 3B: LINEAS TEMPORALES DE 9 AMENAZA FIJA) -->
+    <section id="panel-lineas-temporales" class="hidden space-y-2 bg-indigo-950/40 p-3 rounded-2xl border border-indigo-800/60">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xs font-black text-indigo-300 uppercase tracking-wider">Etapa 3B: Líneas Temporales Separadas</h3>
+        <span class="text-[9px] bg-indigo-900 border border-indigo-700 text-indigo-200 px-2 py-0.5 rounded">Amenaza Fija: 9</span>
+      </div>
+      <div id="grid-kangs" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+        <!-- Generado por JS -->
       </div>
     </section>
 
@@ -125,10 +144,10 @@
   </div>
 
   <footer class="text-center py-1 text-[10px] text-slate-500 font-medium">
-    Marvel Champions Companion v3.0 - Base de Datos Completa
+    Marvel Champions Companion v4.6
   </footer>
 
-  <!-- LÓGICA Y BASE DE DATOS COMPLETA DE VILLANOS -->
+  <!-- LÓGICA Y BASE DE DATOS -->
   <script>
     const packsLista = [
       { id: 'core', name: 'Caja Base (Core Set)' },
@@ -146,71 +165,95 @@
       { id: 'aoa', name: 'Age of Apocalypse' }
     ];
 
-    // BASE DE DATOS COMPLETA DE VILLANOS Y PLANES PRINCIPALES
     const baseVillanos = [
-      // 1. CAJA BASE
-      { id: 'rhino', name: 'Rhino', pack: 'core', hp: [14, 15], plans: [{ name: 'La Ruptura', stage: '1B', threat: 7 }] },
-      { id: 'klaw', name: 'Klaw', pack: 'core', hp: [12, 18], plans: [{ name: 'El Imperio del Sonido', stage: '1B', threat: 6 }, { name: 'Ataque Secreto', stage: '2B', threat: 8 }] },
-      { id: 'ultron', name: 'Ultron', pack: 'core', hp: [17, 22], plans: [{ name: 'La Era de Ultron', stage: '1B', threat: 3 }, { name: 'Imperio de Máquinas', stage: '2B', threat: 10 }] },
+      // Caja Base
+      { id: 'rhino', name: 'Rhino', pack: 'core', hp: [14, 15], plans: [{ name: 'La Ruptura', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'klaw', name: 'Klaw', pack: 'core', hp: [12, 18], plans: [{ name: 'El Imperio del Sonido', stage: '1B', threatPerPlayer: 6 }, { name: 'Ataque Secreto', stage: '2B', threatPerPlayer: 8 }] },
+      { id: 'ultron', name: 'Ultron', pack: 'core', hp: [17, 22], plans: [{ name: 'La Era de Ultron', stage: '1B', threatPerPlayer: 3 }, { name: 'Imperio de Máquinas', stage: '2B', threatPerPlayer: 10 }] },
 
-      // 2. EL DUENDE VERDE
-      { id: 'norman', name: 'Norman Osborn', pack: 'goblin', hp: [16, 18], plans: [{ name: 'Negocios Arriesgados', stage: '1B', threat: 7 }] },
-      { id: 'mutagen', name: 'Fórmula Mutágena', pack: 'goblin', hp: [18, 20], plans: [{ name: 'Invasión Duende', stage: '1B', threat: 11 }] },
+      // KANG EL CONQUISTADOR (Estructura Corregida de 4 Etapas)
+      { 
+        id: 'kang', 
+        name: 'Kang el Conquistador', 
+        pack: 'kang', 
+        hp: [12, 15], 
+        esKang: true,
+        plans: [
+          { name: 'La Llegada de Kang', stage: '1B', threatPerPlayer: 7 },
+          { name: 'El Amo del Tiempo', stage: '2B', threatFixed: 0 },
+          { name: 'Líneas Temporales Separadas', stage: '3B', threatFixed: 9 },
+          { name: 'La Ira de Kang', stage: '4B', threatPerPlayer: 10 }
+        ] 
+      },
 
-      // 3. LA DEMOLEDORA
-      { id: 'wrecker', name: 'Wrecker', pack: 'wrecking', hp: [14, 16], plans: [{ name: 'Fuga de Prisión', stage: '1B', threat: 6 }] },
+      // El Duende Verde
+      { id: 'norman', name: 'Norman Osborn', pack: 'goblin', hp: [16, 18], plans: [{ name: 'Negocios Arriesgados', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'mutagen', name: 'Fórmula Mutágena', pack: 'goblin', hp: [18, 20], plans: [{ name: 'Invasión Duende', stage: '1B', threatPerPlayer: 11 }] },
 
-      // 4. LA SOMBRA DEL DEVORADOR DE MUNDOS
-      { id: 'crossbones', name: 'Crossbones', pack: 'red_skull', hp: [12, 14], plans: [{ name: 'Ataque a Nueva York', stage: '1B', threat: 6 }] },
-      { id: 'absorbing_man', name: 'Hombre Absorbente', pack: 'red_skull', hp: [14, 16], plans: [{ name: 'Poder Absorbente', stage: '1B', threat: 7 }] },
-      { id: 'taskmaster', name: 'Taskmaster', pack: 'red_skull', hp: [14, 16], plans: [{ name: 'Caza de Héroes', stage: '1B', threat: 8 }] },
-      { id: 'zola', name: 'Arnim Zola', pack: 'red_skull', hp: [12, 16], plans: [{ name: 'Creaciones de Zola', stage: '1B', threat: 8 }] },
-      { id: 'red_skull', name: 'Red Skull', pack: 'red_skull', hp: [16, 20], plans: [{ name: 'El Orden Mundial', stage: '1B', threat: 8 }, { name: 'Plan Maestro', stage: '2B', threat: 12 }] },
+      // La Demoledora
+      { id: 'wrecker', name: 'Wrecker', pack: 'wrecking', hp: [14, 16], plans: [{ name: 'Fuga de Prisión', stage: '1B', threatPerPlayer: 6 }] },
 
-      // 5. LOS MÁS BUSCADOS DE LA GALAXIA
-      { id: 'drang', name: 'Brotherhood of Badoon (Drang)', pack: 'gmw', hp: [13, 16], plans: [{ name: 'Invasión Badoon', stage: '1B', threat: 7 }] },
-      { id: 'collector_1', name: 'El Coleccionista (Infiltración)', pack: 'gmw', hp: [14, 17], plans: [{ name: 'La Colección', stage: '1B', threat: 7 }] },
-      { id: 'collector_2', name: 'El Coleccionista (Escape)', pack: 'gmw', hp: [15, 18], plans: [{ name: 'Huida del Museo', stage: '1B', threat: 8 }] },
-      { id: 'nebula', name: 'Nebula', pack: 'gmw', hp: [16, 19], plans: [{ name: 'Nave de Batalla', stage: '1B', threat: 9 }] },
-      { id: 'ronan', name: 'Ronan el Acusador', pack: 'gmw', hp: [18, 22], plans: [{ name: 'Juicio Universal', stage: '1B', threat: 10 }] },
+      // La Sombra del Devorador de Mundos
+      { id: 'crossbones', name: 'Crossbones', pack: 'red_skull', hp: [12, 14], plans: [{ name: 'Ataque a Nueva York', stage: '1B', threatPerPlayer: 6 }] },
+      { id: 'absorbing_man', name: 'Hombre Absorbente', pack: 'red_skull', hp: [14, 16], plans: [{ name: 'Poder Absorbente', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'taskmaster', name: 'Taskmaster', pack: 'red_skull', hp: [14, 16], plans: [{ name: 'Caza de Héroes', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'zola', name: 'Arnim Zola', pack: 'red_skull', hp: [12, 16], plans: [{ name: 'Creaciones de Zola', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'red_skull', name: 'Red Skull', pack: 'red_skull', hp: [16, 20], plans: [{ name: 'El Orden Mundial', stage: '1B', threatPerPlayer: 8 }, { name: 'Plan Maestro', stage: '2B', threatPerPlayer: 12 }] },
 
-      // 6. LA SOMBRA DE THANOS
-      { id: 'ebony_maw', name: 'Ebony Maw', pack: 'mts', hp: [14, 16], plans: [{ name: 'Ataque a Knowhere', stage: '1B', threat: 7 }] },
-      { id: 'tower_defense', name: 'Defensa de la Torre (Proxima & Corvus)', pack: 'mts', hp: [12, 15], plans: [{ name: 'Ataque a la Torre', stage: '1B', threat: 8 }] },
-      { id: 'thanos', name: 'Thanos', pack: 'mts', hp: [20, 24], plans: [{ name: 'Las Gemas del Infinito', stage: '1B', threat: 12 }, { name: 'El Equilibrio', stage: '2B', threat: 15 }] },
-      { id: 'hela', name: 'Hela', pack: 'mts', hp: [18, 20], plans: [{ name: 'Reina de Niflheim', stage: '1B', threat: 10 }] },
-      { id: 'loki', name: 'Loki', pack: 'mts', hp: [20, 22], plans: [{ name: 'Engaño del Dios', stage: '1B', threat: 10 }] },
+      // Los Más Buscados de la Galaxia
+      { id: 'drang', name: 'Brotherhood of Badoon (Drang)', pack: 'gmw', hp: [13, 16], plans: [{ name: 'Invasión Badoon', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'collector_1', name: 'El Coleccionista (Infiltración)', pack: 'gmw', hp: [14, 17], plans: [{ name: 'La Colección', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'collector_2', name: 'El Coleccionista (Escape)', pack: 'gmw', hp: [15, 18], plans: [{ name: 'Huida del Museo', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'nebula', name: 'Nebula', pack: 'gmw', hp: [16, 19], plans: [{ name: 'Nave de Batalla', stage: '1B', threatPerPlayer: 9 }] },
+      { id: 'ronan', name: 'Ronan el Acusador', pack: 'gmw', hp: [18, 22], plans: [{ name: 'Juicio Universal', stage: '1B', threatPerPlayer: 10 }] },
 
-      // 7. SINISTER MOTIVES
-      { id: 'sandman', name: 'Hombre de Arena', pack: 'sinister', hp: [16, 18], plans: [{ name: 'Tormenta de Arena', stage: '1B', threat: 8 }] },
-      { id: 'venom_villain', name: 'Venom (Villano)', pack: 'sinister', hp: [18, 20], plans: [{ name: 'Simbionte Suelto', stage: '1B', threat: 9 }] },
-      { id: 'mysterio', name: 'Mysterio', pack: 'sinister', hp: [16, 18], plans: [{ name: 'Laberinto de Ilusiones', stage: '1B', threat: 8 }] },
-      { id: 'sinister_six', name: 'Los Seis Siniestros', pack: 'sinister', hp: [12, 15], plans: [{ name: 'Ataque Coordinado', stage: '1B', threat: 10 }] },
-      { id: 'venom_goblin', name: 'Venom Goblin', pack: 'sinister', hp: [20, 26], plans: [{ name: 'Terror en la Ciudad', stage: '1B', threat: 10 }] },
+      // La Sombra de Thanos
+      { id: 'ebony_maw', name: 'Ebony Maw', pack: 'mts', hp: [14, 16], plans: [{ name: 'Ataque a Knowhere', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'tower_defense', name: 'Defensa de la Torre', pack: 'mts', hp: [12, 15], plans: [{ name: 'Ataque a la Torre', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'thanos', name: 'Thanos', pack: 'mts', hp: [20, 24], plans: [{ name: 'Las Gemas del Infinito', stage: '1B', threatPerPlayer: 12 }, { name: 'El Equilibrio', stage: '2B', threatPerPlayer: 15 }] },
+      { id: 'hela', name: 'Hela', pack: 'mts', hp: [18, 20], plans: [{ name: 'Reina de Niflheim', stage: '1B', threatPerPlayer: 10 }] },
+      { id: 'loki', name: 'Loki', pack: 'mts', hp: [20, 22], plans: [{ name: 'Engaño del Dios', stage: '1B', threatPerPlayer: 10 }] },
 
-      // 8. MUTANT GENESIS
-      { id: 'sabretooth', name: 'Dientes de Sable', pack: 'mutant', hp: [16, 18], plans: [{ name: 'Cacería Mutante', stage: '1B', threat: 7 }] },
-      { id: 'sentinels', name: 'Centinelas', pack: 'mutant', hp: [14, 16], plans: [{ name: 'Programa Centinela', stage: '1B', threat: 8 }] },
-      { id: 'master_mold', name: 'Molde Maestro', pack: 'mutant', hp: [18, 20], plans: [{ name: 'Producción en Masa', stage: '1B', threat: 9 }] },
-      { id: 'unus', name: 'Unus el Intocable', pack: 'mutant', hp: [16, 18], plans: [{ name: 'Campo de Fuerza', stage: '1B', threat: 8 }] },
-      { id: 'magneto', name: 'Magneto', pack: 'mutant', hp: [20, 25], plans: [{ name: 'Dominación Mutante', stage: '1B', threat: 12 }] },
+      // Sinister Motives
+      { id: 'sandman', name: 'Hombre de Arena', pack: 'sinister', hp: [16, 18], plans: [{ name: 'Tormenta de Arena', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'venom_villain', name: 'Venom (Villano)', pack: 'sinister', hp: [18, 20], plans: [{ name: 'Simbionte Suelto', stage: '1B', threatPerPlayer: 9 }] },
+      { id: 'mysterio', name: 'Mysterio', pack: 'sinister', hp: [16, 18], plans: [{ name: 'Laberinto de Ilusiones', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'sinister_six', name: 'Los Seis Siniestros', pack: 'sinister', hp: [12, 15], plans: [{ name: 'Ataque Coordinado', stage: '1B', threatPerPlayer: 10 }] },
+      { id: 'venom_goblin', name: 'Venom Goblin', pack: 'sinister', hp: [20, 26], plans: [{ name: 'Terror en la Ciudad', stage: '1B', threatPerPlayer: 10 }] },
 
-      // 9. NEXT EVOLUTION
-      { id: 'marauders', name: 'Los Merodeadores', pack: 'next_evo', hp: [15, 18], plans: [{ name: 'Emboscada', stage: '1B', threat: 8 }] },
-      { id: 'juggernaut', name: 'Juggernaut', pack: 'next_evo', hp: [20, 24], plans: [{ name: 'Fuerza Imparable', stage: '1B', threat: 9 }] },
-      { id: 'mister_sinister', name: 'Mister Sinister', pack: 'next_evo', hp: [18, 22], plans: [{ name: 'Experimentos Genéticos', stage: '1B', threat: 10 }] },
-      { id: 'stryfe', name: 'Stryfe', pack: 'next_evo', hp: [18, 22], plans: [{ name: 'El Futuro Oscuro', stage: '1B', threat: 10 }] },
+      // Mutant Genesis
+      { id: 'sabretooth', name: 'Dientes de Sable', pack: 'mutant', hp: [16, 18], plans: [{ name: 'Cacería Mutante', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'sentinels', name: 'Centinelas', pack: 'mutant', hp: [14, 16], plans: [{ name: 'Programa Centinela', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'master_mold', name: 'Molde Maestro', pack: 'mutant', hp: [18, 20], plans: [{ name: 'Producción en Masa', stage: '1B', threatPerPlayer: 9 }] },
+      { id: 'unus', name: 'Unus el Intocable', pack: 'mutant', hp: [16, 18], plans: [{ name: 'Campo de Fuerza', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'magneto', name: 'Magneto', pack: 'mutant', hp: [20, 25], plans: [{ name: 'Dominación Mutante', stage: '1B', threatPerPlayer: 12 }] },
 
-      // 10. AGE OF APOCALYPSE
-      { id: 'four_horsemen', name: 'Los Cuatro Jinetes', pack: 'aoa', hp: [16, 20], plans: [{ name: 'La Llegada del Fin', stage: '1B', threat: 10 }] },
-      { id: 'apocalypse', name: 'Apocalipsis', pack: 'aoa', hp: [22, 28], plans: [{ name: 'La Era de Apocalipsis', stage: '1B', threat: 12 }, { name: 'Supervivencia del Más Apto', stage: '2B', threat: 16 }] },
+      // NeXt Evolution
+      { id: 'marauders', name: 'Los Merodeadores', pack: 'next_evo', hp: [15, 18], plans: [{ name: 'Emboscada', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'juggernaut', name: 'Juggernaut', pack: 'next_evo', hp: [20, 24], plans: [{ name: 'Fuerza Imparable', stage: '1B', threatPerPlayer: 9 }] },
+      { id: 'mister_sinister', name: 'Mister Sinister', pack: 'next_evo', hp: [18, 22], plans: [{ name: 'Experimentos Genéticos', stage: '1B', threatPerPlayer: 10 }] },
+      { id: 'stryfe', name: 'Stryfe', pack: 'next_evo', hp: [18, 22], plans: [{ name: 'El Futuro Oscuro', stage: '1B', threatPerPlayer: 10 }] },
 
-      // PACKS INDIVIDUALES / ESCENARIO
-      { id: 'kang', name: 'Kang el Conquistador', pack: 'kang', hp: [12, 15], plans: [{ name: 'Conquista del Tiempo', stage: '1B', threat: 7 }] },
-      { id: 'hood', name: 'The Hood', pack: 'hood', hp: [14, 16], plans: [{ name: 'Imperio Criminal', stage: '1B', threat: 8 }] }
+      // Age of Apocalypse
+      { id: 'unus_aoa', name: 'Unus el Intocable', pack: 'aoa', hp: [16, 18], plans: [{ name: 'Barricada Mutante', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'four_horsemen', name: 'Los Cuatro Jinetes', pack: 'aoa', hp: [16, 20], plans: [{ name: 'La Llegada del Fin', stage: '1B', threatPerPlayer: 10 }] },
+      { id: 'apocalypse', name: 'Apocalipsis', pack: 'aoa', hp: [22, 28], plans: [{ name: 'La Era de Apocalipsis', stage: '1B', threatPerPlayer: 12 }] },
+      { id: 'dark_beast', name: 'Bestia Oscura', pack: 'aoa', hp: [18, 22], plans: [{ name: 'Experimentos Prohibidos', stage: '1B', threatPerPlayer: 9 }] },
+      { id: 'sabah_nur', name: 'En Sabah Nur', pack: 'aoa', hp: [25, 30], plans: [{ name: 'El Juicio Final', stage: '1B', threatPerPlayer: 15 }] },
+
+      // Scenario Packs
+      { id: 'hood', name: 'The Hood', pack: 'hood', hp: [14, 16], plans: [{ name: 'Imperio Criminal', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'mojomania', name: 'Mojo', pack: 'mojo', hp: [16, 20], plans: [{ name: 'El Show de Mojo', stage: '1B', threatPerPlayer: 9 }] }
     ];
 
-    // BASE DE DATOS LOCAL DE HÉROES
+    // LAS 4 VARIANTES DE KANG EN ETAPA 3B
+    const kangsMultiverso = [
+      { id: 'immortus', name: 'Kang Inmortus', plan: 'Cronópolis', threatFixed: 9 },
+      { id: 'iron_lad', name: 'Kang Iron Lad', plan: 'Destino Inexorable', threatFixed: 9 },
+      { id: 'rama_tut', name: 'Kang Rama-Tut', plan: 'En el Reino de Rama-Tut', threatFixed: 9 },
+      { id: 'scarlet', name: 'Kang Centurión Escarlata', plan: 'La Actual Guerra del Futuro', threatFixed: 9 }
+    ];
+
     const baseHeroes = [
       { id: 'spiderman', name: 'Spider-Man', pack: 'core', hp: 10 },
       { id: 'ironman', name: 'Iron Man', pack: 'core', hp: 9 },
@@ -218,14 +261,9 @@
       { id: 'shehulk', name: 'Hulka', pack: 'core', hp: 15 },
       { id: 'blackpanther', name: 'Pantera Negra', pack: 'core', hp: 11 },
       { id: 'captainamerica', name: 'Capitán América', pack: 'hero_pack', hp: 11 },
-      { id: 'msmarvel', name: 'Ms. Marvel', pack: 'hero_pack', hp: 10 },
       { id: 'thor', name: 'Thor', pack: 'hero_pack', hp: 14 },
-      { id: 'doctorstrange', name: 'Doctor Strange', pack: 'hero_pack', hp: 10 },
       { id: 'ironheart', name: 'Ironheart', pack: 'hero_pack', hp: 10 },
-      { id: 'venom_hero', name: 'Venom (Héroe)', pack: 'hero_pack', hp: 12 },
-      { id: 'wolverine', name: 'Wolverine', pack: 'hero_pack', hp: 10 },
       { id: 'cyclops', name: 'Cíclope', pack: 'mutant', hp: 10 },
-      { id: 'storm', name: 'Tormenta', pack: 'hero_pack', hp: 10 },
       { id: 'cable', name: 'Cable', pack: 'next_evo', hp: 12 }
     ];
 
@@ -269,6 +307,7 @@
       }
 
       renderizarJugadores();
+      if (villanoSeleccionado) cargarPlan();
     }
 
     function renderizarJugadores() {
@@ -384,6 +423,9 @@
         vidaVillano = villanoSeleccionado.hp[0];
         document.getElementById('hp-villano').innerText = vidaVillano;
 
+        document.getElementById('panel-especial-kang').classList.toggle('hidden', !villanoSeleccionado.esKang);
+        document.getElementById('panel-lineas-temporales').classList.add('hidden');
+
         cargarPlan();
       }
     }
@@ -403,9 +445,20 @@
         const plan = villanoSeleccionado.plans[indicePlanActual];
         document.getElementById('nombre-plan').innerText = plan.name;
         document.getElementById('etapa-plan').innerText = `Etapa ${plan.stage}`;
+        
         amenazaActual = 0;
         document.getElementById('amenaza-actual').innerText = 0;
-        document.getElementById('amenaza-limite').innerText = plan.threat;
+        
+        let limiteFinal = 0;
+        if (plan.threatFixed !== undefined) {
+          limiteFinal = plan.threatFixed;
+          document.getElementById('txt-calculo-amenaza').innerText = "(Amenaza Fija)";
+        } else if (plan.threatPerPlayer) {
+          limiteFinal = plan.threatPerPlayer * numJugadores;
+          document.getElementById('txt-calculo-amenaza').innerText = `(${plan.threatPerPlayer} Base × ${numJugadores} Jugadores)`;
+        }
+
+        document.getElementById('amenaza-limite').innerText = limiteFinal;
       }
     }
 
@@ -418,18 +471,60 @@
       if (!villanoSeleccionado) return;
       
       const planActual = villanoSeleccionado.plans[indicePlanActual];
+      let limiteFinal = planActual.threatFixed !== undefined ? planActual.threatFixed : (planActual.threatPerPlayer * numJugadores);
+
       amenazaActual = Math.max(0, amenazaActual + cant);
       document.getElementById('amenaza-actual').innerText = amenazaActual;
 
-      if (planActual && amenazaActual >= planActual.threat) {
+      if (planActual && limiteFinal > 0 && amenazaActual >= limiteFinal) {
         if (indicePlanActual + 1 < villanoSeleccionado.plans.length) {
-          alert(`⚠️ ¡La amenaza alcanzó el límite! Avanzando automáticamente al siguiente Plan.`);
+          alert(`⚠️ ¡La amenaza alcanzó el límite! Avanzando automáticamente a la siguiente etapa del Plan.`);
           indicePlanActual++;
           cargarPlan();
         } else {
           alert(`💀 ¡LA AMENAZA ALCANZÓ EL LÍMITE FINAL! LOS HÉROES HAN PERDIDO.`);
         }
       }
+    }
+
+    // MECÁNICA ETAPA 3B KANG (Líneas Temporales Separadas)
+    function iniciarMecanicaKang() {
+      const panel = document.getElementById('panel-lineas-temporales');
+      const grid = document.getElementById('grid-kangs');
+      panel.classList.remove('hidden');
+      grid.innerHTML = '';
+
+      // Avanzar automáticamente a la Etapa 3B en la tarjeta del plan
+      indicePlanActual = 2;
+      cargarPlan();
+
+      const kangsSorteados = [...kangsMultiverso].sort(() => 0.5 - Math.random());
+
+      jugadores.forEach((j, index) => {
+        const kAssigned = kangsSorteados[index % kangsSorteados.length];
+        const cardKang = document.createElement('div');
+        cardKang.className = "bg-slate-900 border border-indigo-800 p-3 rounded-xl space-y-2";
+        cardKang.innerHTML = `
+          <div class="flex justify-between items-center border-b border-indigo-900 pb-1">
+            <span class="font-black text-indigo-300">Jugador ${j.id}</span>
+            <span class="text-[10px] bg-indigo-950 text-indigo-200 border border-indigo-700 px-2 py-0.5 rounded">Etapa 3B - Línea ${j.id}</span>
+          </div>
+          <div>
+            <div class="font-extrabold text-red-400 text-sm">${kAssigned.name}</div>
+            <div class="text-[11px] text-amber-400 font-semibold">Plan 3B: ${kAssigned.plan} (Máx: 9 Fijo)</div>
+          </div>
+          <button onclick="marcarKangDerrotado(this)" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-1.5 rounded-lg text-[10px] uppercase tracking-wider">
+            ✓ Kang Derrotado (Pasar a Etapa 4B)
+          </button>
+        `;
+        grid.appendChild(cardKang);
+      });
+    }
+
+    function marcarKangDerrotado(btn) {
+      btn.className = "w-full bg-slate-800 text-slate-500 font-bold py-1.5 rounded-lg text-[10px] uppercase border border-slate-700";
+      btn.innerText = "✓ Kang de esta línea derrotado";
+      btn.disabled = true;
     }
 
     function abrirModalColeccion() { document.getElementById('modal-coleccion').classList.remove('hidden'); }
