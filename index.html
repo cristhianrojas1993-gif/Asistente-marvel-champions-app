@@ -6,65 +6,83 @@
   <title>Marvel Champions Companion</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* ANIMACIONES METALIZADAS DINO-REFLEXIVAS */
-    @keyframes shineMetal {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* ANIMACIÓN CONTINUA DE BRILLO METALIZADO (UN SOLO SENTIDO) */
+    @keyframes shineContinuous {
+      0% { transform: translateX(-150%) skewX(-20deg); }
+      100% { transform: translateX(250%) skewX(-20deg); }
     }
 
     @keyframes arcReactorPulse {
       0%, 100% {
-        box-shadow: 0 0 12px rgba(56, 189, 248, 0.8), inset 0 0 15px rgba(56, 189, 248, 0.5);
+        box-shadow: 0 0 10px rgba(56, 189, 248, 0.7), inset 0 0 12px rgba(56, 189, 248, 0.4);
         border-color: #38bdf8 !important;
       }
       50% {
-        box-shadow: 0 0 25px rgba(14, 165, 233, 1), inset 0 0 22px rgba(14, 165, 233, 0.8);
+        box-shadow: 0 0 22px rgba(14, 165, 233, 0.9), inset 0 0 18px rgba(14, 165, 233, 0.7);
         border-color: #7dd3fc !important;
       }
     }
 
-    /* IRONHEART V1 (VERDE-AZUL METÁLICO ANIMADO) */
+    /* ESTILO BASE CON CAPA CROMADA TRASLÚCIDA */
+    .metal-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .metal-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 60%;
+      height: 200%;
+      background: linear-gradient(
+        90deg, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(255, 255, 255, 0.18) 45%, 
+        rgba(255, 255, 255, 0.35) 50%, 
+        rgba(255, 255, 255, 0.18) 55%, 
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: skewX(-20deg);
+      animation: shineContinuous 4s infinite linear;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ARMADURA IRONHEART V1 (VERDE-AZUL METÁLICO) */
     .ironheart-v1 {
-      background: linear-gradient(120deg, #07282e 0%, #134e5a 25%, #2dd4bf 50%, #134e5a 75%, #07282e 100%);
-      background-size: 250% 250%;
-      animation: shineMetal 4s infinite linear;
+      background: linear-gradient(135deg, #07282e 0%, #134e5a 50%, #07282e 100%);
       border: 2px solid #2dd4bf !important;
-      box-shadow: 0 0 15px rgba(45, 212, 191, 0.4);
+      box-shadow: 0 0 12px rgba(45, 212, 191, 0.3);
     }
 
-    /* IRONHEART V2 (ROJO INTENSO METALIZADO ANIMADO + MARCO DORADO) */
+    /* ARMADURA IRONHEART V2 (ROJO INTENSO + MARCO DORADO) */
     .ironheart-v2 {
-      background: linear-gradient(120deg, #420808 0%, #991b1b 25%, #fef08a 50%, #991b1b 75%, #420808 100%);
-      background-size: 250% 250%;
-      animation: shineMetal 3.5s infinite linear;
+      background: linear-gradient(135deg, #420808 0%, #991b1b 50%, #420808 100%);
       border: 2.5px solid #facc15 !important;
-      box-shadow: 0 0 18px rgba(250, 204, 21, 0.5);
+      box-shadow: 0 0 15px rgba(250, 204, 21, 0.4);
     }
 
-    /* IRONHEART V3 (ROJO/DORADO/MAGENTA METALIZADO ANIMADO + MARCO BRULLANTE) */
+    /* ARMADURA IRONHEART V3 (ROJO/MAGENTA/DORADO) */
     .ironheart-v3 {
-      background: linear-gradient(120deg, #580a22 0%, #be123c 20%, #fef08a 50%, #eab308 70%, #580a22 100%);
-      background-size: 250% 250%;
-      animation: shineMetal 3s infinite linear;
-      border: 3.5px solid #fde047 !important;
-      box-shadow: 0 0 22px rgba(253, 224, 71, 0.7);
+      background: linear-gradient(135deg, #580a22 0%, #be123c 40%, #851849 70%, #9a3412 100%);
+      border: 3px solid #fde047 !important;
+      box-shadow: 0 0 18px rgba(253, 224, 71, 0.5);
     }
 
-    /* IRON MAN (ROJO INTENSO ANIMADO + REACTOR ARC AZUL NEÓN) */
+    /* ARMADURA IRON MAN (ROJO INTENSO + REACTOR ARC PULSANTE) */
     .ironman-card {
-      background: linear-gradient(120deg, #450a0a 0%, #b91c1c 25%, #fca5a5 50%, #b91c1c 75%, #450a0a 100%);
-      background-size: 250% 250%;
-      animation: shineMetal 3.5s infinite linear, arcReactorPulse 2s infinite ease-in-out;
+      background: linear-gradient(135deg, #450a0a 0%, #b91c1c 50%, #450a0a 100%);
+      animation: arcReactorPulse 2.5s infinite ease-in-out;
       border: 3px solid #38bdf8 !important;
     }
 
     @keyframes pulseGlowEvolve {
-      0%, 100% { filter: drop-shadow(0 0 10px #facc15); border-color: #ffffff !important; }
-      50% { filter: drop-shadow(0 0 22px #fde047); border-color: #facc15 !important; }
+      0%, 100% { filter: drop-shadow(0 0 8px #facc15); border-color: #ffffff !important; }
+      50% { filter: drop-shadow(0 0 18px #fde047); border-color: #facc15 !important; }
     }
     .glow-evolve {
-      animation: pulseGlowEvolve 1.2s infinite ease-in-out, shineMetal 2.5s infinite linear !important;
+      animation: pulseGlowEvolve 1.2s infinite ease-in-out !important;
     }
   </style>
 </head>
@@ -74,7 +92,7 @@
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.2 (Metal Animado + Arc Reactor)</p>
+      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.3 (Metal Smooth Loop)</p>
     </div>
     
     <div class="flex gap-1.5">
@@ -308,7 +326,7 @@
   </div>
 
   <footer class="text-center py-1 text-[10px] text-slate-500 font-medium">
-    Marvel Champions Companion v6.2
+    Marvel Champions Companion v6.3
   </footer>
 
   <!-- LÓGICA Y DICCIONARIO COMPLETO -->
@@ -509,7 +527,6 @@
       }
     }
 
-    // MANEJO DE ESTADOS EN EL VILLANO
     function toggleEstadoVillano(est) {
       if (est === 'firmeza') {
         villanoEstados.firmeza = !villanoEstados.firmeza;
@@ -623,61 +640,62 @@
         let claseCard = "bg-gradient-to-b from-slate-800 to-slate-850 rounded-2xl p-4 border-2 border-blue-900/60 shadow-2xl min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300";
 
         if (esIronheart) {
-          if (j.ironheartData.version === 1) claseCard = `ironheart-v1 rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300 ${listoEvolucionar ? 'glow-evolve' : ''}`;
-          else if (j.ironheartData.version === 2) claseCard = `ironheart-v2 rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300 ${listoEvolucionar ? 'glow-evolve' : ''}`;
-          else if (j.ironheartData.version === 3) claseCard = `ironheart-v3 rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
+          if (j.ironheartData.version === 1) claseCard = `metal-card ironheart-v1 rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300 ${listoEvolucionar ? 'glow-evolve' : ''}`;
+          else if (j.ironheartData.version === 2) claseCard = `metal-card ironheart-v2 rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300 ${listoEvolucionar ? 'glow-evolve' : ''}`;
+          else if (j.ironheartData.version === 3) claseCard = `metal-card ironheart-v3 rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
         } else if (esIronman) {
-          claseCard = `ironman-card rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
+          claseCard = `metal-card ironman-card rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
         }
 
         const card = document.createElement('div');
         card.className = claseCard;
+        card.id = `card-heroe-${index}`;
         
-        // PANEL IRONHEART
         let htmlPanelIronheart = '';
         if (esIronheart) {
           htmlPanelIronheart = `
-            <div class="mt-3 pt-2 border-t border-slate-700/60 bg-black/50 p-2.5 rounded-xl border border-yellow-500/40 space-y-2 backdrop-blur-sm">
+            <div class="relative z-10 mt-3 pt-2 border-t border-slate-700/60 bg-black/60 p-2.5 rounded-xl border border-yellow-500/40 space-y-2 backdrop-blur-sm">
               <div class="flex justify-between items-center">
                 <span class="text-[10px] font-black text-amber-300 uppercase tracking-wider">Armadura Ironheart</span>
-                <span class="text-[10px] font-extrabold bg-amber-950 border border-yellow-500 text-yellow-300 px-2 py-0.5 rounded shadow">v${j.ironheartData.version} ${j.ironheartData.version === 3 ? '(MÁX)' : ''}</span>
+                <span id="txt-v-ironheart-${index}" class="text-[10px] font-extrabold bg-amber-950 border border-yellow-500 text-yellow-300 px-2 py-0.5 rounded shadow">v${j.ironheartData.version} ${j.ironheartData.version === 3 ? '(MÁX)' : ''}</span>
               </div>
 
               <div class="flex justify-between items-center bg-slate-950/80 p-1.5 rounded-lg border border-slate-800">
-                <span class="text-[9px] font-bold text-slate-300 uppercase">${j.ironheartData.version === 3 ? 'Contadores (Daño 2x):' : 'Avance Tecnológico:'}</span>
+                <span id="lbl-ironheart-${index}" class="text-[9px] font-bold text-slate-300 uppercase">${j.ironheartData.version === 3 ? 'Contadores (Daño 2x):' : 'Avance Tecnológico:'}</span>
                 <div class="flex items-center gap-1">
                   <button onclick="cambiarContadoresIronheart(${index}, -1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">-</button>
-                  <span class="text-sm font-black text-yellow-400 px-1 hover:scale-105">${j.ironheartData.contadores} ${j.ironheartData.version < 3 ? '/ 6' : ''}</span>
+                  <span id="txt-cnt-ironheart-${index}" class="text-sm font-black text-yellow-400 px-1 hover:scale-105">${j.ironheartData.contadores} ${j.ironheartData.version < 3 ? '/ 6' : ''}</span>
                   <button onclick="cambiarContadoresIronheart(${index}, 1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">+</button>
                 </div>
               </div>
 
-              ${listoEvolucionar ? `
-                <button onclick="evolucionarIronheart(${index})" class="w-full bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-black py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow-lg active:scale-95 transition border border-yellow-200">
-                  ⚡ Evolucionar a Versión ${j.ironheartData.version + 1}
-                </button>
-              ` : ''}
+              <div id="wrapper-btn-evolucion-${index}">
+                ${listoEvolucionar ? `
+                  <button onclick="evolucionarIronheart(${index})" class="w-full bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-black py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow-lg active:scale-95 transition border border-yellow-200">
+                    ⚡ Evolucionar a Versión ${j.ironheartData.version + 1}
+                  </button>
+                ` : ''}
+              </div>
             </div>
           `;
         }
 
-        // PANEL IRON MAN
         let htmlPanelIronman = '';
         if (esIronman) {
           const tamMano = j.modoAlterEgo ? 6 : Math.min(7, 1 + j.ironmanData.mejorasTech);
 
           htmlPanelIronman = `
-            <div class="mt-3 pt-2 border-t border-slate-700/60 bg-black/50 p-2.5 rounded-xl border border-sky-400/50 space-y-2 backdrop-blur-sm">
+            <div class="relative z-10 mt-3 pt-2 border-t border-slate-700/60 bg-black/60 p-2.5 rounded-xl border border-sky-400/50 space-y-2 backdrop-blur-sm">
               <div class="flex justify-between items-center">
                 <span class="text-[10px] font-black text-sky-300 uppercase tracking-wider">Equipamiento de Iron Man</span>
-                <span class="text-[10px] font-extrabold bg-sky-950 border border-sky-500 text-sky-200 px-2 py-0.5 rounded shadow">Mano: ${tamMano} cartas</span>
+                <span id="txt-mano-ironman-${index}" class="text-[10px] font-extrabold bg-sky-950 border border-sky-500 text-sky-200 px-2 py-0.5 rounded shadow">Mano: ${tamMano} cartas</span>
               </div>
 
               <div class="flex justify-between items-center bg-slate-950/80 p-1.5 rounded-lg border border-slate-800">
                 <span class="text-[9px] font-bold text-slate-300 uppercase">Mejoras Tech Equipadas:</span>
                 <div class="flex items-center gap-1">
                   <button onclick="cambiarMejorasIronman(${index}, -1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">-</button>
-                  <span class="text-sm font-black text-sky-400 px-1.5">${j.ironmanData.mejorasTech}</span>
+                  <span id="txt-tech-ironman-${index}" class="text-sm font-black text-sky-400 px-1.5">${j.ironmanData.mejorasTech}</span>
                   <button onclick="cambiarMejorasIronman(${index}, 1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">+</button>
                 </div>
               </div>
@@ -685,22 +703,20 @@
           `;
         }
 
-        // DESPLEGABLE DE VIDA PARA CADA HÉROE
         let opcionesVidaHeroe = '';
         for (let v = 1; v <= 15; v++) {
           opcionesVidaHeroe += `<option value="${v}">${v} HP</option>`;
         }
 
         card.innerHTML = `
-          <div class="flex justify-between items-center mb-1">
+          <div class="relative z-10 flex justify-between items-center mb-1">
             <span class="text-[9px] font-black bg-blue-900/80 text-blue-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Jugador ${j.id}</span>
             <select onchange="seleccionarHeroeJugador(${index}, this.value)" class="bg-slate-900 border border-slate-700 rounded-lg text-xs p-1 font-bold text-slate-200 focus:outline-none">
               ${opcionesHeroeHtml}
             </select>
           </div>
 
-          <!-- BOTÓN CAMBIO DE IDENTIDAD (HÉROE / ALTER-EGO) -->
-          <div class="my-1.5">
+          <div class="relative z-10 my-1.5">
             <button onclick="toggleIdentidadJugador(${index})" class="w-full ${j.modoAlterEgo ? 'bg-amber-950/90 border-amber-500 text-amber-300' : 'bg-blue-950/90 border-blue-500 text-blue-300'} border py-1.5 rounded-xl font-black text-xs uppercase flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition">
               <span>${j.modoAlterEgo ? '👤 Alter-Ego' : '🦸 Modo Héroe'}</span>
               <span class="text-[9px] opacity-75">(Cambiar)</span>
@@ -708,12 +724,11 @@
             ${j.cambioUsadoTurno ? `<span class="block text-[8px] text-amber-400 text-center font-bold uppercase mt-0.5">⚠️ Cambio Usado en este Turno</span>` : ''}
           </div>
 
-          <div class="text-center py-2 bg-slate-950/60 rounded-xl my-2 border border-slate-800">
+          <div class="relative z-10 text-center py-2 bg-slate-950/60 rounded-xl my-2 border border-slate-800">
             <div id="hp-heroe-${index}" class="text-5xl font-black text-emerald-400 tracking-tight">${j.hp}</div>
           </div>
 
-          <!-- CONTROLES RÁPIDOS Y CORRECCIÓN DE VIDA EN HÉROE -->
-          <div class="space-y-2 mb-3">
+          <div class="relative z-10 space-y-2 mb-3">
             <div class="flex items-center gap-1.5 bg-slate-950/80 p-2 rounded-xl border border-slate-800">
               <button onclick="modificarVidaJugador(${index}, -1)" class="w-1/3 bg-red-800 active:bg-red-700 font-black py-1.5 rounded-lg text-xs uppercase shadow">- Daño</button>
               
@@ -733,7 +748,7 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-4 gap-1 pt-2 border-t border-slate-700/60">
+          <div class="relative z-10 grid grid-cols-4 gap-1 pt-2 border-t border-slate-700/60">
             <button onclick="toggleEstadoJugador(${index}, 'confuso')" class="${j.estados.confuso > 0 ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1.5 rounded-xl text-[8px] uppercase">
               ${j.estados.teson ? `Confuso (${j.estados.confuso}/2)` : 'Confuso'}
             </button>
@@ -751,9 +766,30 @@
       });
     }
 
+    // ACTUALIZACIÓN DE CONTADORES SIN RECONSTRUIR TARJETA (EVITA RESET DE ANIMACIÓN)
     function cambiarContadoresIronheart(index, cant) {
-      jugadores[index].ironheartData.contadores = Math.max(0, jugadores[index].ironheartData.contadores + cant);
-      renderizarJugadores();
+      const data = jugadores[index].ironheartData;
+      data.contadores = Math.max(0, data.contadores + cant);
+
+      const txtCnt = document.getElementById(`txt-cnt-ironheart-${index}`);
+      if (txtCnt) txtCnt.innerText = `${data.contadores} ${data.version < 3 ? '/ 6' : ''}`;
+
+      const card = document.getElementById(`card-heroe-${index}`);
+      const btnWrapper = document.getElementById(`wrapper-btn-evolucion-${index}`);
+
+      if (data.version < 3 && data.contadores >= 6) {
+        if (card) card.classList.add('glow-evolve');
+        if (btnWrapper) {
+          btnWrapper.innerHTML = `
+            <button onclick="evolucionarIronheart(${index})" class="w-full bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-black py-1.5 rounded-lg text-[10px] uppercase tracking-wider shadow-lg active:scale-95 transition border border-yellow-200">
+              ⚡ Evolucionar a Versión ${data.version + 1}
+            </button>
+          `;
+        }
+      } else {
+        if (card) card.classList.remove('glow-evolve');
+        if (btnWrapper) btnWrapper.innerHTML = '';
+      }
     }
 
     function evolucionarIronheart(index) {
@@ -766,8 +802,17 @@
     }
 
     function cambiarMejorasIronman(index, cant) {
-      jugadores[index].ironmanData.mejorasTech = Math.max(0, jugadores[index].ironmanData.mejorasTech + cant);
-      renderizarJugadores();
+      const data = jugadores[index].ironmanData;
+      data.mejorasTech = Math.max(0, data.mejorasTech + cant);
+
+      const txtTech = document.getElementById(`txt-tech-ironman-${index}`);
+      if (txtTech) txtTech.innerText = data.mejorasTech;
+
+      const txtMano = document.getElementById(`txt-mano-ironman-${index}`);
+      if (txtMano) {
+        const tamMano = jugadores[index].modoAlterEgo ? 6 : Math.min(7, 1 + data.mejorasTech);
+        txtMano.innerText = `Mano: ${tamMano} cartas`;
+      }
     }
 
     function seleccionarHeroeJugador(index, heroeId) {
