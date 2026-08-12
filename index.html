@@ -6,43 +6,45 @@
   <title>Marvel Champions Companion</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-900 text-white min-h-screen p-4 flex flex-col justify-between font-sans select-none">
+<body class="bg-slate-900 text-white min-h-screen p-3 flex flex-col justify-between font-sans select-none">
 
   <!-- ENCABEZADO -->
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Base de Datos Interna Completa</p>
+      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Mesa de Juego Multijugador (1-4 Jugadores)</p>
     </div>
     <button onclick="abrirModalColeccion()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 active:scale-95 transition shadow-md">
       📦 Colección
     </button>
   </header>
 
-  <!-- PANEL DE SELECCIÓN -->
-  <section class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/60 my-3 shadow-xl backdrop-blur">
-    <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Selección de Partida (Modo Libre)</h2>
+  <!-- PANEL DE CONFIGURACIÓN Y SELECCIÓN DE JUGADORES -->
+  <section class="bg-slate-800/80 rounded-2xl p-3 border border-slate-700/60 my-2 shadow-xl backdrop-blur">
+    <div class="flex justify-between items-center mb-2">
+      <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Preparación de Partida</h2>
+      
+      <!-- CONTROLES PARA AÑADIR/QUITAR JUGADORES -->
+      <div class="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-700">
+        <span class="text-[10px] font-bold text-slate-400 px-1 uppercase">Jugadores:</span>
+        <button onclick="cambiarNumJugadores(-1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded-lg text-xs text-slate-200">-</button>
+        <span id="txt-num-jugadores" class="text-xs font-black text-red-400 px-1">1</span>
+        <button onclick="cambiarNumJugadores(1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded-lg text-xs text-slate-200">+</button>
+      </div>
+    </div>
     
-    <div class="grid grid-cols-2 gap-2">
-      <div>
-        <label class="text-[10px] font-bold text-slate-400 uppercase">Villano</label>
-        <select id="select-villano" onchange="actualizarVillano()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
-          <!-- Cargado por JS -->
-        </select>
-      </div>
-      <div>
-        <label class="text-[10px] font-bold text-slate-400 uppercase">Héroe</label>
-        <select id="select-heroe" onchange="actualizarHeroe()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
-          <!-- Cargado por JS -->
-        </select>
-      </div>
+    <div>
+      <label class="text-[10px] font-bold text-slate-400 uppercase">Villano de la Partida</label>
+      <select id="select-villano" onchange="actualizarVillano()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-slate-200 focus:outline-none mt-0.5">
+        <!-- Cargado por JS -->
+      </select>
     </div>
   </section>
 
   <!-- TABLERO PRINCIPAL DE JUEGO -->
-  <main class="space-y-3 flex-1">
+  <main class="space-y-3 flex-1 flex flex-col justify-start">
     
-    <!-- TARJETA DEL VILLANO -->
+    <!-- TARJETA DEL VILLANO Y PLAN PRINCIPAL (FIJO) -->
     <section class="bg-gradient-to-b from-slate-800 to-slate-850 rounded-2xl p-4 border-2 border-red-900/60 shadow-2xl">
       <div class="flex justify-between items-center mb-1">
         <div>
@@ -60,14 +62,14 @@
       </div>
       
       <div class="grid grid-cols-4 gap-2 mb-3">
-        <button onclick="cambiarVida('villano', -5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-5</button>
-        <button onclick="cambiarVida('villano', -1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-1</button>
-        <button onclick="cambiarVida('villano', 1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+1</button>
-        <button onclick="cambiarVida('villano', 5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+5</button>
+        <button onclick="cambiarVidaVillano(-5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-5</button>
+        <button onclick="cambiarVidaVillano(-1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-1</button>
+        <button onclick="cambiarVidaVillano(1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+1</button>
+        <button onclick="cambiarVidaVillano(5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+5</button>
       </div>
 
-      <!-- SECCIÓN DEL PLAN PRINCIPAL (AMENAZA) -->
-      <div class="pt-3 border-t border-slate-700/60">
+      <!-- PLAN PRINCIPAL -->
+      <div class="pt-2 border-t border-slate-700/60">
         <div class="flex justify-between items-center mb-1">
           <div>
             <span class="text-[9px] font-black bg-amber-900/80 text-amber-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Plan Principal</span>
@@ -76,49 +78,32 @@
           <span id="etapa-plan" class="text-[10px] font-bold text-amber-300 bg-amber-950 border border-amber-800 px-2 py-0.5 rounded-md">Etapa 1B</span>
         </div>
 
-        <div class="flex items-center justify-between bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 my-2">
-          <div class="grid grid-cols-2 gap-1 w-28">
-            <button onclick="cambiarAmenaza(-1)" class="bg-slate-800 active:bg-slate-700 font-bold py-1.5 rounded-lg border border-slate-700 text-xs text-slate-200">-1</button>
-            <button onclick="cambiarAmenaza(1)" class="bg-slate-800 active:bg-slate-700 font-bold py-1.5 rounded-lg border border-slate-700 text-xs text-slate-200">+1</button>
+        <div class="flex items-center justify-between bg-slate-950/60 p-2 rounded-xl border border-slate-800 my-1">
+          <div class="grid grid-cols-2 gap-1 w-24">
+            <button onclick="cambiarAmenaza(-1)" class="bg-slate-800 active:bg-slate-700 font-bold py-1 rounded-lg border border-slate-700 text-xs text-slate-200">-1</button>
+            <button onclick="cambiarAmenaza(1)" class="bg-slate-800 active:bg-slate-700 font-bold py-1 rounded-lg border border-slate-700 text-xs text-slate-200">+1</button>
           </div>
           <div class="text-right">
             <div class="flex items-baseline justify-end gap-1">
-              <span id="amenaza-actual" class="text-3xl font-black text-amber-400">0</span>
+              <span id="amenaza-actual" class="text-2xl font-black text-amber-400">0</span>
               <span class="text-slate-500 font-bold text-xs">/</span>
-              <span id="amenaza-limite" class="text-slate-400 font-bold text-sm">0</span>
+              <span id="amenaza-limite" class="text-slate-400 font-bold text-xs">0</span>
             </div>
-            <span class="text-[9px] text-slate-500 uppercase block font-semibold">Amenaza Actual</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TARJETA DEL HÉROE -->
-    <section class="bg-gradient-to-b from-slate-800 to-slate-850 rounded-2xl p-4 border-2 border-blue-900/60 shadow-2xl">
-      <div class="flex justify-between items-center mb-1">
-        <div>
-          <span class="text-[9px] font-black bg-blue-900/80 text-blue-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Héroe</span>
-          <h3 id="nombre-heroe" class="text-2xl font-black text-slate-100 mt-0.5">SELECCIONAR</h3>
-        </div>
-        <span class="text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-700 px-2 py-1 rounded-lg">Jugador 1</span>
+    <!-- SECCIÓN DE HÉROES (CARRUSEL TÁCTIL / GRILLA MULTI-JUGADOR) -->
+    <section class="space-y-2">
+      <div class="flex justify-between items-center px-1">
+        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Héroes en Batalla</h3>
+        <span class="text-[10px] text-slate-500 font-semibold">Desliza para navegar 👉</span>
       </div>
 
-      <div class="text-center py-2 bg-slate-950/60 rounded-xl my-2 border border-slate-800">
-        <div id="hp-heroe" class="text-5xl font-black text-emerald-400 tracking-tight">0</div>
-      </div>
-
-      <div class="grid grid-cols-4 gap-2 mb-3">
-        <button onclick="cambiarVida('heroe', -5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-5</button>
-        <button onclick="cambiarVida('heroe', -1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-1</button>
-        <button onclick="cambiarVida('heroe', 1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+1</button>
-        <button onclick="cambiarVida('heroe', 5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2.5 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+5</button>
-      </div>
-
-      <!-- ESTADOS DEL HÉROE -->
-      <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-700/60">
-        <button id="btn-confuso" onclick="toggleEstado('confuso')" class="bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider">Confuso</button>
-        <button id="btn-aturdido" onclick="toggleEstado('aturdido')" class="bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider">Aturdido</button>
-        <button id="btn-duro" onclick="toggleEstado('duro')" class="bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider">Duro</button>
+      <!-- CONTENEDOR DESLIZABLE TÁCTIL DE HÉROES -->
+      <div id="contenedor-heroes" class="flex gap-3 overflow-x-auto pb-2 pt-1 snap-x snap-mandatory scrollbar-none">
+        <!-- Las tarjetas de cada jugador se generan aquí por JS -->
       </div>
     </section>
 
@@ -140,72 +125,40 @@
     </div>
   </div>
 
-  <footer class="text-center py-2 text-[10px] text-slate-500 font-medium">
-    Marvel Champions Companion v2.0
+  <footer class="text-center py-1 text-[10px] text-slate-500 font-medium">
+    Marvel Champions Companion v2.5
   </footer>
 
-  <!-- DICCIONARIO LOCAL COMPLETO Y LÓGICA -->
+  <!-- LÓGICA MULTIJUGADOR Y DATOS -->
   <script>
-    // LISTADO OFICIAL DE CAJAS
     const packsLista = [
       { id: 'core', name: 'Caja Base (Core Set)' },
       { id: 'goblin', name: 'El Duende Verde' },
       { id: 'wrecking', name: 'La Demoledora' },
-      { id: 'red_skull', name: 'La Sombra del Devorador de Mundos' },
+      { id: 'red_skull', name: 'La Sombra del Devorador' },
       { id: 'kang', name: 'Kang el Conquistador' },
       { id: 'gmw', name: 'Los Más Buscados de la Galaxia' },
       { id: 'mts', name: 'La Sombra de Thanos' },
-      { id: 'hood', name: 'The Hood' },
       { id: 'sinister', name: 'Sinister Motives' },
-      { id: 'mojo', name: 'MojoMania' },
       { id: 'mutant', name: 'Mutant Genesis' },
       { id: 'next_evo', name: 'NeXt Evolution' },
       { id: 'aoa', name: 'Age of Apocalypse' }
     ];
 
-    // BASE DE DATOS LOCAL DE VILLANOS (Fases de Vida y Planes Principales)
     const baseVillanos = [
-      // Caja Base
       { id: 'rhino', name: 'Rhino', pack: 'core', hp: [14, 15], plans: [{ name: 'La Ruptura', stage: '1B', threat: 7 }] },
       { id: 'klaw', name: 'Klaw', pack: 'core', hp: [12, 18], plans: [{ name: 'El Imperio del Sonido', stage: '1B', threat: 6 }, { name: 'Ataque Secreto', stage: '2B', threat: 8 }] },
       { id: 'ultron', name: 'Ultron', pack: 'core', hp: [17, 22], plans: [{ name: 'La Era de Ultron', stage: '1B', threat: 3 }, { name: 'Imperio de Máquinas', stage: '2B', threat: 10 }] },
-
-      // El Duende Verde
       { id: 'norman', name: 'Norman Osborn', pack: 'goblin', hp: [16, 18], plans: [{ name: 'Negocios Arriesgados', stage: '1B', threat: 7 }] },
       { id: 'mutagen', name: 'Fórmula Mutágena', pack: 'goblin', hp: [18, 20], plans: [{ name: 'Invasión Duende', stage: '1B', threat: 11 }] },
-
-      // La Demoledora
-      { id: 'wrecker', name: 'Wrecker (La Demoledora)', pack: 'wrecking', hp: [14, 16], plans: [{ name: 'Fuga de Prisión', stage: '1B', threat: 6 }] },
-
-      // La Sombra del Devorador de Mundos
       { id: 'crossbones', name: 'Crossbones', pack: 'red_skull', hp: [12, 14], plans: [{ name: 'Ataque a Nueva York', stage: '1B', threat: 6 }] },
-      { id: 'taskmaster', name: 'Taskmaster', pack: 'red_skull', hp: [14, 16], plans: [{ name: 'Caza de Héroes', stage: '1B', threat: 8 }] },
-      { id: 'red_skull', name: 'Red Skull', pack: 'red_skull', hp: [16, 20], plans: [{ name: 'El Orden Mundial', stage: '1B', threat: 8 }, { name: 'Plan Maestro', stage: '2B', threat: 12 }] },
-
-      // La Sombra de Thanos
-      { id: 'ebony_maw', name: 'Ebony Maw', pack: 'mts', hp: [14, 16], plans: [{ name: 'Ataque a Knowhere', stage: '1B', threat: 7 }] },
-      { id: 'thanos', name: 'Thanos', pack: 'mts', hp: [20, 24], plans: [{ name: 'Las Gemas del Infinito', stage: '1B', threat: 12 }, { name: 'El Equilibrio', stage: '2B', threat: 15 }] },
-      { id: 'hela', name: 'Hela', pack: 'mts', hp: [18, 20], plans: [{ name: 'Reina de Niflheim', stage: '1B', threat: 10 }] },
-      { id: 'loki', name: 'Loki', pack: 'mts', hp: [20, 22], plans: [{ name: 'Engaño del Dios', stage: '1B', threat: 10 }] },
-
-      // Sinister Motives
+      { id: 'red_skull', name: 'Red Skull', pack: 'red_skull', hp: [16, 20], plans: [{ name: 'El Orden Mundial', stage: '1B', threat: 8 }] },
+      { id: 'thanos', name: 'Thanos', pack: 'mts', hp: [20, 24], plans: [{ name: 'Las Gemas del Infinito', stage: '1B', threat: 12 }] },
       { id: 'sandman', name: 'Hombre de Arena', pack: 'sinister', hp: [16, 18], plans: [{ name: 'Tormenta de Arena', stage: '1B', threat: 8 }] },
-      { id: 'venom_villain', name: 'Venom (Villano)', pack: 'sinister', hp: [18, 20], plans: [{ name: 'Simbionte Suelto', stage: '1B', threat: 9 }] },
-      { id: 'venom_goblin', name: 'Venom Goblin', pack: 'sinister', hp: [20, 26], plans: [{ name: 'Terror en la Ciudad', stage: '1B', threat: 10 }] },
-
-      // Mutant Genesis
-      { id: 'sabretooth', name: 'Dientes de Sable', pack: 'mutant', hp: [16, 18], plans: [{ name: 'Cacería Mutante', stage: '1B', threat: 7 }] },
       { id: 'magneto', name: 'Magneto', pack: 'mutant', hp: [20, 25], plans: [{ name: 'Dominación Mutante', stage: '1B', threat: 12 }] },
-
-      // NeXt Evolution
-      { id: 'juggernaut', name: 'Juggernaut', pack: 'next_evo', hp: [20, 24], plans: [{ name: 'Fuerza Imparable', stage: '1B', threat: 9 }] },
-      { id: 'stryfe', name: 'Stryfe', pack: 'next_evo', hp: [18, 22], plans: [{ name: 'El Futuro Oscuro', stage: '1B', threat: 10 }] },
-
-      // Age of Apocalypse
-      { id: 'apocalypse', name: 'Apocalipsis', pack: 'aoa', hp: [22, 28], plans: [{ name: 'La Era de Apocalipsis', stage: '1B', threat: 12 }, { name: 'Supervivencia del Más Apto', stage: '2B', threat: 16 }] }
+      { id: 'apocalypse', name: 'Apocalipsis', pack: 'aoa', hp: [22, 28], plans: [{ name: 'La Era de Apocalipsis', stage: '1B', threat: 12 }] }
     ];
 
-    // BASE DE DATOS LOCAL DE HÉROES
     const baseHeroes = [
       { id: 'spiderman', name: 'Spider-Man', pack: 'core', hp: 10 },
       { id: 'ironman', name: 'Iron Man', pack: 'core', hp: 9 },
@@ -217,25 +170,116 @@
       { id: 'thor', name: 'Thor', pack: 'hero_pack', hp: 14 },
       { id: 'doctorstrange', name: 'Doctor Strange', pack: 'hero_pack', hp: 10 },
       { id: 'ironheart', name: 'Ironheart', pack: 'hero_pack', hp: 10 },
-      { id: 'venom_hero', name: 'Venom (Héroe)', pack: 'hero_pack', hp: 12 },
-      { id: 'wolverine', name: 'Wolverine', pack: 'hero_pack', hp: 10 },
-      { id: 'cyclops', name: 'Cíclope', pack: 'mutant', hp: 10 },
-      { id: 'storm', name: 'Tormenta', pack: 'hero_pack', hp: 10 },
-      { id: 'cable', name: 'Cable', pack: 'next_evo', hp: 12 }
+      { id: 'cyclops', name: 'Cíclope', pack: 'mutant', hp: 10 }
     ];
 
     let coleccionUsuario = JSON.parse(localStorage.getItem('mvl_coleccion')) || ['core'];
+    let numJugadores = 1;
+    let jugadores = [
+      { id: 1, heroeId: 'spiderman', hp: 10, estados: { confuso: false, aturdido: false, duro: false } }
+    ];
+
     let villanoSeleccionado = null;
-    let faseVillanoActual = 0; // 0 = Fase I, 1 = Fase II
+    let faseVillanoActual = 0;
     let indicePlanActual = 0;
     let amenazaActual = 0;
     let vidaVillano = 0;
-    let vidaHeroe = 0;
-    let estados = { confuso: false, aturdido: false, duro: false };
 
     function inicializarApp() {
       renderizarColeccion();
       actualizarSelects();
+      renderizarJugadores();
+    }
+
+    function cambiarNumJugadores(delta) {
+      const nuevoNum = Math.max(1, Math.min(4, numJugadores + delta));
+      if (nuevoNum === numJugadores) return;
+
+      numJugadores = nuevoNum;
+      document.getElementById('txt-num-jugadores').innerText = numJugadores;
+
+      // Ajustar lista de jugadores
+      while (jugadores.length < numJugadores) {
+        const idNuevo = jugadores.length + 1;
+        const heroeDefault = baseHeroes[(idNuevo - 1) % baseHeroes.length];
+        jugadores.push({
+          id: idNuevo,
+          heroeId: heroeDefault.id,
+          hp: heroeDefault.hp,
+          estados: { confuso: false, aturdido: false, duro: false }
+        });
+      }
+      while (jugadores.length > numJugadores) {
+        jugadores.pop();
+      }
+
+      renderizarJugadores();
+    }
+
+    function renderizarJugadores() {
+      const container = document.getElementById('contenedor-heroes');
+      container.innerHTML = '';
+
+      const heroesFiltrados = baseHeroes.filter(h => coleccionUsuario.includes(h.pack) || h.pack === 'hero_pack');
+
+      jugadores.forEach((j, index) => {
+        const heroeActual = baseHeroes.find(h => h.id === j.heroeId) || baseHeroes[0];
+
+        // Opciones de selección para el menú de cada héroe
+        let opcionesHeroeHtml = '';
+        heroesFiltrados.forEach(h => {
+          opcionesHeroeHtml += `<option value="${h.id}" ${h.id === j.heroeId ? 'selected' : ''}>${h.name}</option>`;
+        });
+
+        const card = document.createElement('div');
+        card.className = "bg-gradient-to-b from-slate-800 to-slate-850 rounded-2xl p-4 border-2 border-blue-900/60 shadow-2xl min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0";
+        card.innerHTML = `
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-[9px] font-black bg-blue-900/80 text-blue-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Jugador ${j.id}</span>
+            <select onchange="seleccionarHeroeJugador(${index}, this.value)" class="bg-slate-900 border border-slate-700 rounded-lg text-xs p-1 font-bold text-slate-200 focus:outline-none">
+              ${opcionesHeroeHtml}
+            </select>
+          </div>
+
+          <div class="text-center py-2 bg-slate-950/60 rounded-xl my-2 border border-slate-800">
+            <div id="hp-heroe-${index}" class="text-5xl font-black text-emerald-400 tracking-tight">${j.hp}</div>
+          </div>
+
+          <div class="grid grid-cols-4 gap-1.5 mb-3">
+            <button onclick="cambiarVidaJugador(${index}, -5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-5</button>
+            <button onclick="cambiarVidaJugador(${index}, -1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-1</button>
+            <button onclick="cambiarVidaJugador(${index}, 1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+1</button>
+            <button onclick="cambiarVidaJugador(${index}, 5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+5</button>
+          </div>
+
+          <!-- ESTADOS -->
+          <div class="grid grid-cols-3 gap-1.5 pt-2 border-t border-slate-700/60">
+            <button onclick="toggleEstadoJugador(${index}, 'confuso')" id="btn-confuso-${index}" class="${j.estados.confuso ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1.5 rounded-xl text-[10px] uppercase">Confuso</button>
+            <button onclick="toggleEstadoJugador(${index}, 'aturdido')" id="btn-aturdido-${index}" class="${j.estados.aturdido ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1.5 rounded-xl text-[10px] uppercase">Aturdido</button>
+            <button onclick="toggleEstadoJugador(${index}, 'duro')" id="btn-duro-${index}" class="${j.estados.duro ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1.5 rounded-xl text-[10px] uppercase">Duro</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function seleccionarHeroeJugador(index, heroeId) {
+      const heroe = baseHeroes.find(h => h.id === heroeId);
+      if (heroe) {
+        jugadores[index].heroeId = heroeId;
+        jugadores[index].hp = heroe.hp;
+        document.getElementById(`hp-heroe-${index}`).innerText = heroe.hp;
+      }
+    }
+
+    function cambiarVidaJugador(index, cant) {
+      jugadores[index].hp = Math.max(0, jugadores[index].hp + cant);
+      document.getElementById(`hp-heroe-${index}`).innerText = jugadores[index].hp;
+    }
+
+    function toggleEstadoJugador(index, estado) {
+      jugadores[index].estados[estado] = !jugadores[index].estados[estado];
+      renderizarJugadores();
     }
 
     function renderizarColeccion() {
@@ -260,40 +304,20 @@
       checkboxes.forEach(chk => { if(chk.checked && chk.value !== 'core') coleccionUsuario.push(chk.value); });
       localStorage.setItem('mvl_coleccion', JSON.stringify(coleccionUsuario));
       actualizarSelects();
+      renderizarJugadores();
       cerrarModalColeccion();
     }
 
     function actualizarSelects() {
-      const selectHeroe = document.getElementById('select-heroe');
       const selectVillano = document.getElementById('select-villano');
-      
-      selectHeroe.innerHTML = '';
       selectVillano.innerHTML = '';
 
-      // Filtrar por Colección
       const villanosFiltrados = baseVillanos.filter(v => coleccionUsuario.includes(v.pack));
-      const heroesFiltrados = baseHeroes.filter(h => coleccionUsuario.includes(h.pack) || h.pack === 'hero_pack');
-
       villanosFiltrados.forEach(v => {
         selectVillano.innerHTML += `<option value="${v.id}">${v.name}</option>`;
       });
 
-      heroesFiltrados.forEach(h => {
-        selectHeroe.innerHTML += `<option value="${h.id}">${h.name} (${h.hp} HP)</option>`;
-      });
-
-      actualizarHeroe();
       actualizarVillano();
-    }
-
-    function actualizarHeroe() {
-      const id = document.getElementById('select-heroe').value;
-      const heroe = baseHeroes.find(h => h.id === id);
-      if (heroe) {
-        vidaHeroe = heroe.hp;
-        document.getElementById('nombre-heroe').innerText = heroe.name.toUpperCase();
-        document.getElementById('hp-heroe').innerText = vidaHeroe;
-      }
     }
 
     function actualizarVillano() {
@@ -334,14 +358,9 @@
       }
     }
 
-    function cambiarVida(tipo, cant) {
-      if (tipo === 'villano') {
-        vidaVillano = Math.max(0, vidaVillano + cant);
-        document.getElementById('hp-villano').innerText = vidaVillano;
-      } else {
-        vidaHeroe = Math.max(0, vidaHeroe + cant);
-        document.getElementById('hp-heroe').innerText = vidaHeroe;
-      }
+    function cambiarVidaVillano(cant) {
+      vidaVillano = Math.max(0, vidaVillano + cant);
+      document.getElementById('hp-villano').innerText = vidaVillano;
     }
 
     function cambiarAmenaza(cant) {
@@ -353,7 +372,7 @@
 
       if (planActual && amenazaActual >= planActual.threat) {
         if (indicePlanActual + 1 < villanoSeleccionado.plans.length) {
-          alert(`⚠️ ¡La amenaza alcanzó el límite! Avanzando automáticamente a la siguiente etapa del Plan.`);
+          alert(`⚠️ ¡La amenaza alcanzó el límite! Avanzando automáticamente al siguiente Plan.`);
           indicePlanActual++;
           cargarPlan();
         } else {
@@ -362,18 +381,10 @@
       }
     }
 
-    function toggleEstado(est) {
-      estados[est] = !estados[est];
-      const btn = document.getElementById('btn-' + est);
-      btn.className = estados[est] 
-        ? "bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold py-2 rounded-xl text-[11px] uppercase tracking-wider"
-        : "bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-2 rounded-xl text-[11px] uppercase tracking-wider";
-    }
-
     function abrirModalColeccion() { document.getElementById('modal-coleccion').classList.remove('hidden'); }
     function cerrarModalColeccion() { document.getElementById('modal-coleccion').classList.add('hidden'); }
 
-    // Iniciar
+    // Iniciar app
     inicializarApp();
   </script>
 </body>
