@@ -12,14 +12,14 @@
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p id="api-status" class="text-[10px] text-slate-400 font-semibold tracking-wide">Cargando datos de MarvelCDB...</p>
+      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Base de Datos Interna Completa</p>
     </div>
     <button onclick="abrirModalColeccion()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 active:scale-95 transition shadow-md">
       📦 Colección
     </button>
   </header>
 
-  <!-- PANEL DE CONFIGURACIÓN DE PARTIDA -->
+  <!-- PANEL DE SELECCIÓN -->
   <section class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/60 my-3 shadow-xl backdrop-blur">
     <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Selección de Partida (Modo Libre)</h2>
     
@@ -27,13 +27,13 @@
       <div>
         <label class="text-[10px] font-bold text-slate-400 uppercase">Villano</label>
         <select id="select-villano" onchange="actualizarVillano()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
-          <option value="">Cargando villanos...</option>
+          <!-- Cargado por JS -->
         </select>
       </div>
       <div>
         <label class="text-[10px] font-bold text-slate-400 uppercase">Héroe</label>
         <select id="select-heroe" onchange="actualizarHeroe()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
-          <option value="">Cargando héroes...</option>
+          <!-- Cargado por JS -->
         </select>
       </div>
     </div>
@@ -42,14 +42,16 @@
   <!-- TABLERO PRINCIPAL DE JUEGO -->
   <main class="space-y-3 flex-1">
     
-    <!-- TARJETA DEL VILLANO Y PLAN PRINCIPAL -->
+    <!-- TARJETA DEL VILLANO -->
     <section class="bg-gradient-to-b from-slate-800 to-slate-850 rounded-2xl p-4 border-2 border-red-900/60 shadow-2xl">
       <div class="flex justify-between items-center mb-1">
         <div>
           <span class="text-[9px] font-black bg-red-900/80 text-red-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Villano</span>
           <h3 id="nombre-villano" class="text-2xl font-black text-slate-100 mt-0.5">SELECCIONAR</h3>
         </div>
-        <span id="fase-villano" class="text-xs font-bold bg-slate-900 border border-red-800/80 text-red-400 px-2.5 py-1 rounded-lg">Fase I</span>
+        <button onclick="cambiarFaseVillano()" id="btn-fase-villano" class="text-xs font-bold bg-slate-900 border border-red-800/80 text-red-400 px-2.5 py-1 rounded-lg active:scale-95 transition">
+          Fase I 🔄
+        </button>
       </div>
       
       <!-- VIDA DEL VILLANO -->
@@ -130,8 +132,8 @@
         <button onclick="cerrarModalColeccion()" class="text-slate-400 text-lg font-bold px-2">✕</button>
       </div>
 
-      <div id="lista-coleccion-api" class="space-y-2 overflow-y-auto pr-1 text-xs flex-1">
-        <p class="text-slate-400 text-center py-4">Cargando expansiones de MarvelCDB...</p>
+      <div id="lista-coleccion" class="space-y-2 overflow-y-auto pr-1 text-xs flex-1">
+        <!-- Generado por JS -->
       </div>
 
       <button onclick="guardarYFiltrar()" class="w-full bg-red-600 font-extrabold py-3 rounded-2xl text-xs uppercase tracking-wider shadow-lg active:scale-95 transition">Guardar y Aplicar</button>
@@ -139,49 +141,113 @@
   </div>
 
   <footer class="text-center py-2 text-[10px] text-slate-500 font-medium">
-    Conectado a MarvelCDB API
+    Marvel Champions Companion v2.0
   </footer>
 
-  <!-- LÓGICA REVISADA DE MARVELCDB -->
+  <!-- DICCIONARIO LOCAL COMPLETO Y LÓGICA -->
   <script>
+    // LISTADO OFICIAL DE CAJAS
+    const packsLista = [
+      { id: 'core', name: 'Caja Base (Core Set)' },
+      { id: 'goblin', name: 'El Duende Verde' },
+      { id: 'wrecking', name: 'La Demoledora' },
+      { id: 'red_skull', name: 'La Sombra del Devorador de Mundos' },
+      { id: 'kang', name: 'Kang el Conquistador' },
+      { id: 'gmw', name: 'Los Más Buscados de la Galaxia' },
+      { id: 'mts', name: 'La Sombra de Thanos' },
+      { id: 'hood', name: 'The Hood' },
+      { id: 'sinister', name: 'Sinister Motives' },
+      { id: 'mojo', name: 'MojoMania' },
+      { id: 'mutant', name: 'Mutant Genesis' },
+      { id: 'next_evo', name: 'NeXt Evolution' },
+      { id: 'aoa', name: 'Age of Apocalypse' }
+    ];
+
+    // BASE DE DATOS LOCAL DE VILLANOS (Fases de Vida y Planes Principales)
+    const baseVillanos = [
+      // Caja Base
+      { id: 'rhino', name: 'Rhino', pack: 'core', hp: [14, 15], plans: [{ name: 'La Ruptura', stage: '1B', threat: 7 }] },
+      { id: 'klaw', name: 'Klaw', pack: 'core', hp: [12, 18], plans: [{ name: 'El Imperio del Sonido', stage: '1B', threat: 6 }, { name: 'Ataque Secreto', stage: '2B', threat: 8 }] },
+      { id: 'ultron', name: 'Ultron', pack: 'core', hp: [17, 22], plans: [{ name: 'La Era de Ultron', stage: '1B', threat: 3 }, { name: 'Imperio de Máquinas', stage: '2B', threat: 10 }] },
+
+      // El Duende Verde
+      { id: 'norman', name: 'Norman Osborn', pack: 'goblin', hp: [16, 18], plans: [{ name: 'Negocios Arriesgados', stage: '1B', threat: 7 }] },
+      { id: 'mutagen', name: 'Fórmula Mutágena', pack: 'goblin', hp: [18, 20], plans: [{ name: 'Invasión Duende', stage: '1B', threat: 11 }] },
+
+      // La Demoledora
+      { id: 'wrecker', name: 'Wrecker (La Demoledora)', pack: 'wrecking', hp: [14, 16], plans: [{ name: 'Fuga de Prisión', stage: '1B', threat: 6 }] },
+
+      // La Sombra del Devorador de Mundos
+      { id: 'crossbones', name: 'Crossbones', pack: 'red_skull', hp: [12, 14], plans: [{ name: 'Ataque a Nueva York', stage: '1B', threat: 6 }] },
+      { id: 'taskmaster', name: 'Taskmaster', pack: 'red_skull', hp: [14, 16], plans: [{ name: 'Caza de Héroes', stage: '1B', threat: 8 }] },
+      { id: 'red_skull', name: 'Red Skull', pack: 'red_skull', hp: [16, 20], plans: [{ name: 'El Orden Mundial', stage: '1B', threat: 8 }, { name: 'Plan Maestro', stage: '2B', threat: 12 }] },
+
+      // La Sombra de Thanos
+      { id: 'ebony_maw', name: 'Ebony Maw', pack: 'mts', hp: [14, 16], plans: [{ name: 'Ataque a Knowhere', stage: '1B', threat: 7 }] },
+      { id: 'thanos', name: 'Thanos', pack: 'mts', hp: [20, 24], plans: [{ name: 'Las Gemas del Infinito', stage: '1B', threat: 12 }, { name: 'El Equilibrio', stage: '2B', threat: 15 }] },
+      { id: 'hela', name: 'Hela', pack: 'mts', hp: [18, 20], plans: [{ name: 'Reina de Niflheim', stage: '1B', threat: 10 }] },
+      { id: 'loki', name: 'Loki', pack: 'mts', hp: [20, 22], plans: [{ name: 'Engaño del Dios', stage: '1B', threat: 10 }] },
+
+      // Sinister Motives
+      { id: 'sandman', name: 'Hombre de Arena', pack: 'sinister', hp: [16, 18], plans: [{ name: 'Tormenta de Arena', stage: '1B', threat: 8 }] },
+      { id: 'venom_villain', name: 'Venom (Villano)', pack: 'sinister', hp: [18, 20], plans: [{ name: 'Simbionte Suelto', stage: '1B', threat: 9 }] },
+      { id: 'venom_goblin', name: 'Venom Goblin', pack: 'sinister', hp: [20, 26], plans: [{ name: 'Terror en la Ciudad', stage: '1B', threat: 10 }] },
+
+      // Mutant Genesis
+      { id: 'sabretooth', name: 'Dientes de Sable', pack: 'mutant', hp: [16, 18], plans: [{ name: 'Cacería Mutante', stage: '1B', threat: 7 }] },
+      { id: 'magneto', name: 'Magneto', pack: 'mutant', hp: [20, 25], plans: [{ name: 'Dominación Mutante', stage: '1B', threat: 12 }] },
+
+      // NeXt Evolution
+      { id: 'juggernaut', name: 'Juggernaut', pack: 'next_evo', hp: [20, 24], plans: [{ name: 'Fuerza Imparable', stage: '1B', threat: 9 }] },
+      { id: 'stryfe', name: 'Stryfe', pack: 'next_evo', hp: [18, 22], plans: [{ name: 'El Futuro Oscuro', stage: '1B', threat: 10 }] },
+
+      // Age of Apocalypse
+      { id: 'apocalypse', name: 'Apocalipsis', pack: 'aoa', hp: [22, 28], plans: [{ name: 'La Era de Apocalipsis', stage: '1B', threat: 12 }, { name: 'Supervivencia del Más Apto', stage: '2B', threat: 16 }] }
+    ];
+
+    // BASE DE DATOS LOCAL DE HÉROES
+    const baseHeroes = [
+      { id: 'spiderman', name: 'Spider-Man', pack: 'core', hp: 10 },
+      { id: 'ironman', name: 'Iron Man', pack: 'core', hp: 9 },
+      { id: 'captainmarvel', name: 'Capitana Marvel', pack: 'core', hp: 12 },
+      { id: 'shehulk', name: 'Hulka', pack: 'core', hp: 15 },
+      { id: 'blackpanther', name: 'Pantera Negra', pack: 'core', hp: 11 },
+      { id: 'captainamerica', name: 'Capitán América', pack: 'hero_pack', hp: 11 },
+      { id: 'msmarvel', name: 'Ms. Marvel', pack: 'hero_pack', hp: 10 },
+      { id: 'thor', name: 'Thor', pack: 'hero_pack', hp: 14 },
+      { id: 'doctorstrange', name: 'Doctor Strange', pack: 'hero_pack', hp: 10 },
+      { id: 'ironheart', name: 'Ironheart', pack: 'hero_pack', hp: 10 },
+      { id: 'venom_hero', name: 'Venom (Héroe)', pack: 'hero_pack', hp: 12 },
+      { id: 'wolverine', name: 'Wolverine', pack: 'hero_pack', hp: 10 },
+      { id: 'cyclops', name: 'Cíclope', pack: 'mutant', hp: 10 },
+      { id: 'storm', name: 'Tormenta', pack: 'hero_pack', hp: 10 },
+      { id: 'cable', name: 'Cable', pack: 'next_evo', hp: 12 }
+    ];
+
+    let coleccionUsuario = JSON.parse(localStorage.getItem('mvl_coleccion')) || ['core'];
+    let villanoSeleccionado = null;
+    let faseVillanoActual = 0; // 0 = Fase I, 1 = Fase II
+    let indicePlanActual = 0;
+    let amenazaActual = 0;
     let vidaVillano = 0;
     let vidaHeroe = 0;
-    let amenazaActual = 0;
-    let amenazaLimite = 0;
-    let planesDelVillano = [];
-    let indicePlanActual = 0;
     let estados = { confuso: false, aturdido: false, duro: false };
-    
-    let packsMarvelCDB = [];
-    let todasLasCartas = [];
-    let coleccionUsuario = JSON.parse(localStorage.getItem('mvl_coleccion')) || ['Core'];
 
-    async function inicializarMarvelCDB() {
-      try {
-        const respPacks = await fetch('https://marvelcdb.com/api/public/packs/');
-        packsMarvelCDB = await respPacks.json();
-
-        const respCards = await fetch('https://marvelcdb.com/api/public/cards/');
-        todasLasCartas = await respCards.json();
-
-        document.getElementById('api-status').innerText = 'Base de datos sincronizada';
-        renderizarColeccion();
-        actualizarSelects();
-      } catch (e) {
-        document.getElementById('api-status').innerText = 'Error al conectar con MarvelCDB';
-      }
+    function inicializarApp() {
+      renderizarColeccion();
+      actualizarSelects();
     }
 
     function renderizarColeccion() {
-      const container = document.getElementById('lista-coleccion-api');
+      const container = document.getElementById('lista-coleccion');
       container.innerHTML = '';
       
-      packsMarvelCDB.forEach(pack => {
-        const isChecked = coleccionUsuario.includes(pack.code) || pack.code === 'Core';
+      packsLista.forEach(pack => {
+        const isChecked = coleccionUsuario.includes(pack.id) || pack.id === 'core';
         const item = document.createElement('label');
         item.className = "flex items-center space-x-2 bg-slate-900/60 p-2.5 rounded-xl border border-slate-700/60";
         item.innerHTML = `
-          <input type="checkbox" value="${pack.code}" ${isChecked ? 'checked' : ''} ${pack.code === 'Core' ? 'disabled' : ''} class="chk-pack accent-red-600 rounded">
+          <input type="checkbox" value="${pack.id}" ${isChecked ? 'checked' : ''} ${pack.id === 'core' ? 'disabled' : ''} class="chk-pack accent-red-600 rounded">
           <span class="font-bold text-slate-200">${pack.name}</span>
         `;
         container.appendChild(item);
@@ -190,8 +256,8 @@
 
     function guardarYFiltrar() {
       const checkboxes = document.querySelectorAll('.chk-pack');
-      coleccionUsuario = ['Core'];
-      checkboxes.forEach(chk => { if(chk.checked && chk.value !== 'Core') coleccionUsuario.push(chk.value); });
+      coleccionUsuario = ['core', 'hero_pack'];
+      checkboxes.forEach(chk => { if(chk.checked && chk.value !== 'core') coleccionUsuario.push(chk.value); });
       localStorage.setItem('mvl_coleccion', JSON.stringify(coleccionUsuario));
       actualizarSelects();
       cerrarModalColeccion();
@@ -204,85 +270,67 @@
       selectHeroe.innerHTML = '';
       selectVillano.innerHTML = '';
 
-      const cartasFiltradas = todasLasCartas.filter(c => coleccionUsuario.includes(c.pack_code));
+      // Filtrar por Colección
+      const villanosFiltrados = baseVillanos.filter(v => coleccionUsuario.includes(v.pack));
+      const heroesFiltrados = baseHeroes.filter(h => coleccionUsuario.includes(h.pack) || h.pack === 'hero_pack');
 
-      // 1. Filtrar Héroes (type_code === 'hero')
-      const heroes = cartasFiltradas.filter(c => c.type_code === 'hero');
-      const heroesUnicos = [...new Map(heroes.map(item => [item.name, item])).values()];
-      
-      heroesUnicos.forEach(h => {
-        selectHeroe.innerHTML += `<option value="${h.code}">${h.name} (${h.health || 10} HP)</option>`;
+      villanosFiltrados.forEach(v => {
+        selectVillano.innerHTML += `<option value="${v.id}">${v.name}</option>`;
       });
 
-      // 2. Filtrar Villanos (type_code es 'villain' o el nombre del grupo coincide con villanos)
-      const villanos = cartasFiltradas.filter(c => c.type_code === 'villain' || c.type_code === 'villain_phase');
-      const villanosUnicos = [...new Map(villanos.map(item => [item.name, item])).values()];
-
-      if (villanosUnicos.length === 0) {
-        selectVillano.innerHTML = '<option value="">Sin villanos en cajas seleccionadas</option>';
-      } else {
-        villanosUnicos.forEach(v => {
-          selectVillano.innerHTML += `<option value="${v.pack_code}_${v.name}">${v.name} (${v.health || 12} HP)</option>`;
-        });
-      }
+      heroesFiltrados.forEach(h => {
+        selectHeroe.innerHTML += `<option value="${h.id}">${h.name} (${h.hp} HP)</option>`;
+      });
 
       actualizarHeroe();
       actualizarVillano();
     }
 
     function actualizarHeroe() {
-      const code = document.getElementById('select-heroe').value;
-      const heroe = todasLasCartas.find(c => c.code === code);
+      const id = document.getElementById('select-heroe').value;
+      const heroe = baseHeroes.find(h => h.id === id);
       if (heroe) {
-        vidaHeroe = heroe.health || 10;
+        vidaHeroe = heroe.hp;
         document.getElementById('nombre-heroe').innerText = heroe.name.toUpperCase();
         document.getElementById('hp-heroe').innerText = vidaHeroe;
       }
     }
 
     function actualizarVillano() {
-      const val = document.getElementById('select-villano').value;
-      if (!val) return;
-
-      const partes = val.split('_');
-      const packCode = partes[0];
-      const nombreVillano = partes[1];
+      const id = document.getElementById('select-villano').value;
+      villanoSeleccionado = baseVillanos.find(v => v.id === id);
       
-      // Buscar carta de villano
-      const villanoCard = todasLasCartas.find(c => (c.type_code === 'villain' || c.type_code === 'villain_phase') && c.name === nombreVillano);
-      if (villanoCard) {
-        vidaVillano = villanoCard.health || 12;
-        document.getElementById('nombre-villano').innerText = villanoCard.name.toUpperCase();
+      if (villanoSeleccionado) {
+        faseVillanoActual = 0;
+        indicePlanActual = 0;
+        
+        document.getElementById('nombre-villano').innerText = villanoSeleccionado.name.toUpperCase();
+        document.getElementById('btn-fase-villano').innerText = `Fase I 🔄`;
+        vidaVillano = villanoSeleccionado.hp[0];
         document.getElementById('hp-villano').innerText = vidaVillano;
+
+        cargarPlan();
       }
-
-      // Buscar todos los Planes Principales (main_scheme) del mismo pack ordenados por etapa
-      planesDelVillano = todasLasCartas
-        .filter(c => c.type_code === 'main_scheme' && c.pack_code === packCode)
-        .sort((a, b) => (a.stage || 1) - (b.stage || 1));
-
-      indicePlanActual = 0;
-      cargarPlanActual();
     }
 
-    function cargarPlanActual() {
-      if (planesDelVillano.length > 0 && planesDelVillano[indicePlanActual]) {
-        const plan = planesDelVillano[indicePlanActual];
+    function cambiarFaseVillano() {
+      if (!villanoSeleccionado) return;
+      faseVillanoActual = (faseVillanoActual === 0) ? 1 : 0;
+      
+      const faseTxt = faseVillanoActual === 0 ? 'Fase I' : 'Fase II';
+      document.getElementById('btn-fase-villano').innerText = `${faseTxt} 🔄`;
+      vidaVillano = villanoSeleccionado.hp[faseVillanoActual];
+      document.getElementById('hp-villano').innerText = vidaVillano;
+    }
+
+    function cargarPlan() {
+      if (villanoSeleccionado && villanoSeleccionado.plans[indicePlanActual]) {
+        const plan = villanoSeleccionado.plans[indicePlanActual];
         document.getElementById('nombre-plan').innerText = plan.name;
-        document.getElementById('etapa-plan').innerText = `Etapa ${plan.stage || (indicePlanActual + 1)}B`;
-        
-        amenazaActual = plan.base_threat || 0;
-        amenazaLimite = plan.base_threat_over_total || plan.threat || 7;
-        
-        document.getElementById('amenaza-actual').innerText = amenazaActual;
-        document.getElementById('amenaza-limite').innerText = amenazaLimite;
-      } else {
-        document.getElementById('nombre-plan').innerText = 'Plan Principal Estándar';
-        document.getElementById('etapa-plan').innerText = 'Etapa 1B';
+        document.getElementById('etapa-plan').innerText = `Etapa ${plan.stage}`;
         amenazaActual = 0;
-        amenazaLimite = 10;
         document.getElementById('amenaza-actual').innerText = 0;
-        document.getElementById('amenaza-limite').innerText = 10;
+        document.getElementById('amenaza-limite').innerText = plan.threat;
       }
     }
 
@@ -297,16 +345,19 @@
     }
 
     function cambiarAmenaza(cant) {
+      if (!villanoSeleccionado) return;
+      
+      const planActual = villanoSeleccionado.plans[indicePlanActual];
       amenazaActual = Math.max(0, amenazaActual + cant);
       document.getElementById('amenaza-actual').innerText = amenazaActual;
 
-      if (amenazaActual >= amenazaLimite && planesDelVillano.length > 0) {
-        if (indicePlanActual + 1 < planesDelVillano.length) {
-          alert(`⚠️ ¡La amenaza alcanzó el límite! Avanzando automáticamente al siguiente Plan Principal.`);
+      if (planActual && amenazaActual >= planActual.threat) {
+        if (indicePlanActual + 1 < villanoSeleccionado.plans.length) {
+          alert(`⚠️ ¡La amenaza alcanzó el límite! Avanzando automáticamente a la siguiente etapa del Plan.`);
           indicePlanActual++;
-          cargarPlanActual();
+          cargarPlan();
         } else {
-          alert(`💀 ¡EL PLAN PRINCIPAL HA COMPLETADO SU ÚLTIMA ETAPA! LOS HÉROES HAN PERDIDO LA PARTIDA.`);
+          alert(`💀 ¡LA AMENAZA ALCANZÓ EL LÍMITE FINAL! LOS HÉROES HAN PERDIDO.`);
         }
       }
     }
@@ -322,7 +373,8 @@
     function abrirModalColeccion() { document.getElementById('modal-coleccion').classList.remove('hidden'); }
     function cerrarModalColeccion() { document.getElementById('modal-coleccion').classList.add('hidden'); }
 
-    inicializarMarvelCDB();
+    // Iniciar
+    inicializarApp();
   </script>
 </body>
 </html>
