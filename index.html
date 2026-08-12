@@ -23,19 +23,25 @@
       }
     }
 
-    /* EFECTO DE CAMPO ELECTROMAGNÉTICO PULSANTE PARA MAGNETO */
-    @keyframes magneticAura {
+    /* MOVIMIENTO FLUIDO DE MATERIA OSCURA DE VENOM (SIMBIONTE) */
+    @keyframes symbioteShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes pulseSymbioteBorder {
       0%, 100% {
-        box-shadow: 0 0 12px rgba(192, 132, 252, 0.8), inset 0 0 15px rgba(129, 140, 248, 0.5);
-        border-color: #c084fc !important;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3), inset 0 0 15px rgba(15, 23, 42, 0.9);
+        border-color: #cbd5e1 !important;
       }
       50% {
-        box-shadow: 0 0 28px rgba(168, 85, 247, 1), inset 0 0 22px rgba(192, 132, 252, 0.8);
-        border-color: #e879f9 !important;
+        box-shadow: 0 0 22px rgba(255, 255, 255, 0.6), inset 0 0 25px rgba(2, 6, 23, 0.95);
+        border-color: #ffffff !important;
       }
     }
 
-    /* ESTILO BASE CON CAPA CROMADA TRASLÚCIDA */
+    /* ESTILO BASE CON CAPA CROMADA TRASLÚCIDA (ARMADURAS) */
     .metal-card {
       position: relative;
       overflow: hidden;
@@ -61,39 +67,60 @@
       z-index: 1;
     }
 
-    /* ARMADURA IRONHEART V1 (VERDE-AZUL METÁLICO) */
+    /* ARMADURA IRONHEART V1 */
     .ironheart-v1 {
       background: linear-gradient(135deg, #07282e 0%, #134e5a 50%, #07282e 100%);
       border: 2px solid #2dd4bf !important;
       box-shadow: 0 0 12px rgba(45, 212, 191, 0.3);
     }
 
-    /* ARMADURA IRONHEART V2 (ROJO INTENSO + MARCO DORADO) */
+    /* ARMADURA IRONHEART V2 */
     .ironheart-v2 {
       background: linear-gradient(135deg, #420808 0%, #991b1b 50%, #420808 100%);
       border: 2.5px solid #facc15 !important;
       box-shadow: 0 0 15px rgba(250, 204, 21, 0.4);
     }
 
-    /* ARMADURA IRONHEART V3 (ROJO/MAGENTA/DORADO) */
+    /* ARMADURA IRONHEART V3 */
     .ironheart-v3 {
       background: linear-gradient(135deg, #580a22 0%, #be123c 40%, #851849 70%, #9a3412 100%);
       border: 3px solid #fde047 !important;
       box-shadow: 0 0 18px rgba(253, 224, 71, 0.5);
     }
 
-    /* ARMADURA IRON MAN (ROJO INTENSO + REACTOR ARC PULSANTE) */
+    /* ARMADURA IRON MAN */
     .ironman-card {
       background: linear-gradient(135deg, #450a0a 0%, #b91c1c 50%, #450a0a 100%);
       animation: arcReactorPulse 2.5s infinite ease-in-out;
       border: 3px solid #38bdf8 !important;
     }
 
-    /* ARMADURA MAGNETO (PLATA BRILLANTE + CAMPO MAGNÉTICO PULSANTE) */
+    /* MAGNETO (PLATA METALIZADO BRILLANTE) */
     .magneto-card {
       background: linear-gradient(135deg, #334155 0%, #64748b 35%, #94a3b8 50%, #475569 80%, #1e293b 100%);
-      animation: magneticAura 2.2s infinite ease-in-out;
-      border: 3px solid #c084fc !important;
+      border: 3px solid #e2e8f0 !important;
+      box-shadow: 0 0 15px rgba(226, 232, 240, 0.4);
+    }
+
+    /* SPIDER-MAN (ROJO CON TELARAÑAS NEGRAS - SIN BRILLO METAL) */
+    .spiderman-card {
+      background-color: #b91c1c;
+      background-image: 
+        radial-gradient(circle at 50% 50%, transparent 20%, rgba(0,0,0,0.85) 90%),
+        repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(15, 23, 42, 0.75) 20px),
+        repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(15, 23, 42, 0.75) 20px),
+        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(15, 23, 42, 0.45) 36px),
+        repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(15, 23, 42, 0.45) 36px);
+      border: 3px solid #ef4444 !important;
+      box-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+    }
+
+    /* VENOM (MATERIA OSCURA SIMBIONTE EN MOVIMIENTO FLUIDO) */
+    .venom-card {
+      background: linear-gradient(270deg, #020617, #0f172a, #1e1b4b, #020617, #090d16);
+      background-size: 300% 300%;
+      animation: symbioteShift 7s ease infinite, pulseSymbioteBorder 3s infinite ease-in-out;
+      border: 3px solid #cbd5e1 !important;
     }
 
     @keyframes pulseGlowEvolve {
@@ -111,7 +138,7 @@
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.5 (Magneto + Smooth Metallic Fix)</p>
+      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.6 (Spidey Web + Symbiote Venom)</p>
     </div>
     
     <button onclick="reiniciarPartida()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-red-400 active:scale-95 transition shadow-md">
@@ -329,7 +356,7 @@
   </div>
 
   <footer class="text-center py-1 text-[10px] text-slate-500 font-medium">
-    Marvel Champions Companion v6.5
+    Marvel Champions Companion v6.6
   </footer>
 
   <!-- LÓGICA Y CATÁLOGO COMPLETO -->
@@ -406,10 +433,10 @@
       { id: 'scarlet', name: 'Kang Centurión Escarlata', plan: 'La Actual Guerra del Futuro' }
     ];
 
-    // CATÁLOGO COMPLETO DE HÉROES (TODOS LOS PUBLICADOS)
+    // CATÁLOGO COMPLETO DE HÉROES
     const baseHeroes = [
       // Core Set
-      { id: 'spiderman', name: 'Spider-Man (Peter Parker)', hp: 10 },
+      { id: 'spiderman', name: 'Spider-Man (Peter Parker)', hp: 10, esSpiderman: true },
       { id: 'ironman', name: 'Iron Man (Tony Stark)', hp: 9, esIronman: true },
       { id: 'captainmarvel', name: 'Capitana Marvel (Carol Danvers)', hp: 12 },
       { id: 'shehulk', name: 'Hulka (Jennifer Walters)', hp: 15 },
@@ -433,7 +460,7 @@
       { id: 'starlord', name: 'Star-Lord (Peter Quill)', hp: 10 },
       { id: 'gamora', name: 'Gamora', hp: 10 },
       { id: 'drax', name: 'Drax el Destructor', hp: 14 },
-      { id: 'venom', name: 'Venom (Flash Thompson)', hp: 12 },
+      { id: 'venom', name: 'Venom (Flash Thompson)', hp: 12, esVenom: true },
       { id: 'rocket', name: 'Rocket Raccoon', hp: 9 },
       { id: 'groot', name: 'Groot', hp: 10 },
       { id: 'spectrum', name: 'Espectro (Monica Rambeau)', hp: 11 },
@@ -480,14 +507,13 @@
     let jugadores = [
       { 
         id: 1, 
-        heroeId: 'ironheart', 
+        heroeId: 'spiderman', 
         hp: 10, 
         modoAlterEgo: false,
         cambioUsadoTurno: false,
         estados: { confuso: 0, aturdido: 0, duro: false, teson: false },
         ironheartData: { version: 1, contadores: 0 },
-        ironmanData: { mejorasTech: 0 },
-        magnetoData: { cargas: 0 }
+        ironmanData: { mejorasTech: 0 }
       }
     ];
 
@@ -588,7 +614,6 @@
           j.estados = { confuso: 0, aturdido: 0, duro: false, teson: false };
           j.ironheartData = { version: 1, contadores: 0 };
           j.ironmanData = { mejorasTech: 0 };
-          j.magnetoData = { cargas: 0 };
         });
 
         document.getElementById('panel-especial-kang').classList.add('hidden');
@@ -673,8 +698,7 @@
           cambioUsadoTurno: false,
           estados: { confuso: 0, aturdido: 0, duro: false, teson: false },
           ironheartData: { version: 1, contadores: 0 },
-          ironmanData: { mejorasTech: 0 },
-          magnetoData: { cargas: 0 }
+          ironmanData: { mejorasTech: 0 }
         });
       }
       while (jugadores.length > numJugadores) {
@@ -708,6 +732,8 @@
         const esIronheart = heroeObj && heroeObj.esIronheart;
         const esIronman = heroeObj && heroeObj.esIronman;
         const esMagneto = heroeObj && heroeObj.esMagneto;
+        const esSpiderman = heroeObj && heroeObj.esSpiderman;
+        const esVenom = heroeObj && heroeObj.esVenom;
 
         let listoEvolucionar = esIronheart && j.ironheartData.version < 3 && j.ironheartData.contadores >= 6;
 
@@ -721,6 +747,10 @@
           claseCard = `metal-card ironman-card rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
         } else if (esMagneto) {
           claseCard = `metal-card magneto-card rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
+        } else if (esSpiderman) {
+          claseCard = `spiderman-card rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
+        } else if (esVenom) {
+          claseCard = `venom-card rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
         }
 
         const card = document.createElement('div');
@@ -773,27 +803,6 @@
                   <button onclick="cambiarMejorasIronman(${index}, -1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">-</button>
                   <span id="txt-tech-ironman-${index}" class="text-sm font-black text-sky-400 px-1.5">${j.ironmanData.mejorasTech}</span>
                   <button onclick="cambiarMejorasIronman(${index}, 1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">+</button>
-                </div>
-              </div>
-            </div>
-          `;
-        }
-
-        let htmlPanelMagneto = '';
-        if (esMagneto) {
-          htmlPanelMagneto = `
-            <div class="relative z-10 mt-3 pt-2 border-t border-slate-700/60 bg-black/70 p-2.5 rounded-xl border border-purple-400/60 space-y-2 backdrop-blur-sm">
-              <div class="flex justify-between items-center">
-                <span class="text-[10px] font-black text-purple-300 uppercase tracking-wider">Control Electromagnético</span>
-                <span class="text-[10px] font-extrabold bg-purple-950 border border-purple-500 text-purple-200 px-2 py-0.5 rounded shadow">Aura Plata</span>
-              </div>
-
-              <div class="flex justify-between items-center bg-slate-950/80 p-1.5 rounded-lg border border-slate-800">
-                <span class="text-[9px] font-bold text-slate-300 uppercase">Cargas de Magnetismo:</span>
-                <div class="flex items-center gap-1">
-                  <button onclick="cambiarCargasMagneto(${index}, -1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">-</button>
-                  <span id="txt-cargas-magneto-${index}" class="text-sm font-black text-purple-300 px-1.5">${j.magnetoData.cargas}</span>
-                  <button onclick="cambiarCargasMagneto(${index}, 1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">+</button>
                 </div>
               </div>
             </div>
@@ -858,7 +867,6 @@
 
           ${htmlPanelIronheart}
           ${htmlPanelIronman}
-          ${htmlPanelMagneto}
         `;
         container.appendChild(card);
       });
@@ -913,14 +921,6 @@
       }
     }
 
-    function cambiarCargasMagneto(index, cant) {
-      const data = jugadores[index].magnetoData;
-      data.cargas = Math.max(0, data.cargas + cant);
-
-      const txtCargas = document.getElementById(`txt-cargas-magneto-${index}`);
-      if (txtCargas) txtCargas.innerText = data.cargas;
-    }
-
     function seleccionarHeroeJugador(index, heroeId) {
       const heroe = baseHeroes.find(h => h.id === heroeId);
       if (heroe) {
@@ -930,7 +930,6 @@
         jugadores[index].cambioUsadoTurno = false;
         jugadores[index].ironheartData = { version: 1, contadores: 0 };
         jugadores[index].ironmanData = { mejorasTech: 0 };
-        jugadores[index].magnetoData = { cargas: 0 };
         renderizarJugadores();
       }
     }
@@ -1155,6 +1154,8 @@
           const esIronheart = heroeObj && heroeObj.esIronheart;
           const esIronman = heroeObj && heroeObj.esIronman;
           const esMagneto = heroeObj && heroeObj.esMagneto;
+          const esSpiderman = heroeObj && heroeObj.esSpiderman;
+          const esVenom = heroeObj && heroeObj.esVenom;
 
           let claseCardHeroe = "bg-slate-900 rounded-2xl p-4 border-2 border-blue-900/60 shadow-xl space-y-2";
           if (esIronheart) {
@@ -1165,6 +1166,10 @@
             claseCardHeroe = `metal-card ironman-card rounded-2xl p-4 space-y-2`;
           } else if (esMagneto) {
             claseCardHeroe = `metal-card magneto-card rounded-2xl p-4 space-y-2`;
+          } else if (esSpiderman) {
+            claseCardHeroe = `spiderman-card rounded-2xl p-4 space-y-2`;
+          } else if (esVenom) {
+            claseCardHeroe = `venom-card rounded-2xl p-4 space-y-2`;
           }
 
           let opcionesVidaHeroe = '';
@@ -1213,26 +1218,6 @@
             `;
           }
 
-          let htmlPanelMagneto = '';
-          if (esMagneto) {
-            htmlPanelMagneto = `
-              <div class="relative z-10 mt-2 pt-2 border-t border-slate-700/60 bg-black/70 p-2 rounded-xl border border-purple-400/60 space-y-1.5">
-                <div class="flex justify-between items-center">
-                  <span class="text-[10px] font-black text-purple-300 uppercase">Magneto</span>
-                  <span class="text-[10px] font-extrabold bg-purple-950 border border-purple-500 text-purple-200 px-1.5 py-0.5 rounded">Plata Aura</span>
-                </div>
-                <div class="flex justify-between items-center bg-slate-950/80 p-1 rounded-lg">
-                  <span class="text-[9px] font-bold text-slate-300 uppercase">Cargas:</span>
-                  <div class="flex items-center gap-1">
-                    <button onclick="cambiarCargasMagneto(${idxJ}, -1); renderizarColumnasKang();" class="bg-slate-800 px-2 text-xs font-bold">-</button>
-                    <span class="text-xs font-black text-purple-300 px-1">${j.magnetoData.cargas}</span>
-                    <button onclick="cambiarCargasMagneto(${idxJ}, 1); renderizarColumnasKang();" class="bg-slate-800 px-2 text-xs font-bold">+</button>
-                  </div>
-                </div>
-              </div>
-            `;
-          }
-
           htmlHeroeCompleto = `
             <div class="${claseCardHeroe}">
               <div class="relative z-10 flex justify-between items-center border-b border-slate-700/60 pb-1">
@@ -1269,7 +1254,6 @@
 
               ${htmlPanelIronheart}
               ${htmlPanelIronman}
-              ${htmlPanelMagneto}
             </div>
           `;
         }
