@@ -24,7 +24,7 @@
     <div class="flex justify-between items-center mb-2">
       <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Preparación de Partida</h2>
       
-      <!-- CONTROLES PARA AÑADIR/QUITAR JUGADORES -->
+      <!-- CONTROLES DE JUGADORES -->
       <div class="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-700">
         <span class="text-[10px] font-bold text-slate-400 px-1 uppercase">Jugadores:</span>
         <button onclick="cambiarNumJugadores(-1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded-lg text-xs text-slate-200">-</button>
@@ -94,16 +94,15 @@
       </div>
     </section>
 
-    <!-- SECCIÓN DE HÉROES (CARRUSEL TÁCTIL / GRILLA MULTI-JUGADOR) -->
+    <!-- SECCIÓN DE HÉROES (CARRUSEL TÁCTIL) -->
     <section class="space-y-2">
       <div class="flex justify-between items-center px-1">
         <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Héroes en Batalla</h3>
-        <span class="text-[10px] text-slate-500 font-semibold">Desliza para navegar 👉</span>
+        <span class="text-[10px] text-slate-500 font-semibold">Desliza 👉</span>
       </div>
 
-      <!-- CONTENEDOR DESLIZABLE TÁCTIL DE HÉROES -->
       <div id="contenedor-heroes" class="flex gap-3 overflow-x-auto pb-2 pt-1 snap-x snap-mandatory scrollbar-none">
-        <!-- Las tarjetas de cada jugador se generan aquí por JS -->
+        <!-- Generado por JS -->
       </div>
     </section>
 
@@ -126,10 +125,10 @@
   </div>
 
   <footer class="text-center py-1 text-[10px] text-slate-500 font-medium">
-    Marvel Champions Companion v2.5
+    Marvel Champions Companion v3.0 - Base de Datos Completa
   </footer>
 
-  <!-- LÓGICA MULTIJUGADOR Y DATOS -->
+  <!-- LÓGICA Y BASE DE DATOS COMPLETA DE VILLANOS -->
   <script>
     const packsLista = [
       { id: 'core', name: 'Caja Base (Core Set)' },
@@ -139,26 +138,79 @@
       { id: 'kang', name: 'Kang el Conquistador' },
       { id: 'gmw', name: 'Los Más Buscados de la Galaxia' },
       { id: 'mts', name: 'La Sombra de Thanos' },
+      { id: 'hood', name: 'The Hood' },
       { id: 'sinister', name: 'Sinister Motives' },
+      { id: 'mojo', name: 'MojoMania' },
       { id: 'mutant', name: 'Mutant Genesis' },
       { id: 'next_evo', name: 'NeXt Evolution' },
       { id: 'aoa', name: 'Age of Apocalypse' }
     ];
 
+    // BASE DE DATOS COMPLETA DE VILLANOS Y PLANES PRINCIPALES
     const baseVillanos = [
+      // 1. CAJA BASE
       { id: 'rhino', name: 'Rhino', pack: 'core', hp: [14, 15], plans: [{ name: 'La Ruptura', stage: '1B', threat: 7 }] },
       { id: 'klaw', name: 'Klaw', pack: 'core', hp: [12, 18], plans: [{ name: 'El Imperio del Sonido', stage: '1B', threat: 6 }, { name: 'Ataque Secreto', stage: '2B', threat: 8 }] },
       { id: 'ultron', name: 'Ultron', pack: 'core', hp: [17, 22], plans: [{ name: 'La Era de Ultron', stage: '1B', threat: 3 }, { name: 'Imperio de Máquinas', stage: '2B', threat: 10 }] },
+
+      // 2. EL DUENDE VERDE
       { id: 'norman', name: 'Norman Osborn', pack: 'goblin', hp: [16, 18], plans: [{ name: 'Negocios Arriesgados', stage: '1B', threat: 7 }] },
       { id: 'mutagen', name: 'Fórmula Mutágena', pack: 'goblin', hp: [18, 20], plans: [{ name: 'Invasión Duende', stage: '1B', threat: 11 }] },
+
+      // 3. LA DEMOLEDORA
+      { id: 'wrecker', name: 'Wrecker', pack: 'wrecking', hp: [14, 16], plans: [{ name: 'Fuga de Prisión', stage: '1B', threat: 6 }] },
+
+      // 4. LA SOMBRA DEL DEVORADOR DE MUNDOS
       { id: 'crossbones', name: 'Crossbones', pack: 'red_skull', hp: [12, 14], plans: [{ name: 'Ataque a Nueva York', stage: '1B', threat: 6 }] },
-      { id: 'red_skull', name: 'Red Skull', pack: 'red_skull', hp: [16, 20], plans: [{ name: 'El Orden Mundial', stage: '1B', threat: 8 }] },
-      { id: 'thanos', name: 'Thanos', pack: 'mts', hp: [20, 24], plans: [{ name: 'Las Gemas del Infinito', stage: '1B', threat: 12 }] },
+      { id: 'absorbing_man', name: 'Hombre Absorbente', pack: 'red_skull', hp: [14, 16], plans: [{ name: 'Poder Absorbente', stage: '1B', threat: 7 }] },
+      { id: 'taskmaster', name: 'Taskmaster', pack: 'red_skull', hp: [14, 16], plans: [{ name: 'Caza de Héroes', stage: '1B', threat: 8 }] },
+      { id: 'zola', name: 'Arnim Zola', pack: 'red_skull', hp: [12, 16], plans: [{ name: 'Creaciones de Zola', stage: '1B', threat: 8 }] },
+      { id: 'red_skull', name: 'Red Skull', pack: 'red_skull', hp: [16, 20], plans: [{ name: 'El Orden Mundial', stage: '1B', threat: 8 }, { name: 'Plan Maestro', stage: '2B', threat: 12 }] },
+
+      // 5. LOS MÁS BUSCADOS DE LA GALAXIA
+      { id: 'drang', name: 'Brotherhood of Badoon (Drang)', pack: 'gmw', hp: [13, 16], plans: [{ name: 'Invasión Badoon', stage: '1B', threat: 7 }] },
+      { id: 'collector_1', name: 'El Coleccionista (Infiltración)', pack: 'gmw', hp: [14, 17], plans: [{ name: 'La Colección', stage: '1B', threat: 7 }] },
+      { id: 'collector_2', name: 'El Coleccionista (Escape)', pack: 'gmw', hp: [15, 18], plans: [{ name: 'Huida del Museo', stage: '1B', threat: 8 }] },
+      { id: 'nebula', name: 'Nebula', pack: 'gmw', hp: [16, 19], plans: [{ name: 'Nave de Batalla', stage: '1B', threat: 9 }] },
+      { id: 'ronan', name: 'Ronan el Acusador', pack: 'gmw', hp: [18, 22], plans: [{ name: 'Juicio Universal', stage: '1B', threat: 10 }] },
+
+      // 6. LA SOMBRA DE THANOS
+      { id: 'ebony_maw', name: 'Ebony Maw', pack: 'mts', hp: [14, 16], plans: [{ name: 'Ataque a Knowhere', stage: '1B', threat: 7 }] },
+      { id: 'tower_defense', name: 'Defensa de la Torre (Proxima & Corvus)', pack: 'mts', hp: [12, 15], plans: [{ name: 'Ataque a la Torre', stage: '1B', threat: 8 }] },
+      { id: 'thanos', name: 'Thanos', pack: 'mts', hp: [20, 24], plans: [{ name: 'Las Gemas del Infinito', stage: '1B', threat: 12 }, { name: 'El Equilibrio', stage: '2B', threat: 15 }] },
+      { id: 'hela', name: 'Hela', pack: 'mts', hp: [18, 20], plans: [{ name: 'Reina de Niflheim', stage: '1B', threat: 10 }] },
+      { id: 'loki', name: 'Loki', pack: 'mts', hp: [20, 22], plans: [{ name: 'Engaño del Dios', stage: '1B', threat: 10 }] },
+
+      // 7. SINISTER MOTIVES
       { id: 'sandman', name: 'Hombre de Arena', pack: 'sinister', hp: [16, 18], plans: [{ name: 'Tormenta de Arena', stage: '1B', threat: 8 }] },
+      { id: 'venom_villain', name: 'Venom (Villano)', pack: 'sinister', hp: [18, 20], plans: [{ name: 'Simbionte Suelto', stage: '1B', threat: 9 }] },
+      { id: 'mysterio', name: 'Mysterio', pack: 'sinister', hp: [16, 18], plans: [{ name: 'Laberinto de Ilusiones', stage: '1B', threat: 8 }] },
+      { id: 'sinister_six', name: 'Los Seis Siniestros', pack: 'sinister', hp: [12, 15], plans: [{ name: 'Ataque Coordinado', stage: '1B', threat: 10 }] },
+      { id: 'venom_goblin', name: 'Venom Goblin', pack: 'sinister', hp: [20, 26], plans: [{ name: 'Terror en la Ciudad', stage: '1B', threat: 10 }] },
+
+      // 8. MUTANT GENESIS
+      { id: 'sabretooth', name: 'Dientes de Sable', pack: 'mutant', hp: [16, 18], plans: [{ name: 'Cacería Mutante', stage: '1B', threat: 7 }] },
+      { id: 'sentinels', name: 'Centinelas', pack: 'mutant', hp: [14, 16], plans: [{ name: 'Programa Centinela', stage: '1B', threat: 8 }] },
+      { id: 'master_mold', name: 'Molde Maestro', pack: 'mutant', hp: [18, 20], plans: [{ name: 'Producción en Masa', stage: '1B', threat: 9 }] },
+      { id: 'unus', name: 'Unus el Intocable', pack: 'mutant', hp: [16, 18], plans: [{ name: 'Campo de Fuerza', stage: '1B', threat: 8 }] },
       { id: 'magneto', name: 'Magneto', pack: 'mutant', hp: [20, 25], plans: [{ name: 'Dominación Mutante', stage: '1B', threat: 12 }] },
-      { id: 'apocalypse', name: 'Apocalipsis', pack: 'aoa', hp: [22, 28], plans: [{ name: 'La Era de Apocalipsis', stage: '1B', threat: 12 }] }
+
+      // 9. NEXT EVOLUTION
+      { id: 'marauders', name: 'Los Merodeadores', pack: 'next_evo', hp: [15, 18], plans: [{ name: 'Emboscada', stage: '1B', threat: 8 }] },
+      { id: 'juggernaut', name: 'Juggernaut', pack: 'next_evo', hp: [20, 24], plans: [{ name: 'Fuerza Imparable', stage: '1B', threat: 9 }] },
+      { id: 'mister_sinister', name: 'Mister Sinister', pack: 'next_evo', hp: [18, 22], plans: [{ name: 'Experimentos Genéticos', stage: '1B', threat: 10 }] },
+      { id: 'stryfe', name: 'Stryfe', pack: 'next_evo', hp: [18, 22], plans: [{ name: 'El Futuro Oscuro', stage: '1B', threat: 10 }] },
+
+      // 10. AGE OF APOCALYPSE
+      { id: 'four_horsemen', name: 'Los Cuatro Jinetes', pack: 'aoa', hp: [16, 20], plans: [{ name: 'La Llegada del Fin', stage: '1B', threat: 10 }] },
+      { id: 'apocalypse', name: 'Apocalipsis', pack: 'aoa', hp: [22, 28], plans: [{ name: 'La Era de Apocalipsis', stage: '1B', threat: 12 }, { name: 'Supervivencia del Más Apto', stage: '2B', threat: 16 }] },
+
+      // PACKS INDIVIDUALES / ESCENARIO
+      { id: 'kang', name: 'Kang el Conquistador', pack: 'kang', hp: [12, 15], plans: [{ name: 'Conquista del Tiempo', stage: '1B', threat: 7 }] },
+      { id: 'hood', name: 'The Hood', pack: 'hood', hp: [14, 16], plans: [{ name: 'Imperio Criminal', stage: '1B', threat: 8 }] }
     ];
 
+    // BASE DE DATOS LOCAL DE HÉROES
     const baseHeroes = [
       { id: 'spiderman', name: 'Spider-Man', pack: 'core', hp: 10 },
       { id: 'ironman', name: 'Iron Man', pack: 'core', hp: 9 },
@@ -170,7 +222,11 @@
       { id: 'thor', name: 'Thor', pack: 'hero_pack', hp: 14 },
       { id: 'doctorstrange', name: 'Doctor Strange', pack: 'hero_pack', hp: 10 },
       { id: 'ironheart', name: 'Ironheart', pack: 'hero_pack', hp: 10 },
-      { id: 'cyclops', name: 'Cíclope', pack: 'mutant', hp: 10 }
+      { id: 'venom_hero', name: 'Venom (Héroe)', pack: 'hero_pack', hp: 12 },
+      { id: 'wolverine', name: 'Wolverine', pack: 'hero_pack', hp: 10 },
+      { id: 'cyclops', name: 'Cíclope', pack: 'mutant', hp: 10 },
+      { id: 'storm', name: 'Tormenta', pack: 'hero_pack', hp: 10 },
+      { id: 'cable', name: 'Cable', pack: 'next_evo', hp: 12 }
     ];
 
     let coleccionUsuario = JSON.parse(localStorage.getItem('mvl_coleccion')) || ['core'];
@@ -198,7 +254,6 @@
       numJugadores = nuevoNum;
       document.getElementById('txt-num-jugadores').innerText = numJugadores;
 
-      // Ajustar lista de jugadores
       while (jugadores.length < numJugadores) {
         const idNuevo = jugadores.length + 1;
         const heroeDefault = baseHeroes[(idNuevo - 1) % baseHeroes.length];
@@ -223,9 +278,6 @@
       const heroesFiltrados = baseHeroes.filter(h => coleccionUsuario.includes(h.pack) || h.pack === 'hero_pack');
 
       jugadores.forEach((j, index) => {
-        const heroeActual = baseHeroes.find(h => h.id === j.heroeId) || baseHeroes[0];
-
-        // Opciones de selección para el menú de cada héroe
         let opcionesHeroeHtml = '';
         heroesFiltrados.forEach(h => {
           opcionesHeroeHtml += `<option value="${h.id}" ${h.id === j.heroeId ? 'selected' : ''}>${h.name}</option>`;
@@ -252,11 +304,10 @@
             <button onclick="cambiarVidaJugador(${index}, 5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+5</button>
           </div>
 
-          <!-- ESTADOS -->
           <div class="grid grid-cols-3 gap-1.5 pt-2 border-t border-slate-700/60">
-            <button onclick="toggleEstadoJugador(${index}, 'confuso')" id="btn-confuso-${index}" class="${j.estados.confuso ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1.5 rounded-xl text-[10px] uppercase">Confuso</button>
-            <button onclick="toggleEstadoJugador(${index}, 'aturdido')" id="btn-aturdido-${index}" class="${j.estados.aturdido ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1.5 rounded-xl text-[10px] uppercase">Aturdido</button>
-            <button onclick="toggleEstadoJugador(${index}, 'duro')" id="btn-duro-${index}" class="${j.estados.duro ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1.5 rounded-xl text-[10px] uppercase">Duro</button>
+            <button onclick="toggleEstadoJugador(${index}, 'confuso')" class="${j.estados.confuso ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1.5 rounded-xl text-[10px] uppercase">Confuso</button>
+            <button onclick="toggleEstadoJugador(${index}, 'aturdido')" class="${j.estados.aturdido ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1.5 rounded-xl text-[10px] uppercase">Aturdido</button>
+            <button onclick="toggleEstadoJugador(${index}, 'duro')" class="${j.estados.duro ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1.5 rounded-xl text-[10px] uppercase">Duro</button>
           </div>
         `;
         container.appendChild(card);
@@ -384,7 +435,7 @@
     function abrirModalColeccion() { document.getElementById('modal-coleccion').classList.remove('hidden'); }
     function cerrarModalColeccion() { document.getElementById('modal-coleccion').classList.add('hidden'); }
 
-    // Iniciar app
+    // Iniciar
     inicializarApp();
   </script>
 </body>
