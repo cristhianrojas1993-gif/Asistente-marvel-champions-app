@@ -92,26 +92,12 @@
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.3 (Metal Smooth Loop)</p>
+      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.4 (Full Roster + Kang Fixed)</p>
     </div>
     
-    <div class="flex gap-1.5">
-      <!-- MENÚ DESPLEGABLE DE CONFIGURACIÓN -->
-      <div class="relative">
-        <button onclick="toggleMenuConfig()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 active:scale-95 transition shadow-md">
-          ⚙️
-        </button>
-        <div id="dropdown-config" class="hidden absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl z-50 p-2 space-y-1">
-          <button onclick="reiniciarPartida()" class="w-full text-left px-3 py-2 text-xs font-bold text-red-400 hover:bg-slate-700 rounded-xl transition flex items-center gap-2">
-            🔄 Reiniciar Partida
-          </button>
-        </div>
-      </div>
-
-      <button onclick="abrirModalColeccion()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 active:scale-95 transition shadow-md">
-        📦 Colección
-      </button>
-    </div>
+    <button onclick="reiniciarPartida()" class="bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold text-red-400 active:scale-95 transition shadow-md">
+      🔄 Reiniciar
+    </button>
   </header>
 
   <!-- BARRA DE CONTROL DE FASES DE JUEGO -->
@@ -144,7 +130,7 @@
     <div>
       <label class="text-[10px] font-bold text-slate-400 uppercase">Villano de la Partida</label>
       <select id="select-villano" onchange="actualizarVillano()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-xs text-slate-200 focus:outline-none mt-0.5">
-        <!-- JS -->
+        <!-- JS Catálogo Completo -->
       </select>
     </div>
   </section>
@@ -200,9 +186,9 @@
         <button onclick="toggleEstadoVillano('firmeza')" id="btn-v-firmeza" class="bg-slate-900/80 text-slate-400 border border-slate-700 font-bold py-1.5 rounded-xl text-[8px] uppercase">Firmeza</button>
       </div>
 
-      <!-- BOTÓN ESPECIAL DE KANG -->
+      <!-- BOTÓN ESPECIAL DE KANG (OCULTO HASTA QUE KANG I SEA DERROTADO) -->
       <div id="panel-especial-kang" class="hidden mt-3">
-        <button onclick="iniciarMecanicaKang()" class="w-full bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-600 hover:to-indigo-600 text-white font-extrabold py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg active:scale-95 transition border border-purple-500">
+        <button onclick="iniciarMecanicaKang()" class="w-full bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-600 hover:to-indigo-600 text-white font-extrabold py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg active:scale-95 transition border border-purple-500 animate-pulse">
           🌀 Activar Etapa 3B (Dividir Mesa en Columnas)
         </button>
       </div>
@@ -258,18 +244,32 @@
 
   </main>
 
-  <!-- VISTA ESPECIAL ETAPA 3B DE KANG -->
-  <main id="vista-etapa3b-kang" class="hidden space-y-2 flex-1 flex flex-col justify-start">
-    <div class="flex justify-between items-center bg-indigo-950/80 p-3 rounded-2xl border border-indigo-800">
+  <!-- VISTA ESPECIAL ETAPA 3B DE KANG (MESA DIVIDIDA) -->
+  <main id="vista-etapa3b-kang" class="hidden space-y-3 flex-1 flex flex-col justify-start">
+    <div class="bg-gradient-to-r from-purple-950 to-indigo-950 p-3 rounded-2xl border border-purple-800 shadow-xl flex justify-between items-center">
       <div>
-        <h3 class="text-xs font-black text-indigo-300 uppercase tracking-wider">Etapa 3B: Líneas Temporales Separadas</h3>
-        <p class="text-[10px] text-indigo-400 font-semibold">Desliza para ver cada columna 👉</p>
+        <h3 class="text-xs font-black text-purple-300 uppercase tracking-wider">Etapa 3B: Líneas Temporales Separadas</h3>
+        <p class="text-[10px] text-purple-400 font-semibold">Cada héroe enfrenta a su versión de Kang en su propia columna 👉</p>
       </div>
-      <button onclick="finalizarEtapa3BKangManualmente()" class="bg-purple-700 hover:bg-purple-600 text-white text-[10px] font-black px-2.5 py-1.5 rounded-xl border border-purple-500 active:scale-95 transition">
+      <button onclick="finalizarEtapa3BKangManualmente()" class="bg-purple-700 hover:bg-purple-600 text-white text-[10px] font-black px-2.5 py-1.5 rounded-xl border border-purple-500 active:scale-95 transition shadow">
         Unir Mesa ➔ Etapa 4B
       </button>
     </div>
 
+    <!-- PLAN PRINCIPAL 2B GLOBAL -->
+    <section class="bg-slate-950 p-3 rounded-2xl border border-amber-800/80 shadow-lg flex justify-between items-center">
+      <div>
+        <span class="text-[9px] font-black bg-amber-950 text-amber-300 px-2 py-0.5 rounded uppercase border border-amber-800">Plan 2B Global</span>
+        <h4 class="text-xs font-bold text-amber-400 mt-1">El Amo del Tiempo</h4>
+      </div>
+      <div class="flex items-center gap-2 bg-slate-900 p-1.5 rounded-xl border border-slate-800">
+        <button onclick="cambiarAmenazaKang2B(-1)" class="bg-slate-800 px-2 py-0.5 rounded text-xs font-black text-slate-200">-</button>
+        <span id="txt-amenaza-kang-2b" class="text-lg font-black text-amber-400 px-1">0</span>
+        <button onclick="cambiarAmenazaKang2B(1)" class="bg-slate-800 px-2 py-0.5 rounded text-xs font-black text-slate-200">+</button>
+      </div>
+    </section>
+
+    <!-- CARRUSEL DE COLUMNAS (KANG + PLAN 3B + PANEL DE HÉROE COMPLETO) -->
     <div id="carrusel-columnas-kang" class="flex gap-3 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scrollbar-none flex-1">
       <!-- JS -->
     </div>
@@ -309,54 +309,26 @@
     </div>
   </div>
 
-  <!-- MODAL DE COLECCIÓN -->
-  <div id="modal-coleccion" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
-    <div class="bg-slate-800 rounded-3xl p-5 border border-slate-700 w-full max-w-sm space-y-4 shadow-2xl max-h-[85vh] flex flex-col">
-      <div class="flex justify-between items-center border-b border-slate-700 pb-2">
-        <h3 class="text-base font-black text-slate-100 uppercase tracking-wide">Seleccionar Cajas</h3>
-        <button onclick="cerrarModalColeccion()" class="text-slate-400 text-lg font-bold px-2">✕</button>
-      </div>
-
-      <div id="lista-coleccion" class="space-y-2 overflow-y-auto pr-1 text-xs flex-1">
-        <!-- JS -->
-      </div>
-
-      <button onclick="guardarYFiltrar()" class="w-full bg-red-600 font-extrabold py-3 rounded-2xl text-xs uppercase tracking-wider shadow-lg active:scale-95 transition">Guardar y Aplicar</button>
-    </div>
-  </div>
-
   <footer class="text-center py-1 text-[10px] text-slate-500 font-medium">
-    Marvel Champions Companion v6.3
+    Marvel Champions Companion v6.4
   </footer>
 
-  <!-- LÓGICA Y DICCIONARIO COMPLETO -->
+  <!-- LÓGICA Y CATÁLOGO COMPLETO -->
   <script>
-    const packsLista = [
-      { id: 'core', name: 'Caja Base (Core Set)' },
-      { id: 'goblin', name: 'El Duende Verde' },
-      { id: 'wrecking', name: 'La Demoledora' },
-      { id: 'red_skull', name: 'La Sombra del Devorador' },
-      { id: 'kang', name: 'Kang el Conquistador' },
-      { id: 'gmw', name: 'Los Más Buscados de la Galaxia' },
-      { id: 'mts', name: 'La Sombra de Thanos' },
-      { id: 'hood', name: 'The Hood' },
-      { id: 'sinister', name: 'Sinister Motives' },
-      { id: 'mojo', name: 'MojoMania' },
-      { id: 'mutant', name: 'Mutant Genesis' },
-      { id: 'next_evo', name: 'NeXt Evolution' },
-      { id: 'aoa', name: 'Age of Apocalypse' }
-    ];
-
+    // CATÁLOGO COMPLETO DE VILLANOS (TODOS LOS PUBLICADOS)
     const baseVillanos = [
-      { id: 'rhino', name: 'Rhino', pack: 'core', hpPerPlayer: [14, 15], plans: [{ name: 'La Ruptura', stage: '1B', threatPerPlayer: 7 }] },
-      { id: 'klaw', name: 'Klaw', pack: 'core', hpPerPlayer: [12, 18], plans: [{ name: 'El Imperio del Sonido', stage: '1B', threatPerPlayer: 6 }, { name: 'Ataque Secreto', stage: '2B', threatPerPlayer: 8 }] },
-      { id: 'ultron', name: 'Ultron', pack: 'core', hpPerPlayer: [17, 22], plans: [{ name: 'La Era de Ultron', stage: '1B', threatPerPlayer: 3 }, { name: 'Imperio de Máquinas', stage: '2B', threatPerPlayer: 10 }] },
+      // Core Set
+      { id: 'rhino', name: 'Rhino', hpPerPlayer: [14, 15], plans: [{ name: 'La Ruptura', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'klaw', name: 'Klaw', hpPerPlayer: [12, 18], plans: [{ name: 'El Imperio del Sonido', stage: '1B', threatPerPlayer: 6 }, { name: 'Ataque Secreto', stage: '2B', threatPerPlayer: 8 }] },
+      { id: 'ultron', name: 'Ultron', hpPerPlayer: [17, 22], plans: [{ name: 'La Era de Ultron', stage: '1B', threatPerPlayer: 3 }, { name: 'Imperio de Máquinas', stage: '2B', threatPerPlayer: 10 }] },
 
-      // KANG EL CONQUISTADOR
+      // Escenarios y Módulos
+      { id: 'norman', name: 'Norman Osborn (Risky Business)', hpPerPlayer: [16, 18], plans: [{ name: 'Negocios Arriesgados', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'mutagen', name: 'Fórmula Mutágena', hpPerPlayer: [18, 20], plans: [{ name: 'Invasión Duende', stage: '1B', threatPerPlayer: 11 }] },
+      { id: 'wrecking_crew', name: 'La Demoledora (Wrecking Crew)', hpPerPlayer: [12, 16], plans: [{ name: 'Fuga Masiva', stage: '1B', threatPerPlayer: 6 }] },
       { 
         id: 'kang', 
         name: 'Kang el Conquistador', 
-        pack: 'kang', 
         hpPerPlayer: [12, 20], 
         esKang: true,
         plans: [
@@ -366,17 +338,46 @@
           { name: 'La Ira de Kang', stage: '4B', threatPerPlayer: 10 }
         ] 
       },
+      { id: 'hood', name: 'The Hood', hpPerPlayer: [14, 16], plans: [{ name: 'El Imperio Criminal', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'mojo', name: 'Mojo', hpPerPlayer: [16, 20], plans: [{ name: 'MojoMania', stage: '1B', threatPerPlayer: 8 }] },
 
-      { id: 'norman', name: 'Norman Osborn', pack: 'goblin', hpPerPlayer: [16, 18], plans: [{ name: 'Negocios Arriesgados', stage: '1B', threatPerPlayer: 7 }] },
-      { id: 'mutagen', name: 'Fórmula Mutágena', pack: 'goblin', hpPerPlayer: [18, 20], plans: [{ name: 'Invasión Duende', stage: '1B', threatPerPlayer: 11 }] },
-      { id: 'crossbones', name: 'Crossbones', pack: 'red_skull', hpPerPlayer: [12, 14], plans: [{ name: 'Ataque a Nueva York', stage: '1B', threatPerPlayer: 6 }] },
-      { id: 'red_skull', name: 'Red Skull', pack: 'red_skull', hpPerPlayer: [16, 20], plans: [{ name: 'El Orden Mundial', stage: '1B', threatPerPlayer: 8 }] },
-      { id: 'drang', name: 'Brotherhood of Badoon (Drang)', pack: 'gmw', hpPerPlayer: [13, 16], plans: [{ name: 'Invasión Badoon', stage: '1B', threatPerPlayer: 7 }] },
-      { id: 'ronan', name: 'Ronan el Acusador', pack: 'gmw', hpPerPlayer: [18, 22], plans: [{ name: 'Juicio Universal', stage: '1B', threatPerPlayer: 10 }] },
-      { id: 'thanos', name: 'Thanos', pack: 'mts', hpPerPlayer: [20, 24], plans: [{ name: 'Las Gemas del Infinito', stage: '1B', threatPerPlayer: 12 }] },
-      { id: 'venom_goblin', name: 'Venom Goblin', pack: 'sinister', hpPerPlayer: [20, 26], plans: [{ name: 'Terror en la Ciudad', stage: '1B', threatPerPlayer: 10 }] },
-      { id: 'magneto', name: 'Magneto', pack: 'mutant', hpPerPlayer: [20, 25], plans: [{ name: 'Dominación Mutante', stage: '1B', threatPerPlayer: 12 }] },
-      { id: 'apocalypse', name: 'Apocalipsis', pack: 'aoa', hpPerPlayer: [22, 28], plans: [{ name: 'La Era de Apocalipsis', stage: '1B', threatPerPlayer: 12 }] }
+      // La Sombra del Devorador (Red Skull)
+      { id: 'crossbones', name: 'Crossbones', hpPerPlayer: [12, 14], plans: [{ name: 'Ataque a Nueva York', stage: '1B', threatPerPlayer: 6 }] },
+      { id: 'absorbing_man', name: 'Hombre Absorbente', hpPerPlayer: [14, 15], plans: [{ name: 'Enfrentamiento en el Parque', stage: '1B', threatPerPlayer: 5 }] },
+      { id: 'taskmaster', name: 'Taskmaster', hpPerPlayer: [15, 17], plans: [{ name: 'Capturar la Base', stage: '1B', threatPerPlayer: 6 }] },
+      { id: 'zola', name: 'Arnim Zola', hpPerPlayer: [12, 16], plans: [{ name: 'La Isla de Zola', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'red_skull', name: 'Red Skull', hpPerPlayer: [16, 20], plans: [{ name: 'El Orden Mundial', stage: '1B', threatPerPlayer: 8 }] },
+
+      // Los Más Buscados de la Galaxia (GMW)
+      { id: 'drang', name: 'Brotherhood of Badoon (Drang)', hpPerPlayer: [13, 16], plans: [{ name: 'Invasión Badoon', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'collector_1', name: 'El Coleccionista (Infiltración)', hpPerPlayer: [14, 15], plans: [{ name: 'Museo de Cosas Raras', stage: '1B', threatPerPlayer: 6 }] },
+      { id: 'collector_2', name: 'El Coleccionista (Huye)', hpPerPlayer: [14, 15], plans: [{ name: 'Huida de la Nave', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'nebula_v', name: 'Nébula', hpPerPlayer: [16, 18], plans: [{ name: 'El Abordaje', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'ronan', name: 'Ronan el Acusador', hpPerPlayer: [18, 22], plans: [{ name: 'Juicio Universal', stage: '1B', threatPerPlayer: 10 }] },
+
+      // La Sombra de Thanos (MTS)
+      { id: 'ebony_maw', name: 'Ebony Maw', hpPerPlayer: [14, 16], plans: [{ name: 'Ataque a Knowhere', stage: '1B', threatPerPlayer: 6 }] },
+      { id: 'tower_defense', name: 'Proxima & Corvus (Tower Defense)', hpPerPlayer: [15, 18], plans: [{ name: 'Defensa de la Torre', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'thanos', name: 'Thanos', hpPerPlayer: [20, 24], plans: [{ name: 'Las Gemas del Infinito', stage: '1B', threatPerPlayer: 12 }] },
+      { id: 'hela', name: 'Hela', hpPerPlayer: [18, 22], plans: [{ name: 'Reino de Niflheim', stage: '1B', threatPerPlayer: 10 }] },
+      { id: 'loki', name: 'Loki', hpPerPlayer: [18, 20], plans: [{ name: 'El Engaño Real', stage: '1B', threatPerPlayer: 9 }] },
+
+      // Sinister Motives
+      { id: 'sandman', name: 'Hombre de Arena', hpPerPlayer: [14, 16], plans: [{ name: 'Tormenta de Arena', stage: '1B', threatPerPlayer: 6 }] },
+      { id: 'venom_v', name: 'Venom', hpPerPlayer: [16, 18], plans: [{ name: 'Simbionte Suelto', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'mysterio', name: 'Mysterio', hpPerPlayer: [15, 17], plans: [{ name: 'Laberinto de Ilusiones', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'sinister_six', name: 'Los Seis Siniestros', hpPerPlayer: [12, 15], plans: [{ name: 'Emboscada en Nueva York', stage: '1B', threatPerPlayer: 6 }] },
+      { id: 'venom_goblin', name: 'Venom Goblin', hpPerPlayer: [20, 26], plans: [{ name: 'Terror en la Ciudad', stage: '1B', threatPerPlayer: 10 }] },
+
+      // Mutant Genesis
+      { id: 'sabretooth', name: 'Dientes de Sable', hpPerPlayer: [15, 18], plans: [{ name: 'Caza Mutante', stage: '1B', threatPerPlayer: 7 }] },
+      { id: 'sentinel', name: 'Centinela Master Mold', hpPerPlayer: [16, 20], plans: [{ name: 'Fábrica de Centinelas', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'magneto', name: 'Magneto', hpPerPlayer: [20, 25], plans: [{ name: 'Dominación Mutante', stage: '1B', threatPerPlayer: 12 }] },
+
+      // NeXt Evolution & Age of Apocalypse
+      { id: 'stryfe', name: 'Stryfe', hpPerPlayer: [18, 22], plans: [{ name: 'Dominio Psíquico', stage: '1B', threatPerPlayer: 10 }] },
+      { id: 'unus', name: 'Unus el Intocable', hpPerPlayer: [16, 18], plans: [{ name: 'El Escudo Inquebrantable', stage: '1B', threatPerPlayer: 8 }] },
+      { id: 'apocalypse', name: 'Apocalipsis', hpPerPlayer: [22, 28], plans: [{ name: 'La Era de Apocalipsis', stage: '1B', threatPerPlayer: 12 }] }
     ];
 
     const kangsMultiversoBase = [
@@ -386,20 +387,76 @@
       { id: 'scarlet', name: 'Kang Centurión Escarlata', plan: 'La Actual Guerra del Futuro' }
     ];
 
+    // CATÁLOGO COMPLETO DE HÉROES (TODOS LOS PUBLICADOS)
     const baseHeroes = [
-      { id: 'ironheart', name: 'Ironheart', pack: 'hero_pack', hp: 10, esIronheart: true },
-      { id: 'ironman', name: 'Iron Man', pack: 'core', hp: 9, esIronman: true },
-      { id: 'spiderman', name: 'Spider-Man', pack: 'core', hp: 10 },
-      { id: 'captainmarvel', name: 'Capitana Marvel', pack: 'core', hp: 12 },
-      { id: 'shehulk', name: 'Hulka', pack: 'core', hp: 15 },
-      { id: 'blackpanther', name: 'Pantera Negra', pack: 'core', hp: 11 },
-      { id: 'captainamerica', name: 'Capitán América', pack: 'hero_pack', hp: 11 },
-      { id: 'thor', name: 'Thor', pack: 'hero_pack', hp: 14 },
-      { id: 'cyclops', name: 'Cíclope', pack: 'mutant', hp: 10 },
-      { id: 'cable', name: 'Cable', pack: 'next_evo', hp: 12 }
+      // Core Set
+      { id: 'spiderman', name: 'Spider-Man (Peter Parker)', hp: 10 },
+      { id: 'ironman', name: 'Iron Man (Tony Stark)', hp: 9, esIronman: true },
+      { id: 'captainmarvel', name: 'Capitana Marvel (Carol Danvers)', hp: 12 },
+      { id: 'shehulk', name: 'Hulka (Jennifer Walters)', hp: 15 },
+      { id: 'blackpanther', name: 'Pantera Negra (T\'Challa)', hp: 11 },
+
+      // OLA 1: Vengadores y Guardianes
+      { id: 'captainamerica', name: 'Capitán América', hp: 11 },
+      { id: 'msmarvel', name: 'Ms. Marvel (Kamala Khan)', hp: 10 },
+      { id: 'thor', name: 'Thor', hp: 14 },
+      { id: 'blackwidow', name: 'Viuda Negra (Natasha Romanoff)', hp: 9 },
+      { id: 'doctorstrange', name: 'Doctor Strange', hp: 10 },
+      { id: 'hulk', name: 'Hulk (Bruce Banner)', hp: 18 },
+      { id: 'hawkeye', name: 'Ojo de Halcón (Clint Barton)', hp: 9 },
+      { id: 'spiderwoman', name: 'Spider-Woman (Jessica Drew)', hp: 11 },
+      { id: 'antman', name: 'Ant-Man (Scott Lang)', hp: 12 },
+      { id: 'wasp', name: 'Avispa (Nadia van Dyne)', hp: 11 },
+      { id: 'quicksilver', name: 'Mercurio (Pietro Maximoff)', hp: 9 },
+      { id: 'scarletwitch', name: 'Bruja Escarlata (Wanda Maximoff)', hp: 10 },
+
+      // OLA 2: Guardianes de la Galaxia
+      { id: 'starlord', name: 'Star-Lord (Peter Quill)', hp: 10 },
+      { id: 'gamora', name: 'Gamora', hp: 10 },
+      { id: 'drax', name: 'Drax el Destructor', hp: 14 },
+      { id: 'venom', name: 'Venom (Flash Thompson)', hp: 12 },
+      { id: 'rocket', name: 'Rocket Raccoon', hp: 9 },
+      { id: 'groot', name: 'Groot', hp: 10 },
+      { id: 'spectrum', name: 'Espectro (Monica Rambeau)', hp: 11 },
+      { id: 'adamwarlock', name: 'Adam Warlock', hp: 11 },
+      { id: 'nebula', name: 'Nébula', hp: 11 },
+      { id: 'warmachine', name: 'Máquina de Guerra (Rhodey)', hp: 10 },
+      { id: 'vision', name: 'Visión', hp: 11 },
+      { id: 'valkyrie', name: 'Valquiria (Brunnhilde)', hp: 12 },
+
+      // OLA 3: Campeones, Web-Warriors y NeXt
+      { id: 'ironheart', name: 'Ironheart (Riri Williams)', hp: 10, esIronheart: true },
+      { id: 'nova', name: 'Nova (Sam Alexander)', hp: 10 },
+      { id: 'milesmorales', name: 'Spider-Man (Miles Morales)', hp: 9 },
+      { id: 'ghostspider', name: 'Spider-Gwen (Gwen Stacy)', hp: 10 },
+      { id: 'spiderham', name: 'Spider-Ham (Peter Porker)', hp: 12 },
+      { id: 'spdr', name: 'SP//dr (Peni Parker)', hp: 14 },
+
+      // OLA 4: X-Men y Mutantes
+      { id: 'shadowcat', name: 'Gata Sombra (Kitty Pryde)', hp: 11 },
+      { id: 'colossus', name: 'Coloso (Piotr Rasputin)', hp: 14 },
+      { id: 'cyclops', name: 'Cíclope (Scott Summers)', hp: 10 },
+      { id: 'phoenix', name: 'Fénix (Jean Grey)', hp: 9 },
+      { id: 'wolverine', name: 'Lobezno (Logan)', hp: 10 },
+      { id: 'storm', name: 'Tormenta (Ororo Munroe)', hp: 10 },
+      { id: 'gambit', name: 'Gambito (Remy LeBeau)', hp: 9 },
+      { id: 'rogue', name: 'Pícara (Anna Marie)', hp: 11 },
+
+      // OLA 5: X-Force y Apocalipsis
+      { id: 'cable', name: 'Cable (Nathan Summers)', hp: 12 },
+      { id: 'domino', name: 'Dominó (Neena Thurman)', hp: 10 },
+      { id: 'psylocke', name: 'Mariposa Mental (Betsy Braddock)', hp: 10 },
+      { id: 'angel', name: 'Ángel (Warren Worthington III)', hp: 12 },
+      { id: 'x23', name: 'X-23 (Laura Kinney)', hp: 10 },
+      { id: 'deadpool', name: 'Deadpool (Wade Wilson)', hp: 9 },
+      { id: 'bishop', name: 'Bishop (Lucas Bishop)', hp: 11 },
+      { id: 'magik', name: 'Magik (Illyana Rasputina)', hp: 10 },
+      { id: 'iceman', name: 'Hombre de Hielo (Bobby Drake)', hp: 11 },
+      { id: 'jubilee', name: 'Júbilo (Jubilation Lee)', hp: 10 },
+      { id: 'nightcrawler', name: 'Rondador Nocturno (Kurt Wagner)', hp: 11 },
+      { id: 'magneto_hero', name: 'Magneto (Erik Lehnsherr)', hp: 11 }
     ];
 
-    let coleccionUsuario = JSON.parse(localStorage.getItem('mvl_coleccion')) || ['core'];
     let numJugadores = 1;
     let jugadores = [
       { 
@@ -422,19 +479,15 @@
 
     let villanoEstados = { duro: false, confuso: 0, aturdido: 0, teson: false, firmeza: false };
     let lineasTemporalesKang = [];
+    let amenazaKang2BGlobal = 0;
 
     let faseJuego = 0; // 0: Héroes, 1: Villano
 
     function inicializarApp() {
-      renderizarColeccion();
-      actualizarSelects();
       poblarSelectsModales();
+      actualizarSelects();
       renderizarJugadores();
       renderizarEstadosVillano();
-    }
-
-    function toggleMenuConfig() {
-      document.getElementById('dropdown-config').classList.toggle('hidden');
     }
 
     function poblarSelectsModales() {
@@ -494,7 +547,6 @@
     }
 
     function reiniciarPartida() {
-      toggleMenuConfig();
       if (confirm("¿Seguro que deseas reiniciar la partida actual?")) {
         faseVillanoActual = 0;
         indicePlanActual = 0;
@@ -518,6 +570,7 @@
           j.ironmanData = { mejorasTech: 0 };
         });
 
+        document.getElementById('panel-especial-kang').classList.add('hidden');
         document.getElementById('vista-etapa3b-kang').classList.add('hidden');
         document.getElementById('tablero-principal').classList.remove('hidden');
 
@@ -623,11 +676,9 @@
       const container = document.getElementById('contenedor-heroes');
       container.innerHTML = '';
 
-      const heroesFiltrados = baseHeroes.filter(h => coleccionUsuario.includes(h.pack) || h.pack === 'hero_pack');
-
       jugadores.forEach((j, index) => {
         let opcionesHeroeHtml = '';
-        heroesFiltrados.forEach(h => {
+        baseHeroes.forEach(h => {
           opcionesHeroeHtml += `<option value="${h.id}" ${h.id === j.heroeId ? 'selected' : ''}>${h.name}</option>`;
         });
 
@@ -766,7 +817,6 @@
       });
     }
 
-    // ACTUALIZACIÓN DE CONTADORES SIN RECONSTRUIR TARJETA (EVITA RESET DE ANIMACIÓN)
     function cambiarContadoresIronheart(index, cant) {
       const data = jugadores[index].ironheartData;
       data.contadores = Math.max(0, data.contadores + cant);
@@ -855,38 +905,11 @@
       renderizarJugadores();
     }
 
-    function renderizarColeccion() {
-      const container = document.getElementById('lista-coleccion');
-      container.innerHTML = '';
-      
-      packsLista.forEach(pack => {
-        const isChecked = coleccionUsuario.includes(pack.id) || pack.id === 'core';
-        const item = document.createElement('label');
-        item.className = "flex items-center space-x-2 bg-slate-900/60 p-2.5 rounded-xl border border-slate-700/60";
-        item.innerHTML = `
-          <input type="checkbox" value="${pack.id}" ${isChecked ? 'checked' : ''} ${pack.id === 'core' ? 'disabled' : ''} class="chk-pack accent-red-600 rounded">
-          <span class="font-bold text-slate-200">${pack.name}</span>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    function guardarYFiltrar() {
-      const checkboxes = document.querySelectorAll('.chk-pack');
-      coleccionUsuario = ['core', 'hero_pack'];
-      checkboxes.forEach(chk => { if(chk.checked && chk.value !== 'core') coleccionUsuario.push(chk.value); });
-      localStorage.setItem('mvl_coleccion', JSON.stringify(coleccionUsuario));
-      actualizarSelects();
-      renderizarJugadores();
-      cerrarModalColeccion();
-    }
-
     function actualizarSelects() {
       const selectVillano = document.getElementById('select-villano');
       selectVillano.innerHTML = '';
 
-      const villanosFiltrados = baseVillanos.filter(v => coleccionUsuario.includes(v.pack));
-      villanosFiltrados.forEach(v => {
+      baseVillanos.forEach(v => {
         selectVillano.innerHTML += `<option value="${v.id}">${v.name}</option>`;
       });
 
@@ -908,7 +931,8 @@
         
         actualizarVidaVillanoCalculada();
 
-        document.getElementById('panel-especial-kang').classList.toggle('hidden', !villanoSeleccionado.esKang);
+        // Kang inicia sin el botón de dividir mesa
+        document.getElementById('panel-especial-kang').classList.add('hidden');
         document.getElementById('vista-etapa3b-kang').classList.add('hidden');
         document.getElementById('tablero-principal').classList.remove('hidden');
 
@@ -968,10 +992,10 @@
       vidaVillano = Math.max(0, vidaVillano + cant);
       document.getElementById('hp-villano').innerText = vidaVillano;
 
+      // SI KANG I LLEGA A 0 HP, SE DESBLOQUEA Y MUESTRA EL BOTÓN DE ETAPA 3B
       if (vidaVillano === 0 && villanoSeleccionado.esKang && indicePlanActual === 0) {
-        alert("🎉 ¡Kang I derrotado! Avance a la Etapa 2B.");
-        indicePlanActual = 1;
-        cargarPlan();
+        alert("🎉 ¡Kang I ha sido derrotado! Se ha desbloqueado la opción para dividir la mesa en la Etapa 3B.");
+        document.getElementById('panel-especial-kang').classList.remove('hidden');
       }
     }
 
@@ -989,12 +1013,14 @@
       }
     }
 
-    // KANG ETAPA 3B
+    // MECÁNICA KANG ETAPA 3B (COLUMNAS CON PANELS DE HÉROE COMPLETOS + PLAN 2B ARRIBA)
     function iniciarMecanicaKang() {
       document.getElementById('tablero-principal').classList.add('hidden');
       document.getElementById('vista-etapa3b-kang').classList.remove('hidden');
 
       indicePlanActual = 2;
+      amenazaKang2BGlobal = 0;
+      document.getElementById('txt-amenaza-kang-2b').innerText = 0;
 
       const kangsSorteados = [...kangsMultiversoBase].sort(() => 0.5 - Math.random());
       lineasTemporalesKang = [];
@@ -1008,11 +1034,16 @@
           hp: 18,
           amenaza: 0,
           derrotado: false,
-          heroesAsignadosIds: [j.id]
+          idJugador: j.id
         });
       });
 
       renderizarColumnasKang();
+    }
+
+    function cambiarAmenazaKang2B(cant) {
+      amenazaKang2BGlobal = Math.max(0, amenazaKang2BGlobal + cant);
+      document.getElementById('txt-amenaza-kang-2b').innerText = amenazaKang2BGlobal;
     }
 
     function renderizarColumnasKang() {
@@ -1021,13 +1052,14 @@
 
       lineasTemporalesKang.forEach((linea, indexLinea) => {
         const col = document.createElement('div');
-        col.className = `min-w-[290px] w-[88vw] max-w-[340px] snap-center flex-shrink-0 flex flex-col gap-3 p-3 rounded-2xl border ${linea.derrotado ? 'bg-slate-900/60 border-slate-700/80 opacity-70' : 'bg-slate-800 border-indigo-800 shadow-2xl'}`;
+        col.className = `min-w-[300px] w-[88vw] max-w-[350px] snap-center flex-shrink-0 flex flex-col gap-3 p-3 rounded-2xl border ${linea.derrotado ? 'bg-slate-900/60 border-slate-700/80 opacity-75' : 'bg-slate-800 border-indigo-800 shadow-2xl'}`;
 
+        // PANEL DE KANG + PLAN 3B EN LA PARTE SUPERIOR DE LA COLUMNA
         let htmlKang = `
-          <div class="bg-slate-900 p-3 rounded-xl border border-indigo-900/80 space-y-2">
-            <div class="flex justify-between items-center border-b border-indigo-950 pb-1">
+          <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/80 space-y-2">
+            <div class="flex justify-between items-center border-b border-indigo-900/60 pb-1">
               <span class="font-black text-indigo-300 text-xs">Línea Temporal ${linea.idLinea}</span>
-              <span class="text-[9px] bg-indigo-950 text-indigo-200 border border-indigo-700 px-1.5 py-0.5 rounded uppercase font-bold">Etapa 3B</span>
+              <span class="text-[9px] bg-indigo-950 text-indigo-200 border border-indigo-700 px-1.5 py-0.5 rounded uppercase font-bold">Plan 3B</span>
             </div>
 
             <div>
@@ -1035,7 +1067,7 @@
               <div class="text-[10px] text-amber-400 font-bold">Plan: ${linea.nombrePlan}</div>
             </div>
 
-            <div class="flex justify-between items-center bg-slate-950 p-2 rounded-lg border border-slate-800">
+            <div class="flex justify-between items-center bg-slate-900 p-2 rounded-lg border border-slate-800">
               <span class="text-[10px] text-slate-400 font-bold uppercase">Vida Kang:</span>
               <div class="flex items-center gap-1.5">
                 <button onclick="cambiarHpKangLinea(${indexLinea}, -1)" ${linea.derrotado ? 'disabled' : ''} class="bg-slate-800 active:bg-slate-700 px-2 py-0.5 rounded text-xs font-bold text-slate-200">-</button>
@@ -1044,8 +1076,8 @@
               </div>
             </div>
 
-            <div class="flex justify-between items-center bg-slate-950 p-2 rounded-lg border border-slate-800">
-              <span class="text-[10px] text-slate-400 font-bold uppercase">Amenaza:</span>
+            <div class="flex justify-between items-center bg-slate-900 p-2 rounded-lg border border-slate-800">
+              <span class="text-[10px] text-slate-400 font-bold uppercase">Amenaza 3B:</span>
               <div class="flex items-center gap-1.5">
                 <button onclick="cambiarAmenazaKangLinea(${indexLinea}, -1)" ${linea.derrotado ? 'disabled' : ''} class="bg-slate-800 active:bg-slate-700 px-2 py-0.5 rounded text-xs font-bold text-slate-200">-</button>
                 <span class="text-base font-black text-amber-400 px-1">${linea.amenaza} / 9</span>
@@ -1060,54 +1092,112 @@
           </div>
         `;
 
-        let htmlHeroes = `<div class="space-y-2 border-t border-slate-700/60 pt-2">`;
-        
-        linea.heroesAsignadosIds.forEach(idHeroe => {
-          const idxJ = jugadores.findIndex(j => j.id === idHeroe);
-          if (idxJ !== -1) {
-            const j = jugadores[idxJ];
-            const heroeObj = baseHeroes.find(h => h.id === j.heroeId);
+        // CLONACIÓN / RENDERIZADO DEL PANEL DEL HÉROE EN SU TAMAÑO ORIGINAL Y COMPLETO
+        const idxJ = jugadores.findIndex(j => j.id === linea.idJugador);
+        let htmlHeroeCompleto = '';
 
-            let opcionesUnirseHtml = '';
-            lineasTemporalesKang.forEach((lineaDestino) => {
-              if (lineaDestino.idLinea !== linea.idLinea && !lineaDestino.derrotado) {
-                opcionesUnirseHtml += `<option value="${lineaDestino.idLinea}">Unirse a Línea ${lineaDestino.idLinea} (${lineaDestino.nombreKang})</option>`;
-              }
-            });
+        if (idxJ !== -1) {
+          const j = jugadores[idxJ];
+          const heroeObj = baseHeroes.find(h => h.id === j.heroeId);
+          const esIronheart = heroeObj && heroeObj.esIronheart;
+          const esIronman = heroeObj && heroeObj.esIronman;
 
-            htmlHeroes += `
-              <div class="bg-gradient-to-b from-slate-800 to-slate-850 rounded-xl p-3 border border-blue-900/60 space-y-2 shadow-lg">
+          let claseCardHeroe = "bg-slate-900 rounded-2xl p-4 border-2 border-blue-900/60 shadow-xl space-y-2";
+          if (esIronheart) {
+            if (j.ironheartData.version === 1) claseCardHeroe = `metal-card ironheart-v1 rounded-2xl p-4 space-y-2`;
+            else if (j.ironheartData.version === 2) claseCardHeroe = `metal-card ironheart-v2 rounded-2xl p-4 space-y-2`;
+            else if (j.ironheartData.version === 3) claseCardHeroe = `metal-card ironheart-v3 rounded-2xl p-4 space-y-2`;
+          } else if (esIronman) {
+            claseCardHeroe = `metal-card ironman-card rounded-2xl p-4 space-y-2`;
+          }
+
+          let opcionesVidaHeroe = '';
+          for (let v = 1; v <= 15; v++) {
+            opcionesVidaHeroe += `<option value="${v}">${v} HP</option>`;
+          }
+
+          let htmlPanelIronheart = '';
+          if (esIronheart) {
+            htmlPanelIronheart = `
+              <div class="relative z-10 mt-2 pt-2 border-t border-slate-700/60 bg-black/60 p-2 rounded-xl border border-yellow-500/40 space-y-1.5">
                 <div class="flex justify-between items-center">
-                  <span class="text-[9px] font-black bg-blue-900/80 text-blue-200 px-2 py-0.5 rounded uppercase">Jugador ${j.id}</span>
-                  <span class="text-xs font-black text-slate-200">${heroeObj ? heroeObj.name : ''}</span>
+                  <span class="text-[10px] font-black text-amber-300 uppercase">Ironheart</span>
+                  <span class="text-[10px] font-extrabold bg-amber-950 border border-yellow-500 text-yellow-300 px-1.5 py-0.5 rounded">v${j.ironheartData.version}</span>
                 </div>
-
-                <div class="flex justify-between items-center bg-slate-950/80 px-2 py-1 rounded-lg border border-slate-800">
-                  <span class="text-[10px] font-bold text-slate-400 uppercase">HP:</span>
+                <div class="flex justify-between items-center bg-slate-950/80 p-1 rounded-lg">
+                  <span class="text-[9px] font-bold text-slate-300 uppercase">${j.ironheartData.version === 3 ? 'Contadores:' : 'Avance:'}</span>
                   <div class="flex items-center gap-1">
-                    <button onclick="cambiarVidaJugador(${idxJ}, -1); renderizarColumnasKang();" class="bg-slate-800 text-xs font-black px-2 py-0.5 rounded text-slate-200">-</button>
-                    <span class="text-lg font-black text-emerald-400 px-1.5">${j.hp}</span>
-                    <button onclick="cambiarVidaJugador(${idxJ}, 1); renderizarColumnasKang();" class="bg-slate-800 text-xs font-black px-2 py-0.5 rounded text-slate-200">+</button>
+                    <button onclick="cambiarContadoresIronheart(${idxJ}, -1); renderizarColumnasKang();" class="bg-slate-800 px-2 text-xs font-bold">-</button>
+                    <span class="text-xs font-black text-yellow-400 px-1">${j.ironheartData.contadores}</span>
+                    <button onclick="cambiarContadoresIronheart(${idxJ}, 1); renderizarColumnasKang();" class="bg-slate-800 px-2 text-xs font-bold">+</button>
                   </div>
                 </div>
-
-                ${linea.derrotado && opcionesUnirseHtml !== '' ? `
-                  <div class="pt-1 border-t border-slate-700/60 mt-1">
-                    <label class="text-[8px] text-amber-400 font-bold uppercase block mb-0.5">Mover Héroe a otra Línea:</label>
-                    <select onchange="transferirHeroeALinea(${j.id}, this.value)" class="w-full bg-slate-900 border border-amber-800/80 rounded-lg p-1 text-[10px] text-amber-300 font-bold focus:outline-none">
-                      <option value="">-- Seleccionar Destino --</option>
-                      ${opcionesUnirseHtml}
-                    </select>
-                  </div>
-                ` : ''}
               </div>
             `;
           }
-        });
 
-        htmlHeroes += `</div>`;
+          let htmlPanelIronman = '';
+          if (esIronman) {
+            const tamMano = j.modoAlterEgo ? 6 : Math.min(7, 1 + j.ironmanData.mejorasTech);
+            htmlPanelIronman = `
+              <div class="relative z-10 mt-2 pt-2 border-t border-slate-700/60 bg-black/60 p-2 rounded-xl border border-sky-400/50 space-y-1.5">
+                <div class="flex justify-between items-center">
+                  <span class="text-[10px] font-black text-sky-300 uppercase">Iron Man</span>
+                  <span class="text-[10px] font-extrabold bg-sky-950 border border-sky-500 text-sky-200 px-1.5 py-0.5 rounded">Mano: ${tamMano}</span>
+                </div>
+                <div class="flex justify-between items-center bg-slate-950/80 p-1 rounded-lg">
+                  <span class="text-[9px] font-bold text-slate-300 uppercase">Tech:</span>
+                  <div class="flex items-center gap-1">
+                    <button onclick="cambiarMejorasIronman(${idxJ}, -1); renderizarColumnasKang();" class="bg-slate-800 px-2 text-xs font-bold">-</button>
+                    <span class="text-xs font-black text-sky-400 px-1">${j.ironmanData.mejorasTech}</span>
+                    <button onclick="cambiarMejorasIronman(${idxJ}, 1); renderizarColumnasKang();" class="bg-slate-800 px-2 text-xs font-bold">+</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
 
-        col.innerHTML = htmlKang + htmlHeroes;
+          htmlHeroeCompleto = `
+            <div class="${claseCardHeroe}">
+              <div class="relative z-10 flex justify-between items-center border-b border-slate-700/60 pb-1">
+                <span class="text-[9px] font-black bg-blue-900/80 text-blue-200 px-2 py-0.5 rounded uppercase">Jugador ${j.id}</span>
+                <span class="text-xs font-black text-slate-200">${heroeObj ? heroeObj.name : ''}</span>
+              </div>
+
+              <div class="relative z-10 my-1">
+                <button onclick="toggleIdentidadJugador(${idxJ}); renderizarColumnasKang();" class="w-full ${j.modoAlterEgo ? 'bg-amber-950/90 border-amber-500 text-amber-300' : 'bg-blue-950/90 border-blue-500 text-blue-300'} border py-1 rounded-xl font-black text-xs uppercase flex items-center justify-center gap-1 shadow">
+                  <span>${j.modoAlterEgo ? '👤 Alter-Ego' : '🦸 Modo Héroe'}</span>
+                </button>
+              </div>
+
+              <div class="relative z-10 text-center py-1.5 bg-slate-950/60 rounded-xl my-1 border border-slate-800">
+                <div class="text-4xl font-black text-emerald-400 tracking-tight">${j.hp}</div>
+              </div>
+
+              <div class="relative z-10 space-y-1.5">
+                <div class="flex items-center gap-1 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800">
+                  <button onclick="modificarVidaJugador(${idxJ}, -1); renderizarColumnasKang();" class="w-1/3 bg-red-800 py-1 rounded text-[10px] font-black uppercase">- Daño</button>
+                  <select id="select-cant-vida-heroe-kang-${idxJ}" class="w-1/3 bg-slate-900 text-center font-black text-xs py-1 rounded text-slate-200 focus:outline-none">
+                    ${opcionesVidaHeroe}
+                  </select>
+                  <button onclick="modificarVidaJugador(${idxJ}, 1); renderizarColumnasKang();" class="w-1/3 bg-emerald-800 py-1 rounded text-[10px] font-black uppercase">+ Curar</button>
+                </div>
+              </div>
+
+              <div class="relative z-10 grid grid-cols-4 gap-1 pt-2 border-t border-slate-700/60">
+                <button onclick="toggleEstadoJugador(${idxJ}, 'confuso'); renderizarColumnasKang();" class="${j.estados.confuso > 0 ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1 rounded text-[8px] uppercase">Confuso</button>
+                <button onclick="toggleEstadoJugador(${idxJ}, 'aturdido'); renderizarColumnasKang();" class="${j.estados.aturdido > 0 ? 'bg-amber-500/20 text-amber-300 border-2 border-amber-500 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1 rounded text-[8px] uppercase">Aturdido</button>
+                <button onclick="toggleEstadoJugador(${idxJ}, 'duro'); renderizarColumnasKang();" class="${j.estados.duro ? 'bg-indigo-600 text-indigo-100 border border-indigo-400 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1 rounded text-[8px] uppercase">Duro</button>
+                <button onclick="toggleEstadoJugador(${idxJ}, 'teson'); renderizarColumnasKang();" class="${j.estados.teson ? 'bg-purple-800 text-purple-200 border border-purple-400 font-extrabold' : 'bg-slate-900/80 text-slate-400 border border-slate-700 font-bold'} py-1 rounded text-[8px] uppercase">Tesón</button>
+              </div>
+
+              ${htmlPanelIronheart}
+              ${htmlPanelIronman}
+            </div>
+          `;
+        }
+
+        col.innerHTML = htmlKang + htmlHeroeCompleto;
         carrusel.appendChild(col);
       });
     }
@@ -1136,22 +1226,6 @@
       comprobarFinEtapa3B();
     }
 
-    function transferirHeroeALinea(idJugador, idLineaDestinoStr) {
-      if (!idLineaDestinoStr) return;
-      const idLineaDestino = parseInt(idLineaDestinoStr);
-
-      lineasTemporalesKang.forEach(l => {
-        l.heroesAsignadosIds = l.heroesAsignadosIds.filter(id => id !== idJugador);
-      });
-
-      const idxDestino = lineasTemporalesKang.findIndex(l => l.idLinea === idLineaDestino);
-      if (idxDestino !== -1) {
-        lineasTemporalesKang[idxDestino].heroesAsignadosIds.push(idJugador);
-      }
-
-      renderizarColumnasKang();
-    }
-
     function comprobarFinEtapa3B() {
       const todosDerrotados = lineasTemporalesKang.every(l => l.derrotado);
       if (todosDerrotados) {
@@ -1174,9 +1248,6 @@
       actualizarVidaVillanoCalculada();
       cargarPlan();
     }
-
-    function abrirModalColeccion() { document.getElementById('modal-coleccion').classList.remove('hidden'); }
-    function cerrarModalColeccion() { document.getElementById('modal-coleccion').classList.add('hidden'); }
 
     // Iniciar
     inicializarApp();
