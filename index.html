@@ -6,24 +6,57 @@
   <title>Marvel Champions Companion</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* EFECTOS METALIZADOS BRILLANTES CON REFLEJO CROMADO */
+    /* ANIMACIONES METALIZADAS DINO-REFLEXIVAS */
+    @keyframes shineMetal {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes arcReactorPulse {
+      0%, 100% {
+        box-shadow: 0 0 12px rgba(56, 189, 248, 0.8), inset 0 0 15px rgba(56, 189, 248, 0.5);
+        border-color: #38bdf8 !important;
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(14, 165, 233, 1), inset 0 0 22px rgba(14, 165, 233, 0.8);
+        border-color: #7dd3fc !important;
+      }
+    }
+
+    /* IRONHEART V1 (VERDE-AZUL METÁLICO ANIMADO) */
     .ironheart-v1 {
-      background: linear-gradient(135deg, #092f38 0%, #17606b 40%, #5eead4 50%, #17606b 60%, #0c3942 100%);
-      background-size: 200% 200%;
+      background: linear-gradient(120deg, #07282e 0%, #134e5a 25%, #2dd4bf 50%, #134e5a 75%, #07282e 100%);
+      background-size: 250% 250%;
+      animation: shineMetal 4s infinite linear;
       border: 2px solid #2dd4bf !important;
-      box-shadow: inset 0 0 15px rgba(45, 212, 191, 0.6), 0 0 15px rgba(20, 184, 166, 0.4);
+      box-shadow: 0 0 15px rgba(45, 212, 191, 0.4);
     }
+
+    /* IRONHEART V2 (ROJO INTENSO METALIZADO ANIMADO + MARCO DORADO) */
     .ironheart-v2 {
-      background: linear-gradient(135deg, #4d0a0a 0%, #a31c1c 40%, #fef08a 50%, #a31c1c 60%, #520909 100%);
-      background-size: 200% 200%;
-      border: 3px solid #facc15 !important;
-      box-shadow: inset 0 0 20px rgba(250, 204, 21, 0.7), 0 0 18px rgba(220, 38, 38, 0.6);
+      background: linear-gradient(120deg, #420808 0%, #991b1b 25%, #fef08a 50%, #991b1b 75%, #420808 100%);
+      background-size: 250% 250%;
+      animation: shineMetal 3.5s infinite linear;
+      border: 2.5px solid #facc15 !important;
+      box-shadow: 0 0 18px rgba(250, 204, 21, 0.5);
     }
+
+    /* IRONHEART V3 (ROJO/DORADO/MAGENTA METALIZADO ANIMADO + MARCO BRULLANTE) */
     .ironheart-v3 {
-      background: linear-gradient(135deg, #6b0c2a 0%, #be123c 30%, #fef08a 50%, #eab308 70%, #881337 100%);
-      background-size: 200% 200%;
+      background: linear-gradient(120deg, #580a22 0%, #be123c 20%, #fef08a 50%, #eab308 70%, #580a22 100%);
+      background-size: 250% 250%;
+      animation: shineMetal 3s infinite linear;
       border: 3.5px solid #fde047 !important;
-      box-shadow: inset 0 0 25px rgba(253, 224, 71, 0.8), 0 0 22px rgba(234, 179, 8, 0.8);
+      box-shadow: 0 0 22px rgba(253, 224, 71, 0.7);
+    }
+
+    /* IRON MAN (ROJO INTENSO ANIMADO + REACTOR ARC AZUL NEÓN) */
+    .ironman-card {
+      background: linear-gradient(120deg, #450a0a 0%, #b91c1c 25%, #fca5a5 50%, #b91c1c 75%, #450a0a 100%);
+      background-size: 250% 250%;
+      animation: shineMetal 3.5s infinite linear, arcReactorPulse 2s infinite ease-in-out;
+      border: 3px solid #38bdf8 !important;
     }
 
     @keyframes pulseGlowEvolve {
@@ -31,7 +64,7 @@
       50% { filter: drop-shadow(0 0 22px #fde047); border-color: #facc15 !important; }
     }
     .glow-evolve {
-      animation: pulseGlowEvolve 1.2s infinite ease-in-out;
+      animation: pulseGlowEvolve 1.2s infinite ease-in-out, shineMetal 2.5s infinite linear !important;
     }
   </style>
 </head>
@@ -41,7 +74,7 @@
   <header class="flex justify-between items-center py-2 border-b border-slate-800">
     <div>
       <h1 class="text-xl font-black tracking-wider text-red-500 uppercase">Marvel Champions</h1>
-      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.1 (Metal + Iron Man)</p>
+      <p class="text-[10px] text-slate-400 font-semibold tracking-wide">Companion App v6.2 (Metal Animado + Arc Reactor)</p>
     </div>
     
     <div class="flex gap-1.5">
@@ -119,11 +152,25 @@
         <span id="txt-calculo-hp-villano" class="text-[9px] text-slate-500 font-semibold uppercase block mt-1">(Base × Jugadores)</span>
       </div>
       
-      <div class="grid grid-cols-4 gap-2 mb-3">
-        <button onclick="cambiarVidaVillano(-5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-5</button>
-        <button onclick="cambiarVidaVillano(-1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-1</button>
-        <button onclick="cambiarVidaVillano(1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+1</button>
-        <button onclick="cambiarVidaVillano(5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+5</button>
+      <!-- CONTROLES DE VIDA DEL VILLANO (RÁPIDO + CORRECCIÓN) -->
+      <div class="space-y-2 mb-3">
+        <div class="flex items-center gap-1.5 bg-slate-950 p-2 rounded-xl border border-slate-800">
+          <button onclick="modificarVidaVillano(-1)" class="w-1/3 bg-red-800 active:bg-red-700 font-black py-1.5 rounded-lg text-xs uppercase shadow">- Daño</button>
+          
+          <select id="select-cant-vida-villano" class="w-1/3 bg-slate-900 border border-slate-700 text-center font-black text-xs py-1.5 rounded-lg text-slate-200 focus:outline-none">
+            <!-- 1 a 15 -->
+          </select>
+          
+          <button onclick="modificarVidaVillano(1)" class="w-1/3 bg-emerald-800 active:bg-emerald-700 font-black py-1.5 rounded-lg text-xs uppercase shadow">+ Curar</button>
+        </div>
+
+        <div class="flex items-center justify-between px-1">
+          <span class="text-[9px] font-bold text-slate-500 uppercase">Ajuste de Corrección:</span>
+          <div class="flex gap-2">
+            <button onclick="cambiarVidaVillanoCorreccion(-1)" class="bg-slate-700 active:bg-slate-600 font-bold px-3 py-0.5 rounded-lg border border-slate-600 text-xs text-slate-200">-1</button>
+            <button onclick="cambiarVidaVillanoCorreccion(1)" class="bg-slate-700 active:bg-slate-600 font-bold px-3 py-0.5 rounded-lg border border-slate-600 text-xs text-slate-200">+1</button>
+          </div>
+        </div>
       </div>
 
       <!-- ESTADOS DEL VILLANO -->
@@ -261,7 +308,7 @@
   </div>
 
   <footer class="text-center py-1 text-[10px] text-slate-500 font-medium">
-    Marvel Champions Companion v6.1
+    Marvel Champions Companion v6.2
   </footer>
 
   <!-- LÓGICA Y DICCIONARIO COMPLETO -->
@@ -341,7 +388,7 @@
         id: 1, 
         heroeId: 'ironheart', 
         hp: 10, 
-        modoAlterEgo: false, // false: Héroe, true: Alter-Ego
+        modoAlterEgo: false,
         cambioUsadoTurno: false,
         estados: { confuso: 0, aturdido: 0, duro: false, teson: false },
         ironheartData: { version: 1, contadores: 0 },
@@ -384,6 +431,12 @@
       for (let i = 1; i <= 20; i++) {
         selectIntervenir.innerHTML += `<option value="${i}">${i} de Amenaza Removida</option>`;
       }
+
+      const selectVidaV = document.getElementById('select-cant-vida-villano');
+      selectVidaV.innerHTML = '';
+      for (let i = 1; i <= 15; i++) {
+        selectVidaV.innerHTML += `<option value="${i}">${i} HP</option>`;
+      }
     }
 
     function avanzarFaseJuego() {
@@ -394,7 +447,6 @@
         badge.innerText = "🛡️ Fase de Héroes";
         badge.className = "text-xs font-black bg-emerald-950 border border-emerald-700 text-emerald-300 px-2.5 py-1 rounded-lg uppercase tracking-wider";
         
-        // Resetear recordatorio de cambio de identidad al iniciar la fase de héroes
         jugadores.forEach(j => j.cambioUsadoTurno = false);
         renderizarJugadores();
       } else {
@@ -405,13 +457,8 @@
       }
     }
 
-    function abrirModalAumentarPlan() {
-      document.getElementById('modal-amenaza-villano').classList.remove('hidden');
-    }
-
-    function cerrarModalAmenazaVillano() {
-      document.getElementById('modal-amenaza-villano').classList.add('hidden');
-    }
+    function abrirModalAumentarPlan() { document.getElementById('modal-amenaza-villano').classList.remove('hidden'); }
+    function cerrarModalAmenazaVillano() { document.getElementById('modal-amenaza-villano').classList.add('hidden'); }
 
     function confirmarAmenazaFaseVillano() {
       const cant = parseInt(document.getElementById('select-amenaza-fase').value);
@@ -419,13 +466,8 @@
       cerrarModalAmenazaVillano();
     }
 
-    function abrirModalIntervenirPlan() {
-      document.getElementById('modal-intervenir-plan').classList.remove('hidden');
-    }
-
-    function cerrarModalIntervenirPlan() {
-      document.getElementById('modal-intervenir-plan').classList.add('hidden');
-    }
+    function abrirModalIntervenirPlan() { document.getElementById('modal-intervenir-plan').classList.remove('hidden'); }
+    function cerrarModalIntervenirPlan() { document.getElementById('modal-intervenir-plan').classList.add('hidden'); }
 
     function confirmarIntervenirPlan() {
       const cant = parseInt(document.getElementById('select-intervenir-amenaza').value);
@@ -584,6 +626,8 @@
           if (j.ironheartData.version === 1) claseCard = `ironheart-v1 rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300 ${listoEvolucionar ? 'glow-evolve' : ''}`;
           else if (j.ironheartData.version === 2) claseCard = `ironheart-v2 rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300 ${listoEvolucionar ? 'glow-evolve' : ''}`;
           else if (j.ironheartData.version === 3) claseCard = `ironheart-v3 rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
+        } else if (esIronman) {
+          claseCard = `ironman-card rounded-2xl p-4 min-w-[280px] w-[85vw] max-w-[340px] snap-center flex-shrink-0 transition-all duration-300`;
         }
 
         const card = document.createElement('div');
@@ -617,29 +661,34 @@
           `;
         }
 
-        // PANEL IRON MAN (MEJORAS TECH Y TAMAÑO DE MANO)
+        // PANEL IRON MAN
         let htmlPanelIronman = '';
         if (esIronman) {
-          // Mano en Alter-Ego = 6, Héroe = 1 + Mejoras Tech (Máximo 7)
           const tamMano = j.modoAlterEgo ? 6 : Math.min(7, 1 + j.ironmanData.mejorasTech);
 
           htmlPanelIronman = `
-            <div class="mt-3 pt-2 border-t border-slate-700/60 bg-black/50 p-2.5 rounded-xl border border-red-500/40 space-y-2 backdrop-blur-sm">
+            <div class="mt-3 pt-2 border-t border-slate-700/60 bg-black/50 p-2.5 rounded-xl border border-sky-400/50 space-y-2 backdrop-blur-sm">
               <div class="flex justify-between items-center">
-                <span class="text-[10px] font-black text-red-400 uppercase tracking-wider">Equipamiento de Iron Man</span>
-                <span class="text-[10px] font-extrabold bg-red-950 border border-red-700 text-red-300 px-2 py-0.5 rounded shadow">Mano: ${tamMano} cartas</span>
+                <span class="text-[10px] font-black text-sky-300 uppercase tracking-wider">Equipamiento de Iron Man</span>
+                <span class="text-[10px] font-extrabold bg-sky-950 border border-sky-500 text-sky-200 px-2 py-0.5 rounded shadow">Mano: ${tamMano} cartas</span>
               </div>
 
               <div class="flex justify-between items-center bg-slate-950/80 p-1.5 rounded-lg border border-slate-800">
                 <span class="text-[9px] font-bold text-slate-300 uppercase">Mejoras Tech Equipadas:</span>
                 <div class="flex items-center gap-1">
                   <button onclick="cambiarMejorasIronman(${index}, -1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">-</button>
-                  <span class="text-sm font-black text-red-400 px-1.5">${j.ironmanData.mejorasTech}</span>
+                  <span class="text-sm font-black text-sky-400 px-1.5">${j.ironmanData.mejorasTech}</span>
                   <button onclick="cambiarMejorasIronman(${index}, 1)" class="bg-slate-800 active:bg-slate-700 font-black px-2 py-0.5 rounded text-xs text-slate-200">+</button>
                 </div>
               </div>
             </div>
           `;
+        }
+
+        // DESPLEGABLE DE VIDA PARA CADA HÉROE
+        let opcionesVidaHeroe = '';
+        for (let v = 1; v <= 15; v++) {
+          opcionesVidaHeroe += `<option value="${v}">${v} HP</option>`;
         }
 
         card.innerHTML = `
@@ -656,18 +705,32 @@
               <span>${j.modoAlterEgo ? '👤 Alter-Ego' : '🦸 Modo Héroe'}</span>
               <span class="text-[9px] opacity-75">(Cambiar)</span>
             </button>
-            ${j.cambioUsadoTurno ? `<span class="block text-[8px] text-amber-400 text-center font-bold uppercase mt-0.5">⚠️ Cambio de Identidad Usado en este Turno</span>` : ''}
+            ${j.cambioUsadoTurno ? `<span class="block text-[8px] text-amber-400 text-center font-bold uppercase mt-0.5">⚠️ Cambio Usado en este Turno</span>` : ''}
           </div>
 
           <div class="text-center py-2 bg-slate-950/60 rounded-xl my-2 border border-slate-800">
             <div id="hp-heroe-${index}" class="text-5xl font-black text-emerald-400 tracking-tight">${j.hp}</div>
           </div>
 
-          <div class="grid grid-cols-4 gap-1.5 mb-3">
-            <button onclick="cambiarVidaJugador(${index}, -5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-5</button>
-            <button onclick="cambiarVidaJugador(${index}, -1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">-1</button>
-            <button onclick="cambiarVidaJugador(${index}, 1)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+1</button>
-            <button onclick="cambiarVidaJugador(${index}, 5)" class="bg-slate-700/80 active:bg-slate-600 font-black py-2 rounded-xl border border-slate-600/50 text-slate-100 text-sm">+5</button>
+          <!-- CONTROLES RÁPIDOS Y CORRECCIÓN DE VIDA EN HÉROE -->
+          <div class="space-y-2 mb-3">
+            <div class="flex items-center gap-1.5 bg-slate-950/80 p-2 rounded-xl border border-slate-800">
+              <button onclick="modificarVidaJugador(${index}, -1)" class="w-1/3 bg-red-800 active:bg-red-700 font-black py-1.5 rounded-lg text-xs uppercase shadow">- Daño</button>
+              
+              <select id="select-cant-vida-heroe-${index}" class="w-1/3 bg-slate-900 border border-slate-700 text-center font-black text-xs py-1.5 rounded-lg text-slate-200 focus:outline-none">
+                ${opcionesVidaHeroe}
+              </select>
+              
+              <button onclick="modificarVidaJugador(${index}, 1)" class="w-1/3 bg-emerald-800 active:bg-emerald-700 font-black py-1.5 rounded-lg text-xs uppercase shadow">+ Curar</button>
+            </div>
+
+            <div class="flex items-center justify-between px-1">
+              <span class="text-[9px] font-bold text-slate-400 uppercase">Corrección:</span>
+              <div class="flex gap-2">
+                <button onclick="cambiarVidaJugador(${index}, -1)" class="bg-slate-700/80 active:bg-slate-600 font-bold px-3 py-0.5 rounded-lg border border-slate-600 text-xs text-slate-200">-1</button>
+                <button onclick="cambiarVidaJugador(${index}, 1)" class="bg-slate-700/80 active:bg-slate-600 font-bold px-3 py-0.5 rounded-lg border border-slate-600 text-xs text-slate-200">+1</button>
+              </div>
+            </div>
           </div>
 
           <div class="grid grid-cols-4 gap-1 pt-2 border-t border-slate-700/60">
@@ -718,6 +781,12 @@
         jugadores[index].ironmanData = { mejorasTech: 0 };
         renderizarJugadores();
       }
+    }
+
+    function modificarVidaJugador(index, signo) {
+      const cant = parseInt(document.getElementById(`select-cant-vida-heroe-${index}`).value);
+      jugadores[index].hp = Math.max(0, jugadores[index].hp + (signo * cant));
+      document.getElementById(`hp-heroe-${index}`).innerText = jugadores[index].hp;
     }
 
     function cambiarVidaJugador(index, cant) {
@@ -839,6 +908,15 @@
 
         document.getElementById('amenaza-limite').innerText = limiteFinal;
       }
+    }
+
+    function modificarVidaVillano(signo) {
+      const cant = parseInt(document.getElementById('select-cant-vida-villano').value);
+      cambiarVidaVillano(signo * cant);
+    }
+
+    function cambiarVidaVillanoCorreccion(cant) {
+      cambiarVidaVillano(cant);
     }
 
     function cambiarVidaVillano(cant) {
